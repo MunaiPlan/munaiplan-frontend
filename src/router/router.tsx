@@ -6,6 +6,7 @@ import Catalog from "../pages/Catalog";
 import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
 import Auth from "../pages/Auth";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -15,19 +16,35 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />,
+                element: (
+                    <ProtectedRoute>
+                         <Home />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "catalog",
-                element: <Catalog />,
+                element: (
+                    <ProtectedRoute>
+                        <Catalog />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "settings",
-                element: <Settings />,
+                element: (
+                    <ProtectedRoute>
+                        <Settings />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: "account",
-                element: <Account />,
+                element: (
+                    <ProtectedRoute>
+                        <Account />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: 'auth',
