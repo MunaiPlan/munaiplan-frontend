@@ -61,3 +61,19 @@ export interface IResponseUserData {
     token: string
     user: IResponseUser
 }
+
+
+export interface ICompany {
+    id: string | null 
+    name: string | null
+    division: string | null
+    group: string | null
+    representative: string | null
+    address: string | null
+    phone: string | null
+    fields: IField[] | null
+}
+
+export interface IField {
+
+}

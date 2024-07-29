@@ -7,23 +7,19 @@ import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import SideBar from '../components/SideBar'
 import { MenuItem } from '../components/SideBarItem'
+import { useCompanyFormOpen } from '../hooks/useCompany'
+import CreateCompany from '../components/forms/CreateCompany'
 
 
 
 const Home: FC = () => {
-  const isAuth = useAuth()
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const isCompanyFormOpened = useCompanyFormOpen()
 
-  const logoutHandler = () => {
-    dispatch(logout())
-    removeTokenFromLocalStorage('token')
-    toast.success('Вы вышли из системы')
-    navigate('/')
-  }
   return (
     <div className='flex h-screen'>
-      <div>Other</div>
+      {
+      isCompanyFormOpened ? (<CreateCompany />) : (<div className='w-screen flex flex-col justify-center items-center'>Welcome dear user</div>)
+    }
     </div>
     
   )
