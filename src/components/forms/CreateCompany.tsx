@@ -1,11 +1,13 @@
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { createCompany } from '../../store/user/companySlice'
+import { createCompany, toggleCompanyForm } from '../../store/user/companySlice'
 import { toast } from 'react-toastify'
-import { companyService } from '../../services/company.service'
+import { companyService } from '../../services/forms.service'
+import { useNavigate } from 'react-router-dom'
 
 const CreateCompany: FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const [nameCompany, setNameCompany] = useState("")
   const [divisionCompany, setDivisionCompany] = useState("")
@@ -13,6 +15,10 @@ const CreateCompany: FC = () => {
   const [representativeCompany, setRepresentativeCompany] = useState("")
   const [addressCompany, setAddressCompany] = useState("")
   const [phoneCompany, setPhoneCompany] = useState("")
+
+  const companyCreateFormOpenHandler = () => {
+    dispatch(toggleCompanyForm())
+  }
 
   const createCompanyHandle = () => {
     console.log("It works 1")
@@ -27,7 +33,7 @@ const CreateCompany: FC = () => {
       fields: []
     }))
     toast.success('Company was successfully created')
-    console.log("It works 2")
+    companyCreateFormOpenHandler()
   }
 
   const createCompanyHandler = async (e: React.FormEvent<HTMLFormElement>) => {

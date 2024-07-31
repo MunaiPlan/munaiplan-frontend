@@ -34,8 +34,11 @@ export const CompanySlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    toggleForm: (state) => {
+    toggleCompanyForm: (state) => {
         state.isCompanyFormOpened = !state.isCompanyFormOpened
+    },
+    closeCompanyForm: (state) => {
+      state.isCompanyFormOpened = false
     },
     createCompany: (state, action: PayloadAction<ICompany>) => {
         state.id = action.payload.id
@@ -50,7 +53,7 @@ export const CompanySlice = createSlice({
   },
 })
 
-export const { toggleForm, createCompany } = CompanySlice.actions
+export const { toggleCompanyForm, createCompany, closeCompanyForm } = CompanySlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCompany = (state: RootState) => state.company

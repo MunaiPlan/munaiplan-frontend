@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
 import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper';
 import { toast } from 'react-toastify';
-import { toggleForm } from '../store/user/companySlice';
+import { toggleCompanyForm } from '../store/user/companySlice';
+import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
 
 interface SidebarProps {
   menuItems: MenuItem[];
@@ -29,7 +30,8 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   }
 
   const companyCreateFormOpenHandler = () => {
-    dispatch(toggleForm())
+    dispatch(toggleCompanyForm())
+    dispatch(closeFieldForm())
   }
 
   return isAuth ? 

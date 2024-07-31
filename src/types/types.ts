@@ -75,5 +75,15 @@ export interface ICompany {
 }
 
 export interface IField {
+    companyId: string
+    name: string
+    description: string
+    reductionLevel: string
+    activeFieldUnit: string
+    company: ICompany | undefined
+    sites: ISite[]
+}
+
+export interface ISite {
 
 }
