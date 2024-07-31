@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { FaRegFile } from "react-icons/fa";
 import { useAppDispatch } from '../store/hooks';
-import { toggleFieldForm } from '../store/user/fieldSlice';
+import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
+import { closeSiteForm, toggleSiteForm } from '../store/user/siteSlice';
 
 
 interface MenuItemProps {
@@ -33,6 +34,13 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const fieldCreateFormOpenHandler = () => {
     dispatch(toggleFieldForm())
     dispatch(closeCompanyForm())
+    dispatch(closeSiteForm())
+  }
+
+  const siteCreateFormOpenHandler = () => {
+    dispatch(toggleSiteForm())
+    dispatch(closeCompanyForm())
+    dispatch(closeFieldForm())
   }
 
   return (
@@ -55,7 +63,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
           ))}
           {/* The create button might also be conditional based on level or other factors */}
           <button 
-            onClick={level === 0 ? fieldCreateFormOpenHandler : () => {}}
+            onClick={level === 0 ? fieldCreateFormOpenHandler : siteCreateFormOpenHandler}
             className="text-gray-200 hover:text-gray-400 text-md mt-2">+ Создать</button>
         </div>
       )}

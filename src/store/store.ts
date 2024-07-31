@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './user/userSlice'
 import companyReducer from './user/companySlice'
 import fieldReducer from './user/fieldSlice'
+import siteReducer from './user/siteSlice'
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     company: companyReducer,
     field: fieldReducer,
+    site: siteReducer,
   },
 })
 

@@ -12,6 +12,7 @@ import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper';
 import { toast } from 'react-toastify';
 import { toggleCompanyForm } from '../store/user/companySlice';
 import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
+import { closeSiteForm } from '../store/user/siteSlice';
 
 interface SidebarProps {
   menuItems: MenuItem[];
@@ -32,6 +33,7 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   const companyCreateFormOpenHandler = () => {
     dispatch(toggleCompanyForm())
     dispatch(closeFieldForm())
+    dispatch(closeSiteForm())
   }
 
   return isAuth ? 

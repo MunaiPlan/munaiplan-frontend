@@ -9,3 +9,8 @@ export const useFieldFormOpen = () => {
     const isFieldFormOpen = useAppSelector((state) => state.field.isFieldFormOpened)
     return isFieldFormOpen
 }
+
+export const useSiteFormOpen = () => {
+    const isSiteFormOpen = useAppSelector((state) => state.site.isSiteFormOpened)
+    return isSiteFormOpen
+}

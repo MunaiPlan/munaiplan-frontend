@@ -85,5 +85,17 @@ export interface IField {
 }
 
 export interface ISite {
+    id: string
+    name: string
+    area: number
+    block: string
+    azimuth: number
+    country: string
+    state: string
+    region: string
+    wells: IWell[]
+}
+
+export interface IWell {
 
 }
