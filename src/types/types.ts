@@ -97,5 +97,19 @@ export interface ISite {
 }
 
 export interface IWell {
+    id: string
+    name: string
+    description: string
+    location: string
+    universalWellIdentifier: string
+    type: string
+    wellNumber: string
+    workingGroup: string
+    activeWellUnit: string
+    wellBores: IWellBore[]
+    createdAt: Date
+}
+
+export interface IWellBore {
 
 }

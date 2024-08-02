@@ -25,11 +25,11 @@ const menuStructure: MenuItem[] = [
                       name: 'Ствол Скважины 1',
                       children: [
                         {
-                          id: 5,
+                          id: 6,
                           name: 'Дизайн 1',
                           children: [
                             {
-                              id: 5,
+                              id: 7,
                               name: 'Кейс 1',
                               children: [
                                 // ... more nested items
@@ -45,11 +45,11 @@ const menuStructure: MenuItem[] = [
             },
             {
               id: 8,
-              name: 'Месторождение 1',
+              name: 'Куст 2',
               children: [
                 {
-                  id: 5,
-                  name: 'Месторождение 1',
+                  id: 9,
+                  name: 'Скважина 2',
                   children: [
                     // ... more nested items
                   ],

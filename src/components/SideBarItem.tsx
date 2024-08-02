@@ -5,6 +5,7 @@ import { useAppDispatch } from '../store/hooks';
 import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
 import { closeSiteForm, toggleSiteForm } from '../store/user/siteSlice';
+import { toggleWellForm } from '../store/user/wellSlice';
 
 
 interface MenuItemProps {
@@ -43,6 +44,26 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm())
   }
 
+  const wellCreateFormOpenHandler = () => {
+    dispatch(toggleWellForm())
+    dispatch(closeCompanyForm())
+    dispatch(closeFieldForm())
+    dispatch(closeSiteForm())
+  }
+
+  const func = () => {
+    let content;
+    if (level === 0) {
+      fieldCreateFormOpenHandler()
+    } else if (level === 1) {
+      siteCreateFormOpenHandler()
+    } else if (level === 2) { 
+      wellCreateFormOpenHandler()
+    } else {
+      content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
+    }
+  }
+
   return (
     <>
       <div className="flex gap-x-1 items-center justify-start mt-2">
@@ -63,7 +84,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
           ))}
           {/* The create button might also be conditional based on level or other factors */}
           <button 
-            onClick={level === 0 ? fieldCreateFormOpenHandler : siteCreateFormOpenHandler}
+            onClick={func}
             className="text-gray-200 hover:text-gray-400 text-md mt-2">+ Создать</button>
         </div>
       )}

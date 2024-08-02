@@ -66,7 +66,7 @@ const CreateSite: FC = () => {
 
   return (
     <div className='w-screen flex flex-col justify-center items-center overflow-auto'>  
-          <div className="w-3/4 max-w-md justify-center items-center">
+        <div className="w-3/4 max-w-md justify-center items-center">
           <h2 className="text-3xl font-bold mt-16 mb-8 justify-center flex font-montserrat">Создать куст</h2>
           <form 
             // onSubmit={createSiteHandler}

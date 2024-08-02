@@ -14,3 +14,8 @@ export const useSiteFormOpen = () => {
     const isSiteFormOpen = useAppSelector((state) => state.site.isSiteFormOpened)
     return isSiteFormOpen
 }
+
+export const useWellFormOpen = () => {
+    const isWellFormOpen = useAppSelector((state) => state.well.isWellFormOpened)
+    return isWellFormOpen
+}
