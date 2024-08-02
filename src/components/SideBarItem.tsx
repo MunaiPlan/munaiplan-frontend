@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { FaRegFile } from "react-icons/fa";
 import { useAppDispatch } from '../store/hooks';
-import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
+import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
-import { closeSiteForm, toggleSiteForm } from '../store/user/siteSlice';
-import { toggleWellForm } from '../store/user/wellSlice';
+import { closeSiteForm, openSiteForm } from '../store/user/siteSlice';
+import { closeWellForm, openWellForm } from '../store/user/wellSlice';
+import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 
 
 interface MenuItemProps {
@@ -33,19 +34,32 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   };
 
   const fieldCreateFormOpenHandler = () => {
-    dispatch(toggleFieldForm())
+    dispatch(openFieldForm())
     dispatch(closeCompanyForm())
     dispatch(closeSiteForm())
+    dispatch(closeWellForm())
+    dispatch(closeWellBoreForm())
   }
 
   const siteCreateFormOpenHandler = () => {
-    dispatch(toggleSiteForm())
+    dispatch(openSiteForm())
     dispatch(closeCompanyForm())
     dispatch(closeFieldForm())
+    dispatch(closeWellForm())
+    dispatch(closeWellBoreForm())
   }
 
   const wellCreateFormOpenHandler = () => {
-    dispatch(toggleWellForm())
+    dispatch(openWellForm())
+    dispatch(closeCompanyForm())
+    dispatch(closeFieldForm())
+    dispatch(closeSiteForm())
+    dispatch(closeWellBoreForm())
+  }
+
+  const wellBoreCreateFormOpenHandler = () => {
+    dispatch(openWellBoreForm())
+    dispatch(closeWellForm())
     dispatch(closeCompanyForm())
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
@@ -59,6 +73,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       siteCreateFormOpenHandler()
     } else if (level === 2) { 
       wellCreateFormOpenHandler()
+    } else if (level === 3) {
+      wellBoreCreateFormOpenHandler()
     } else {
       content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
     }

@@ -1,6 +1,6 @@
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { createCompany, toggleCompanyForm } from '../../store/user/companySlice'
+import { createCompany, openCompanyForm } from '../../store/user/companySlice'
 import { toast } from 'react-toastify'
 import { companyService } from '../../services/forms.service'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,7 @@ const CreateCompany: FC = () => {
   const [phoneCompany, setPhoneCompany] = useState("")
 
   const companyCreateFormOpenHandler = () => {
-    dispatch(toggleCompanyForm())
+    dispatch(openCompanyForm())
   }
 
   const createCompanyHandle = () => {

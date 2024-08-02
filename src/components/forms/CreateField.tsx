@@ -1,6 +1,6 @@
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { toggleFieldForm, createField } from '../../store/user/fieldSlice'
+import { openFieldForm, createField } from '../../store/user/fieldSlice'
 import { toast } from 'react-toastify'
 import { fieldService } from '../../services/forms.service'
 import { useNavigate } from 'react-router-dom'
@@ -18,7 +18,7 @@ const CreateField: FC = () => {
   const [fieldSites, setFieldSites] = useState<ISite[]>([])
 
   const fieldCreateFormOpenHandler = () => {
-    dispatch(toggleFieldForm())
+    dispatch(openFieldForm())
   }
 
   const createFieldHandle = () => {

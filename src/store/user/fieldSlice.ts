@@ -32,8 +32,8 @@ export const FieldSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    toggleFieldForm: (state) => {
-        state.isFieldFormOpened = !state.isFieldFormOpened
+    openFieldForm: (state) => {
+        state.isFieldFormOpened = true
     },
     closeFieldForm: (state) => {
       state.isFieldFormOpened = false
@@ -50,7 +50,7 @@ export const FieldSlice = createSlice({
   },
 })
 
-export const { toggleFieldForm, closeFieldForm, createField } = FieldSlice.actions
+export const { openFieldForm, closeFieldForm, createField } = FieldSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectField = (state: RootState) => state.field

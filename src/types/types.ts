@@ -111,5 +111,23 @@ export interface IWell {
 }
 
 export interface IWellBore {
-
+    id: string
+    name: string
+    bottomLocation: string
+    wellBoreDepth: number
+    averageHookLead: number
+    riserPressure: number
+    averageInLetFlow: number
+    averageColumnRotationFrequency: number
+    maximumColumnRotationFrequency: number
+    averageWeightOnBit: number
+    maximumWeightOnBit: number
+    averageTorque: number
+    maximumTorque: number
+    downStaticFriction: number
+    depthInterval: number
+    designs: IDesign[]
+    createdAt: Date
 }
+
+export interface IDesign {}

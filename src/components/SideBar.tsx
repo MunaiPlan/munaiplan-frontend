@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
 import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper';
 import { toast } from 'react-toastify';
-import { toggleCompanyForm } from '../store/user/companySlice';
-import { closeFieldForm, toggleFieldForm } from '../store/user/fieldSlice';
+import { openCompanyForm } from '../store/user/companySlice';
+import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
 import { closeSiteForm } from '../store/user/siteSlice';
 
 interface SidebarProps {
@@ -31,7 +31,7 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   }
 
   const companyCreateFormOpenHandler = () => {
-    dispatch(toggleCompanyForm())
+    dispatch(openCompanyForm())
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
   }

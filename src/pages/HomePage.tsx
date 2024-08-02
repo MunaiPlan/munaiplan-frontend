@@ -1,16 +1,17 @@
 import {FC} from 'react'
-import { useCompanyFormOpen, useFieldFormOpen, useSiteFormOpen, useWellFormOpen } from '../hooks/useForms'
+import { useCompanyFormOpen, useFieldFormOpen, useSiteFormOpen, useWellBoreFormOpen, useWellFormOpen } from '../hooks/useForms'
 import CreateCompany from '../components/forms/CreateCompany'
 import CreateField from '../components/forms/CreateField'
 import CreateSite from '../components/forms/CreateSite'
 import CreateWell from '../components/forms/CreateWell'
-
+import CreateWellBore from '../components/forms/CreateWellBore'
 
 const Home: FC = () => {
   const isCompanyFormOpened = useCompanyFormOpen()
   const isFieldFormOpened = useFieldFormOpen()
   const isSiteFormOpened = useSiteFormOpen()
   const isWellFormOpened = useWellFormOpen()
+  const isWellBoreFormOpened = useWellBoreFormOpen()
 
   let content;
   if (isCompanyFormOpened) {
@@ -21,6 +22,8 @@ const Home: FC = () => {
     content = <CreateSite />
   } else if (isWellFormOpened){
     content = <CreateWell />
+  } else if (isWellBoreFormOpened) {
+    content = <CreateWellBore />
   } else {
     content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
   }

@@ -36,8 +36,8 @@ export const SiteSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    toggleSiteForm: (state) => {
-        state.isSiteFormOpened = !state.isSiteFormOpened
+    openSiteForm: (state) => {
+        state.isSiteFormOpened = true
     },
     closeSiteForm: (state) => {
       state.isSiteFormOpened = false
@@ -56,7 +56,7 @@ export const SiteSlice = createSlice({
   },
 })
 
-export const { toggleSiteForm, createSite, closeSiteForm } = SiteSlice.actions
+export const { openSiteForm, createSite, closeSiteForm } = SiteSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSite = (state: RootState) => state.site

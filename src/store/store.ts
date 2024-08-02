@@ -4,6 +4,7 @@ import companyReducer from './user/companySlice'
 import fieldReducer from './user/fieldSlice'
 import siteReducer from './user/siteSlice'
 import wellReducer from './user/wellSlice'
+import wellBoreReducer from './user/wellBoreSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     field: fieldReducer,
     site: siteReducer,
     well: wellReducer,
+    wellBore: wellBoreReducer,
   },
 })
 

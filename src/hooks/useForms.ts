@@ -19,3 +19,8 @@ export const useWellFormOpen = () => {
     const isWellFormOpen = useAppSelector((state) => state.well.isWellFormOpened)
     return isWellFormOpen
 }
+
+export const useWellBoreFormOpen = () => {
+    const isWellBoreFormOpen = useAppSelector((state) => state.wellBore.isWellBoreFormOpened)
+    return isWellBoreFormOpen
+}

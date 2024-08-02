@@ -1,6 +1,6 @@
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { createWell, toggleWellForm } from '../../store/user/wellSlice'
+import { createWell, openWellForm } from '../../store/user/wellSlice'
 import { toast } from 'react-toastify'
 import { wellService } from '../../services/forms.service'
 import { useNavigate } from 'react-router-dom'
@@ -24,7 +24,7 @@ const CreateWell: FC = () => {
   
 
   const wellCreateFormOpenHandler = () => {
-    dispatch(toggleWellForm())
+    dispatch(openWellForm())
   }
 
   const createWellHandle = () => {
@@ -88,7 +88,7 @@ const CreateWell: FC = () => {
                 placeholderText="Введите имя скважины"
                 onChangeFunction={(value) => {
                     if (typeof value === 'string') {
-                        setDescriptionWell(value);
+                        setNameWell(value);
                     }
                 }}            
             />
@@ -179,7 +179,7 @@ const CreateWell: FC = () => {
                 placeholderText="Введите рабочую группу скважины"
                 onChangeFunction={(value) => {
                     if (typeof value === 'string') {
-                        setWorkingGroupWell(value);
+                        setActiveWellUnitWell(value);
                     }
                 }}
             />

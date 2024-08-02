@@ -1,15 +1,12 @@
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { toggleSiteForm, createSite } from '../../store/user/siteSlice'
+import { openSiteForm, createSite } from '../../store/user/siteSlice'
 import { toast } from 'react-toastify'
 import { siteService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { IWell, ISite } from '../../types/types'
-import { createSlice } from '@reduxjs/toolkit'
+import { IWell } from '../../types/types'
 
 const CreateSite: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   const [nameSite, setNameSite] = useState("")
   const [areaSite, setAreaSite] = useState<number>(0)
@@ -21,7 +18,7 @@ const CreateSite: FC = () => {
   const [wellsSite, setWellsSite] = useState<IWell[]>([])
 
   const siteCreateFormOpenHandler = () => {
-    dispatch(toggleSiteForm())
+    dispatch(openSiteForm())
   }
 
   const createSiteHandle = () => {

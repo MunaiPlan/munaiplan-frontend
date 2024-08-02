@@ -16,7 +16,7 @@ interface WellState {
     activeWellUnit: string | null
     wellBores: IWellBore[] | null
     createdAt: Date | null
-    isWellFormOpened: boolean,
+    isWellFormOpened: boolean
 }
 
 // Define the initial state using that type
@@ -40,8 +40,8 @@ export const WellSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    toggleWellForm: (state) => {
-        state.isWellFormOpened = !state.isWellFormOpened
+    openWellForm: (state) => {
+        state.isWellFormOpened = true
     },
     closeWellForm: (state) => {
       state.isWellFormOpened = false
@@ -62,7 +62,7 @@ export const WellSlice = createSlice({
   },
 })
 
-export const { toggleWellForm, createWell, closeWellForm } = WellSlice.actions
+export const { openWellForm, createWell, closeWellForm } = WellSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectWell = (state: RootState) => state.well
