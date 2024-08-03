@@ -7,6 +7,7 @@ import { closeCompanyForm } from '../store/user/companySlice';
 import { closeSiteForm, openSiteForm } from '../store/user/siteSlice';
 import { closeWellForm, openWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
+import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
 
 
 interface MenuItemProps {
@@ -39,6 +40,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeSiteForm())
     dispatch(closeWellForm())
     dispatch(closeWellBoreForm())
+    dispatch(closeDesignForm())
   }
 
   const siteCreateFormOpenHandler = () => {
@@ -47,6 +49,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm())
     dispatch(closeWellForm())
     dispatch(closeWellBoreForm())
+    dispatch(closeDesignForm())
   }
 
   const wellCreateFormOpenHandler = () => {
@@ -55,6 +58,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
     dispatch(closeWellBoreForm())
+    dispatch(closeDesignForm())
   }
 
   const wellBoreCreateFormOpenHandler = () => {
@@ -63,6 +67,16 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeCompanyForm())
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
+    dispatch(closeDesignForm())
+  }
+
+  const designCreateFormOpenHandler = () => {
+    dispatch(closeWellBoreForm())
+    dispatch(closeWellForm())
+    dispatch(closeCompanyForm())
+    dispatch(closeFieldForm())
+    dispatch(closeSiteForm())
+    dispatch(openDesignForm())
   }
 
   const func = () => {
@@ -75,6 +89,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       wellCreateFormOpenHandler()
     } else if (level === 3) {
       wellBoreCreateFormOpenHandler()
+    } else if (level === 4) {
+      designCreateFormOpenHandler()
     } else {
       content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
     }

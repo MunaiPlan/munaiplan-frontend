@@ -24,3 +24,8 @@ export const useWellBoreFormOpen = () => {
     const isWellBoreFormOpen = useAppSelector((state) => state.wellBore.isWellBoreFormOpened)
     return isWellBoreFormOpen
 }
+
+export const useDesignFormOpen = () => {
+    const isDesignFormOpen = useAppSelector((state) => state.design.isDesignFormOpened)
+    return isDesignFormOpen
+}

@@ -130,4 +130,21 @@ export interface IWellBore {
     createdAt: Date
 }
 
-export interface IDesign {}
+export interface IDesign {
+    id: string
+    planName: string
+    stage: string
+    version: string
+    actualDate: Date
+    cases: ICase[]
+    trajectories: ITrajectory[]
+    createdAt: Date
+}
+
+export interface ICase{
+
+}
+
+export interface ITrajectory{
+
+}

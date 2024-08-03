@@ -13,6 +13,9 @@ import { toast } from 'react-toastify';
 import { openCompanyForm } from '../store/user/companySlice';
 import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
 import { closeSiteForm } from '../store/user/siteSlice';
+import { closeWellForm } from '../store/user/wellSlice';
+import { closeWellBoreForm } from '../store/user/wellBoreSlice';
+import { closeDesignForm } from '../store/user/designSlice';
 
 interface SidebarProps {
   menuItems: MenuItem[];
@@ -34,6 +37,9 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
     dispatch(openCompanyForm())
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
+    dispatch(closeWellForm())
+    dispatch(closeWellBoreForm())
+    dispatch(closeDesignForm())
   }
 
   return isAuth ? 

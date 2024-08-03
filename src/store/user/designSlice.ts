@@ -1,0 +1,61 @@
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../store'
+import { IDesign, ICase, ITrajectory } from '../../types/types'
+
+// Define a type for the slice state
+interface DesignState {
+    id: string | null,
+    namePlan: string | null,
+    stage: string | null,
+    version: string | null,
+    actualDate: Date | null,
+    cases: ICase[] | null,
+    trajectories: ITrajectory[] | null,
+    createdAt: Date | null,
+    isDesignFormOpened: boolean
+}
+
+// Define the initial state using that type
+const initialState: DesignState = {
+    id: null,
+    namePlan: null,
+    stage: null,
+    version: null,
+    actualDate: null,
+    cases: null,
+    trajectories: null,
+    createdAt: null,
+    isDesignFormOpened: false
+}
+
+export const DesignSlice = createSlice({
+  name: 'design',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {
+    openDesignForm: (state) => {
+        state.isDesignFormOpened = true
+    },
+    closeDesignForm: (state) => {
+      state.isDesignFormOpened = false
+    },
+    createDesign: (state, action: PayloadAction<IDesign>) => {
+        state.id = action.payload.id
+        state.namePlan = action.payload.planName
+        state.stage = action.payload.stage
+        state.version = action.payload.version,
+        state.actualDate = action.payload.actualDate,
+        state.cases = action.payload.cases,
+        state.trajectories = action.payload.trajectories,
+        state.createdAt = action.payload.createdAt
+    }
+  }
+})
+
+export const { openDesignForm, createDesign, closeDesignForm } = DesignSlice.actions
+
+// Other code such as selectors can use the imported `RootState` type
+export const selectDesign = (state: RootState) => state.design
+
+export default DesignSlice.reducer
