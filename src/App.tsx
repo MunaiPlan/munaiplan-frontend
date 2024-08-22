@@ -7,28 +7,28 @@ import { login, logout } from "./store/user/userSlice"
 import { useEffect } from "react"
 
 function App() {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
 
-  const checkAuth = async () => {
-    const token = getTokenFromLocalStorage()
-    try {
-      if (token) {
-        const data = await authService.getProfile()
+  // const checkAuth = async () => {
+  //   const token = getTokenFromLocalStorage()
+  //   try {
+  //     if (token) {
+  //       const data = await authService.getProfile()
 
-        if (data) {
-          dispatch(login(data))
-        } else {
-          dispatch(logout())
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //       if (data) {
+  //         dispatch(login(data))
+  //       } else {
+  //         dispatch(logout())
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  useEffect(() => {
-    checkAuth()
-  }, [])
+  // useEffect(() => {
+  //   checkAuth()
+  // }, [])
 
   return <RouterProvider router={router}/>
 }

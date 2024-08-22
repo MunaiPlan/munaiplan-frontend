@@ -8,6 +8,7 @@ import { closeSiteForm, openSiteForm } from '../store/user/siteSlice';
 import { closeWellForm, openWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
+import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
 
 
 interface MenuItemProps {
@@ -41,6 +42,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeWellForm())
     dispatch(closeWellBoreForm())
     dispatch(closeDesignForm())
+    dispatch(closeCaseForm())
   }
 
   const siteCreateFormOpenHandler = () => {
@@ -50,6 +52,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeWellForm())
     dispatch(closeWellBoreForm())
     dispatch(closeDesignForm())
+    dispatch(closeCaseForm())
   }
 
   const wellCreateFormOpenHandler = () => {
@@ -59,6 +62,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeSiteForm())
     dispatch(closeWellBoreForm())
     dispatch(closeDesignForm())
+    dispatch(closeCaseForm())
   }
 
   const wellBoreCreateFormOpenHandler = () => {
@@ -68,6 +72,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
     dispatch(closeDesignForm())
+    dispatch(closeCaseForm())
   }
 
   const designCreateFormOpenHandler = () => {
@@ -77,6 +82,17 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())
     dispatch(openDesignForm())
+    dispatch(closeCaseForm())
+  }
+
+  const caseCreateFormOpenHandler = () => {
+    dispatch(openCaseForm())
+    dispatch(closeWellBoreForm())
+    dispatch(closeWellForm())
+    dispatch(closeCompanyForm())
+    dispatch(closeFieldForm())
+    dispatch(closeSiteForm())
+    dispatch(closeDesignForm())
   }
 
   const func = () => {
@@ -91,6 +107,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       wellBoreCreateFormOpenHandler()
     } else if (level === 4) {
       designCreateFormOpenHandler()
+    } else if (level === 5){
+      caseCreateFormOpenHandler()
     } else {
       content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
     }

@@ -1,25 +1,20 @@
-import { instance } from "../api/axios.api"
-import { IUserData, RegistrationData, RegistrationResponseData, IUser } from "../types/types"
+import { instance } from "../api/axios.api";
+import { IUserData, RegistrationData, RegistrationResponseData, IUser } from "../types/types";
+
 export const authService = {
-
-    async login(userData: IUserData): Promise<IUser | undefined> {
-        const {data} = await instance.post<IUser>('api/v1/users/sign-in', {body: userData, organizationID: '001'})
-        return data
+    async login(userData: IUserData, organizationId: string): Promise<IUser | undefined> {
+        const { data } = await instance.post<IUser>(
+          `api/v1/users/sign-in?organizationId=${organizationId}`,
+          userData
+        );
+        return data;
     },
 
-    async registration(userData: RegistrationData): Promise<RegistrationResponseData | undefined> {
-        const requestBody = {
-            "body": userData,
-            "organizationID": "001"
-        };
-        const {data} = await instance.post<RegistrationResponseData>('api/v1/users/sign-up', requestBody)
-        return data
-    },
-
-    async getProfile(): Promise<IUser | undefined> {
-        const {data} = await instance.get<IUser>('api/v1/users/sign-out')
-        if (data){
-            return data
-        }
-    },
-}
+    async registration(userData: RegistrationData, organizationId: string): Promise<RegistrationResponseData | undefined> {     
+        const { data } = await instance.post<RegistrationResponseData>(
+          `api/v1/users/sign-up?organizationId=${organizationId}`, 
+          userData
+        );
+        return data;
+      },
+};

@@ -6,6 +6,7 @@ import siteReducer from './user/siteSlice'
 import wellReducer from './user/wellSlice'
 import wellBoreReducer from './user/wellBoreSlice'
 import designReducer from './user/designSlice'
+import caseReducer from './user/caseSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     well: wellReducer,
     wellBore: wellBoreReducer,
     design: designReducer,
+    case: caseReducer
   },
 })
 

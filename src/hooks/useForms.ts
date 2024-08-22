@@ -29,3 +29,8 @@ export const useDesignFormOpen = () => {
     const isDesignFormOpen = useAppSelector((state) => state.design.isDesignFormOpened)
     return isDesignFormOpen
 }
+
+export const useCaseFormOpen = () => {
+    const isCaseFormOpen = useAppSelector((state) => state.case.isCaseFormOpened)
+    return isCaseFormOpen
+}

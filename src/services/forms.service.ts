@@ -1,5 +1,5 @@
 import { instance } from "../api/axios.api"
-import { ICompany, IDesign, IField, ISite, IWell, IWellBore } from "../types/types"
+import { ICompany, IDesign, IField, ISite, IWell, IWellBore, ICase } from "../types/types"
 
 export const companyService = {
     async createCompany(companyData: ICompany): Promise<ICompany | undefined> {
@@ -39,6 +39,13 @@ export const wellBoreService = {
 export const DesignService = {
     async createDesign(designData: IDesign): Promise<IDesign | undefined> {
         const {data} = await instance.post<IDesign>('api/design', {designData})
+        return data
+    }
+}
+
+export const CaseService = {
+    async createCase(caseData: ICase): Promise<ICase | undefined> {
+        const {data} = await instance.post<ICase>('api/case', {caseData})
         return data
     }
 }

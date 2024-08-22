@@ -5,8 +5,8 @@ import { MdPeople } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from '../hooks/useAuth';
-import { useAppDispatch } from '../store/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
 import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper';
 import { toast } from 'react-toastify';
@@ -16,6 +16,9 @@ import { closeSiteForm } from '../store/user/siteSlice';
 import { closeWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm } from '../store/user/designSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@reduxjs/toolkit/query';
+import { IResponseLoader } from '../types/types';
 
 interface SidebarProps {
   menuItems: MenuItem[];
@@ -25,6 +28,7 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   const isAuth = useAuth()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  // const { companies: initialCompanies } = useLoaderData() as IResponseLoader
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -63,15 +67,21 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
         <div className='flex flex-col flex-grow'>
           <div className='flex justify-start items-center'>
             <HiMiniSquares2X2 className='mr-2 text-gray-500' />
-            Каталог
+            <button onClick={() => navigate('/catalog')}>
+              Каталог
+            </button>
           </div>
           <div className='flex justify-start items-center mt-2'>
             <MdPeople className='mr-2 text-gray-500' />
-            Аккаунт
+            <button onClick={() => navigate('/account')}>
+              Аккаунт
+            </button>
           </div>
           <div className='flex justify-start items-center mt-2 mb-2'>
             <FaGear className='mr-2 text-gray-500' />
-            Настройки
+            <button onClick={() => navigate('/settings')}>
+              Настройки
+            </button>
           </div>
         </div>
         <div className='flex items-center justify-end ml-4'>

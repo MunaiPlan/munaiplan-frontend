@@ -61,7 +61,7 @@ const CreateCompany: FC = () => {
 
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
-          <div className="w-3/4 max-w-md justify-center items-center">
+          <div className="w-3/4 max-w-md justify-center items-center bg-gray-200 rounded-lg p-5 m-5">
           <h2 className="text-3xl font-bold mb-8 justify-center flex font-montserrat">Создать компанию</h2>
           <form 
             // onSubmit={createCompanyHandler}

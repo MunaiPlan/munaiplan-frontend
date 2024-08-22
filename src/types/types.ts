@@ -64,8 +64,8 @@ export interface IResponseUserData {
 
 
 export interface ICompany {
-    id: string | null 
-    name: string | null
+    id: number
+    name: string
     division: string | null
     group: string | null
     representative: string | null
@@ -142,9 +142,18 @@ export interface IDesign {
 }
 
 export interface ICase{
-
+    id: string
+    caseName: string
+    caseDescription: string
+    drillDepth: number
+    pipeSize: number
+    createdAt: Date
 }
 
 export interface ITrajectory{
 
+}
+
+export interface IResponseLoader {
+    companies: ICompany[]
 }

@@ -16,6 +16,8 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
+                // loader: companiesLoader,
+                // action: companiesAction,
                 element: (
                     <ProtectedRoute>
                          <Home />
