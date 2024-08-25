@@ -65,11 +65,9 @@ const menuStructure: MenuItem[] = [
   ];
 
 const Layout: FC = () => {
-    return (
-    <div className="flex h-screen w-full">
-        <SideBar menuItems={menuStructure}/>
-        <Outlet />
-    </div>)
+    return <>
+      <Outlet />
+    </>
 }
 
 export default Layout;

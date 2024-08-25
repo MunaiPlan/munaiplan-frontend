@@ -12,3 +12,4 @@ export function setTokenToLocalStorage(key:string, token:string): void {
 export function removeTokenFromLocalStorage(key:string):void {
     localStorage.removeItem(key)
 }
+

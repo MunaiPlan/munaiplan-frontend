@@ -7,6 +7,8 @@ import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
+import CreateCompany from "../components/forms/CreateCompany";
+import Company, { companiesAction, companiesLoader } from "../pages/Company";
 
 export const router = createBrowserRouter([
     {
@@ -16,8 +18,8 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                // loader: companiesLoader,
-                // action: companiesAction,
+                loader: companiesLoader,
+                action: companiesAction,
                 element: (
                     <ProtectedRoute>
                          <Home />
@@ -52,6 +54,14 @@ export const router = createBrowserRouter([
                 path: 'auth',
                 element: <Auth />,
             },
+            {
+                loader: companiesLoader,
+                action: companiesAction,
+                path: 'companies',
+                element: <ProtectedRoute>
+                            <Company />
+                        </ProtectedRoute>
+            }
         ]
     }
 ])

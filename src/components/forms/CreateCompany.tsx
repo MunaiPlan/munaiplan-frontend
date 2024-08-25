@@ -3,9 +3,25 @@ import { useAppDispatch } from '../../store/hooks'
 import { createCompany, openCompanyForm } from '../../store/user/companySlice'
 import { toast } from 'react-toastify'
 import { companyService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
+import { instance } from '../../api/axios.api'
+import { ICompany, IField } from '../../types/types'
 
-const CreateCompany: FC = () => {
+interface ICompanyForm {
+  type: "post" | "patch";
+  id?: number;
+  prevName: string;
+  prevDivision: string;
+  prevGroup: string;
+  prevRepresentative: string;
+  prevAddress: string;
+  prevPhone: string;
+  fields?: IField[];
+  setIsEdit?: (edit: boolean) => void;
+}
+
+
+const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, fields, setIsEdit}) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -20,52 +36,15 @@ const CreateCompany: FC = () => {
     dispatch(openCompanyForm())
   }
 
-  const createCompanyHandle = () => {
-    console.log("It works 1")
-    dispatch(createCompany({
-      id: "",
-      name: nameCompany,
-      division: divisionCompany,
-      group: groupCompany,
-      representative: representativeCompany,
-      address: addressCompany,
-      phone: phoneCompany,
-      fields: []
-    }))
-    toast.success('Company was successfully created')
-    companyCreateFormOpenHandler()
-  }
-
-  const createCompanyHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await companyService.createCompany({
-        id: "",
-        name: nameCompany,
-        division: divisionCompany,
-        group: groupCompany,
-        representative: representativeCompany,
-        address: addressCompany,
-        phone: phoneCompany,
-        fields: []
-      })
-      if (data){
-        toast.success('Company was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a company'
-      toast.error(error.toString()) 
-    }
-  }
-
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
           <div className="w-3/4 max-w-md justify-center items-center bg-gray-200 rounded-lg p-5 m-5">
           <h2 className="text-3xl font-bold mb-8 justify-center flex font-montserrat">Создать компанию</h2>
-          <form 
-            // onSubmit={createCompanyHandler}
-            className="mb-7">
+          <Form 
+            className='grid gap-2' 
+            method={type} 
+            action='/companies'
+          >
             {/* Name of company */}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="nameCompany">
@@ -75,10 +54,12 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="nameCompany"
                 type="text"
-                placeholder="Введите имя компании"
+                placeholder={type=="patch" ? prevName : "Введите имя компании"} 
+                value={nameCompany}
                 onChange={(e) => setNameCompany(e.target.value)}
                 required
               />
+              <input type="hidden" name="id" value={id}/>
             </div>
 
             {/* Division of company */}
@@ -90,7 +71,8 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="divisionCompany"
                 type="text"
-                placeholder="Введите дивизию компании"
+                placeholder={type=="patch" ? prevDivision : "Введите дивизию компании"} 
+                value={divisionCompany}
                 onChange={(e) => setDivisionCompany(e.target.value)}
                 required
               />
@@ -105,7 +87,8 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="groupCompany"
                 type="text"
-                placeholder="Введите группу компании"
+                placeholder={type=="patch" ? prevGroup : "Введите группу компании"} 
+                value={groupCompany}
                 onChange={(e) => setGroupCompany(e.target.value)}
                 required
               />
@@ -120,8 +103,9 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="representativeCompany"
                 type="text"
-                placeholder="Введите ФИО представителя"
+                placeholder={type=="patch" ? prevRepresentative : "Введите ФИО представителя"} 
                 onChange={(e) => setRepresentativeCompany(e.target.value)}
+                value={representativeCompany}
                 required
               />
             </div>
@@ -135,7 +119,8 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="addressCompany"
                 type="text"
-                placeholder="Введите адрес компании"
+                placeholder={type=="patch" ? prevAddress : "Введите адрес компании"} 
+                value={addressCompany}
                 onChange={(e) => setAddressCompany(e.target.value)}
                 required
               />
@@ -150,18 +135,22 @@ const CreateCompany: FC = () => {
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="phoneNumberCompany"
                 type="text"
-                placeholder="Введите телефонный номер компании"
+                placeholder={type=="patch" ? prevPhone : "Введите телефонный номер компании"} 
+                value={phoneCompany}
                 onChange={(e) => setPhoneCompany(e.target.value)}
                 required
               />
             </div>
+            {/* Submit button */}
             <div className="flex items-center justify-between">
-              <button
-                onClick={createCompanyHandle}
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" // type='submit'
-              >Создать компанию</button>
+                <button type="submit" className='w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+                    {type === 'patch' ? 'Обновить' : 'Создать'}
+                </button>
+                { type === 'patch' && (<button className="btn btn-red" onClick={() => {
+                    if(setIsEdit) {setIsEdit(false);}
+                }}>Close</button>)}
             </div>
-          </form>
+          </Form>
       </div>
     </div>
   )

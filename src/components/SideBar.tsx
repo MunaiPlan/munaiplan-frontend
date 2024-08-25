@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useEffect} from 'react'
 import SideBarMenu, { MenuItem } from './SideBarItem';
 import { HiMiniSquares2X2 } from "react-icons/hi2";
 import { MdPeople } from "react-icons/md";
@@ -28,7 +28,10 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   const isAuth = useAuth()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  // const { companies: initialCompanies } = useLoaderData() as IResponseLoader
+  console.log("1")
+  const { companies: initialCompanies = [] } = useLoaderData() as IResponseLoader || {};
+  console.log(initialCompanies)
+  console.log("2")
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -57,7 +60,7 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
       {/* Dropdown */}
       <div className='flex flex-col ml-10 mr-10 mb-6 overflow-y-auto flex-grow'>
         <div className='flex flex-col gap-x-1 items-start justify-center'>
-          {menuItems.map((item) => (
+          {initialCompanies.map((item) => (
             <SideBarMenu key={item.id} item={item} />
           ))}
         </div>

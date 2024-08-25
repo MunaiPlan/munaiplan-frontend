@@ -64,6 +64,10 @@ const Auth: FC = () => {
   };
 
   return (
+    <div className='flex h-screen w-full'>
+      <div className="w-1/2 bg-[#16171B] flex items-top justify-left">
+        <h1 className="text-white text-3xl font-semibold ml-24 mt-12 font-inter">MunaiPlan</h1>
+      </div>
     <div className="w-1/2 flex items-center justify-center">
       <div className="w-3/4 max-w-md justify-center items-center">
         <h2 className="text-3xl font-bold mb-8 justify-center flex font-montserrat">
@@ -176,6 +180,7 @@ const Auth: FC = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };
