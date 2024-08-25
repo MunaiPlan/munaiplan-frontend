@@ -26,6 +26,7 @@ export const companiesLoader = async() => {
 export const companiesAction = async({request }: any) => {
   switch (request.method) {
     case "POST": {
+      try {
       const formData = await request.formData()
       console.log(formData.get("name"))
       const newCompany = {
@@ -39,7 +40,11 @@ export const companiesAction = async({request }: any) => {
       }
       await instance.post('/api/v1/companies', newCompany)
       toast.success("Company was added")
-      return null
+      return null}
+      catch (err: any) {
+        const error = err.response?.data.message || 'An error occurred during login';
+        toast.error(error.toString());
+      }
     }
     case "DELETE": {
         const formData = await request.formData()
