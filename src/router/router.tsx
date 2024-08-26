@@ -58,9 +58,11 @@ export const router = createBrowserRouter([
                 loader: companiesLoader,
                 action: companiesAction,
                 path: 'companies',
-                element: <ProtectedRoute>
-                            <Company />
-                        </ProtectedRoute>
+                element: (
+                    <ProtectedRoute>
+                        <Company />
+                    </ProtectedRoute>
+                )
             }
         ]
     }

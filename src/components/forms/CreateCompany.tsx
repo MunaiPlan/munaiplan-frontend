@@ -43,7 +43,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
           <Form 
             className='grid gap-2' 
             method={type} 
-            action='/companies'
+            action='companies'
           >
             {/* Name of company */}
             <div className="mb-4">
@@ -54,6 +54,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="nameCompany"
                 type="text"
+                name='name'
                 placeholder={type=="patch" ? prevName : "Введите имя компании"} 
                 value={nameCompany}
                 onChange={(e) => setNameCompany(e.target.value)}
@@ -71,6 +72,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="divisionCompany"
                 type="text"
+                name='division'
                 placeholder={type=="patch" ? prevDivision : "Введите дивизию компании"} 
                 value={divisionCompany}
                 onChange={(e) => setDivisionCompany(e.target.value)}
@@ -87,6 +89,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="groupCompany"
                 type="text"
+                name='group'
                 placeholder={type=="patch" ? prevGroup : "Введите группу компании"} 
                 value={groupCompany}
                 onChange={(e) => setGroupCompany(e.target.value)}
@@ -103,6 +106,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="representativeCompany"
                 type="text"
+                name='representative'
                 placeholder={type=="patch" ? prevRepresentative : "Введите ФИО представителя"} 
                 onChange={(e) => setRepresentativeCompany(e.target.value)}
                 value={representativeCompany}
@@ -119,6 +123,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="addressCompany"
                 type="text"
+                name='address'
                 placeholder={type=="patch" ? prevAddress : "Введите адрес компании"} 
                 value={addressCompany}
                 onChange={(e) => setAddressCompany(e.target.value)}
@@ -135,6 +140,7 @@ const CreateCompany: FC<ICompanyForm> = ({type, id, prevName, prevDivision, prev
                 className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="phoneNumberCompany"
                 type="text"
+                name='phone'
                 placeholder={type=="patch" ? prevPhone : "Введите телефонный номер компании"} 
                 value={phoneCompany}
                 onChange={(e) => setPhoneCompany(e.target.value)}
