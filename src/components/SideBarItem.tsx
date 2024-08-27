@@ -9,6 +9,7 @@ import { closeWellForm, openWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 interface MenuItemProps {
@@ -28,11 +29,11 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = item.children && item.children.length > 0;
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "кейс"];
 
   const handleToggle = () => {
-    if (hasChildren) {
-      setIsOpen(!isOpen);
-    }
+    setIsOpen(!isOpen);
   };
 
   const fieldCreateFormOpenHandler = () => {
@@ -112,14 +113,21 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     } else {
       content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
     }
+    navigate('/')
+  }
+
+  const goTo = () => {
+    if (level == 0) {
+      navigate(`/companies/${item.id}`)
+    }
   }
 
   return (
     <>
       <div className="flex gap-x-1 items-center justify-start mt-2">
-        <div className="flex items-center" onClick={handleToggle}>
-          {item.name.split(' ')[0] === "Кейс" ? (<FaRegFile className='mr-1'/>) : (isOpen ? <IoIosArrowDown className='mr-1'/> : <IoIosArrowForward className='mr-1'/>)}   
-          {item.name}
+        <div className="flex items-center">
+          {item.name.split(' ')[0] === "Кейс" ? (<FaRegFile className='mr-1'/>) : (isOpen ? <IoIosArrowDown onClick={handleToggle} className='mr-1'/> : <IoIosArrowForward onClick={handleToggle} className='mr-1'/>)}   
+          <label onClick={goTo}>{item.name}</label>
         </div>
         {/* {hasChildren && (
           <button onClick={handleToggle}>
@@ -127,17 +135,23 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
           </button>
         )} */}
       </div>
-      {isOpen && hasChildren && (
+      {isOpen && hasChildren ? (
         <div className="ml-4">
           {item.children?.map((child) => (
             <SideBarMenu key={child.id} item={child} level={level + 1} />
           ))}
-          {/* The create button might also be conditional based on level or other factors */}
           <button 
             onClick={func}
-            className="text-gray-200 hover:text-gray-400 text-md mt-2">+ Создать</button>
+            className="text-gray-200 hover:text-gray-400 text-md mt-2 truncate">{"+ Создать " + entities[level]}
+          </button>
         </div>
-      )}
+      ) : (isOpen && !hasChildren && (
+        <button 
+          onClick={func}
+          className="ml-4 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">{"+ Создать " + entities[level]}
+        </button>
+      )) 
+    }
     </>
   );
 };

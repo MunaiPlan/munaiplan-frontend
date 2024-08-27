@@ -1,14 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
 import ErrorPage from "../pages/ErrorPage";
-import Home from "../pages/HomePage";
+import Home, { companiesAction, companiesLoader } from "../pages/HomePage";
 import Catalog from "../pages/Catalog";
 import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CreateCompany from "../components/forms/CreateCompany";
-import Company, { companiesAction, companiesLoader } from "../pages/Company";
+import Company from "../pages/CompanyDetailPage";
+import CompanyDetail from "../pages/CompanyDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -57,10 +58,10 @@ export const router = createBrowserRouter([
             {
                 loader: companiesLoader,
                 action: companiesAction,
-                path: 'companies',
+                path: '/:id',
                 element: (
                     <ProtectedRoute>
-                        <Company />
+                        <CompanyDetail />
                     </ProtectedRoute>
                 )
             }

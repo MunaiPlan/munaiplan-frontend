@@ -66,11 +66,11 @@ export interface IResponseUserData {
 export interface ICompany {
     id: number
     name: string
-    division: string | null
-    group: string | null
-    representative: string | null
-    address: string | null
-    phone: string | null
+    division: string
+    group: string
+    representative: string
+    address: string
+    phone: string
     fields: IField[] | null
 }
 

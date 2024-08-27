@@ -20,11 +20,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@reduxjs/toolkit/query';
 import { IResponseLoader } from '../types/types';
 
-interface SidebarProps {
-  menuItems: MenuItem[];
-}
-
-const SideBar: FC<SidebarProps> = ({menuItems}) => {
+const SideBar: FC = () => {
   const isAuth = useAuth()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -50,8 +46,8 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
   }
 
   return isAuth ? 
-    (<div className='flex flex-col w-1/5 bg-[#16171B] text-white absolute h-screen'>
-      <h1 className='flex text-4xl font-semibold font-montserrat mt-12 mb-16 justify-center items-start'>MunaiPlan</h1>
+    (<div className='flex flex-col w-1/5 bg-[#16171B] text-white fixed h-screen'>
+      <h1 className='flex text-4xl font-semibold font-montserrat mt-12 mb-16 justify-center items-start' onClick={() => {navigate("/")}}>MunaiPlan</h1>
       <div 
         onClick={companyCreateFormOpenHandler}
         className='flex justify-center items-start'>
@@ -96,7 +92,7 @@ const SideBar: FC<SidebarProps> = ({menuItems}) => {
       </div>
     </div>) : (
       <div className="w-1/2 bg-[#16171B] flex items-top justify-left">
-        <h1 className="text-white text-3xl font-semibold ml-24 mt-12 font-inter">MunaiPlan</h1>
+        <h1 className="text-white text-3xl font-semibold ml-24 mt-12 font-inter" onClick={() => {navigate("/")}}>MunaiPlan</h1>
       </div>
 )};
 

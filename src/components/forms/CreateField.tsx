@@ -1,12 +1,27 @@
+import { ISite } from "../../types/types"
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { openFieldForm, createField } from '../../store/user/fieldSlice'
+import { createCompany, openCompanyForm } from '../../store/user/companySlice'
 import { toast } from 'react-toastify'
-import { fieldService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { ICompany, ISite } from '../../types/types'
+import { companyService } from '../../services/forms.service'
+import { Form, useNavigate } from 'react-router-dom'
+import { instance } from '../../api/axios.api'
+import { ICompany, IField } from '../../types/types'
 
-const CreateField: FC = () => {
+interface IFieldForm {
+  type: "post" | "patch";
+  id?: string;
+  companyId: string;
+  prevName: string
+  prevDescription: string;
+  prevReductionLevel: string;
+  prevActiveFieldUnit: string;
+  sites?: ISite[];
+  setIsEdit?: (edit: boolean) => void;
+}
+
+
+const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevReductionLevel, prevActiveFieldUnit, setIsEdit}) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -14,122 +29,91 @@ const CreateField: FC = () => {
   const [descriptionField, setDescriptionField] = useState("")
   const [reductionLevelField, setReductionLevelField] = useState("")
   const [activeFieldUnitField, setActiveFieldUnitField] = useState("")
-  const [fieldCompany, setFieldCompant] = useState<ICompany>()
-  const [fieldSites, setFieldSites] = useState<ISite[]>([])
 
-  const fieldCreateFormOpenHandler = () => {
-    dispatch(openFieldForm())
-  }
-
-  const createFieldHandle = () => {
-    dispatch(createField({
-      companyId: "",
-      name: nameField,
-      description: descriptionField,
-      reductionLevel: reductionLevelField,
-      activeFieldUnit: activeFieldUnitField,
-      company: fieldCompany,
-      sites: fieldSites,
-    }))
-    toast.success('Field was successfully created')
-    fieldCreateFormOpenHandler()
-  }
-
-  const createFieldHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await fieldService.createField({
-        companyId: "",
-        name: nameField,
-        description: descriptionField,
-        reductionLevel: reductionLevelField,
-        activeFieldUnit: activeFieldUnitField,
-        company: fieldCompany,
-        sites: fieldSites,
-      })
-      if (data){
-        toast.success('Field was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a field'
-      toast.error(error.toString()) 
-    }
-  }
 
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
-          <div className="w-3/4 max-w-md justify-center items-center">
-          <h2 className="text-3xl font-bold mb-8 justify-center flex font-montserrat">Создать месторождение</h2>
-          <form 
-            // onSubmit={createFieldHandler}
-            className="mb-7">
+        <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">Создать новое месторождение</h2>
+          <Form 
+            className='grid gap-2' 
+            method={type} 
+            action='fields'
+          >
             {/* Name of field */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="nameOfField">
+            <div className="input-wrapper">
+              <label htmlFor="nameField">
                 Имя месторождении
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="nameOfField"
+                id="nameField"
                 type="text"
-                placeholder="Введите имя месторождении"
+                name='name'
+                placeholder={type=="patch" ? prevName : "Введите имя месторождении"} 
+                value={nameField}
                 onChange={(e) => setNameField(e.target.value)}
                 required
               />
+              <input type="hidden" name="id" value={id}/>
             </div>
 
-            {/* Description of company */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="descriptionOfField">
+            {/* Description of field */}
+            <div className="input-wrapper">
+              <label htmlFor="descriptionField">
                 Описание месторождении
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="descriptionOfField"
+                id="descriptionField"
                 type="text"
-                placeholder="Введите описание месторождении"
+                name='description'
+                placeholder={type=="patch" ? prevDescription : "Введите описание месторождении"} 
+                value={descriptionField}
                 onChange={(e) => setDescriptionField(e.target.value)}
                 required
               />
             </div>
 
-            {/* Reduction Level of company */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="reductionLevelOfField">
+            {/* Reduction Level of Field */}
+            <div className="input-wrapper">
+              <label htmlFor="reductionLevelField">
                 Уровень редукции месторождении
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="reductionLevelOfField"
+                id="reductionLevelField"
                 type="text"
-                placeholder="Введите уровень редукции месторождении"
+                name='reductionLevel'
+                placeholder={type=="patch" ? prevReductionLevel : "Введите Уровень редукции месторождении"} 
+                value={reductionLevelField}
                 onChange={(e) => setReductionLevelField(e.target.value)}
                 required
               />
             </div>
 
-            {/* Active Field Unit of Field */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="activeFieldUnitOfField">
-                Уровень редукции месторождении
+            {/* Active Unit Field */}
+            <div className="input-wrapper">
+              <label htmlFor="activeFieldField">
+                Активная полевая единица месторождении
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
                 id="activeFieldUnitOfField"
                 type="text"
-                placeholder="Введите активную полевую единицу месторождении"
+                name='activeFieldUnitOfField'
+                placeholder={type=="patch" ? prevActiveFieldUnit : "Введите активную полевую единицу месторождении"} 
                 onChange={(e) => setActiveFieldUnitField(e.target.value)}
+                value={activeFieldUnitField}
                 required
               />
             </div>
-            <div className="flex items-center justify-between">
-              <button
-                onClick={createFieldHandle}
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" // type='submit'
-              >Создать месторождение</button>
+            {/* Submit button */}
+            <div className="flex items-center justify-between mt-3 mx-6">
+                <button type="submit" className='w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+                    {type === 'patch' ? 'Обновить' : 'Создать'}
+                </button>
+                { type === 'patch' && (<button className="btn btn-red" onClick={() => {
+                    if(setIsEdit) {setIsEdit(false);}
+                }}>Close</button>)}
             </div>
-          </form>
+          </Form>
       </div>
     </div>
   )
