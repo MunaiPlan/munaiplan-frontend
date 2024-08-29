@@ -43,60 +43,6 @@ export const companiesLoader = async() => {
   }
 };
 
-export const companiesAction = async({request }: any) => {
-  switch (request.method) {
-    case "POST": {
-      const formData = await request.formData()
-      console.log(formData)
-      console.log(formData.get("name"))
-      const newCompany = {
-        name: formData.get("name"),
-        division: formData.get("division"),
-        group: formData.get("group"),
-        representative: formData.get("representative"),
-        address: formData.get("address"),
-        phone: formData.get("phone")
-      }
-      await instance.post('/api/v1/companies', newCompany)
-      toast.success("Company was added")
-      return null
-    }
-    case "DELETE": {
-        const formData = await request.formData()
-        const companyID = formData.get('id')
-        await instance.delete(`/api/v1/companies/${companyID}`)
-        toast.success("Компания была успешно удалена")
-        return redirect('/');
-    }
-    case "PUT": {
-      console.log("PUT works");
-      const formData = await request.formData();
-      const companyID = formData.get("id");
-      console.log("Company ID:", companyID);
-      const updatedCompany = {
-        name: formData.get("name"),
-        division: formData.get("division"),
-        group: formData.get("group"),
-        representative: formData.get("representative"),
-        address: formData.get("address"),
-        phone: formData.get("phone")
-      };
-      console.log("Updated Company:", updatedCompany);
-      
-      // API call
-      try {
-        const response = await instance.put(`/api/v1/companies/${companyID}`, updatedCompany);
-        console.log("Response:", response);
-        toast.success("Компания была успешно обновлено");
-        return redirect('/');
-      } catch (error) {
-        console.error("Update failed:", error);
-        toast.error("Failed to update the company");
-      }
-    }
-  }
-}
-
 
 const Home: FC = () => {
   const isCompanyFormOpened = useCompanyFormOpen()

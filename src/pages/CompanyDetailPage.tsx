@@ -44,13 +44,8 @@ const CompanyDetail: React.FC = () => {
     }
   };
 
-  const companyCreateFormOpenHandler = () => {
-    dispatch(openCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeWellForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeDesignForm());
+  const handleUpdateSuccess = () => {
+    setIsEdit(false);
   };
 
   if (!company) {
@@ -59,32 +54,36 @@ const CompanyDetail: React.FC = () => {
 
   return (
     <div className='h-screen w-full flex'>
-      <SideBar />
-      <div className='flex flex-col h-screen w-full'>
+      <div className='w-1/5'>
+        <SideBar />
+      </div>
+      <div className='flex flex-col h-screen w-4/5 justify-center items-center gap-y-4'>
         {!isEdit ? (
           <>
-            <div className='flex flex-col items-center'>
-              <h1>{company.name}</h1>
-              <p>Division: {company.division}</p>
-              <p>Group: {company.group}</p>
-              <p>Representative: {company.representative}</p>
-              <p>Address: {company.address}</p>
-              <p>Phone: {company.phone}</p>
+            <div className='flex flex-col justify-center items-center w-full'>
+              <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
+                <h1>О компании: <label className='font-bold'>{company.name}</label></h1>
+                <p>Дивизия: <label className='font-bold'>{company.division}</label></p>
+                <p>Группа: <label className='font-bold'>{company.group}</label></p>
+                <p>Представитель: <label className='font-bold'>{company.representative}</label></p>
+                <p>Адрес: <label className='font-bold'>{company.address}</label></p>
+                <p>Телефонный номер: <label className='font-bold'>{company.phone}</label></p>
+              </div>
             </div>
-            <div className='flex flex-col items-center'>
+            <div className='flex w-full items-center justify-center gap-x-4'>
               <button
-                className='btn hover:btn-green items-center justify-center'
+                className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
                 onClick={() => {
                   setIsEdit(true);
                 }}
               >
-                <FaPen />
+                Изменить
               </button>
               <button
-                className='btn hover:btn-red items-center justify-center ml-auto'
+                className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
                 onClick={handleDelete}
               >
-                <FaTrash />
+                Удалить
               </button>
             </div>
           </>
@@ -99,6 +98,7 @@ const CompanyDetail: React.FC = () => {
               prevPhone={company.phone}
               type='put'
               id={id}
+              onSuccess={handleUpdateSuccess}
             />
           )
         )}

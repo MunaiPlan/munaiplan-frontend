@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
 import ErrorPage from "../pages/ErrorPage";
-import Home, { companiesAction, companiesLoader } from "../pages/HomePage";
+import Home, { companiesLoader } from "../pages/HomePage";
 import Catalog from "../pages/Catalog";
 import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
@@ -18,7 +18,6 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 loader: companiesLoader,
-                action: companiesAction,
                 element: (
                     <ProtectedRoute>
                          <Home />
@@ -55,7 +54,6 @@ export const router = createBrowserRouter([
             },
             {
                 loader: companiesLoader,
-                action: companiesAction,
                 path: '/:id',
                 element: (
                     <ProtectedRoute>

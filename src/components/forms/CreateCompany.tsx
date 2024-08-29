@@ -3,6 +3,8 @@ import { Form } from 'react-router-dom'
 import { ICompany, IField } from '../../types/types'
 import { useAppDispatch } from '../../store/hooks';
 import { openCompanyForm } from '../../store/user/companySlice';
+import { instance } from '../../api/axios.api';
+import { toast } from 'react-toastify';
 
 interface ICompanyForm {
   type: "post" | "put";
@@ -15,10 +17,11 @@ interface ICompanyForm {
   prevPhone: string;
   fields?: IField[];
   setIsEdit?: (edit: boolean) => void;
+  onSuccess?: () => void
 }
 
 
-const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, fields, setIsEdit}) => {
+const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, fields, setIsEdit, onSuccess}) => {
 
   const [nameCompany, setNameCompany] = useState(prevName)
   const [divisionCompany, setDivisionCompany] = useState(prevDivision)
@@ -32,14 +35,48 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
     dispatch(openCompanyForm())
   }
 
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      if (type == 'post') {
+        const newCompany = {
+          name: nameCompany,
+          division: divisionCompany,
+          group: groupCompany,
+          representative: representativeCompany,
+          address: addressCompany,
+          phone: phoneCompany
+        };
+        await instance.post('/api/v1/companies', newCompany)
+        toast.success("Company was added")
+        window.location.reload();
+      }
+      if (type == 'put' && id) {
+        const updatedCompany = {
+          name: nameCompany,
+          division: divisionCompany,
+          group: groupCompany,
+          representative: representativeCompany,
+          address: addressCompany,
+          phone: phoneCompany
+        };
+        const response = await instance.put(`/api/v1/companies/${id}`, updatedCompany);
+        toast.success("Компания была успешно обновлено");
+        if (onSuccess) onSuccess();
+        window.location.reload();
+      }
+    } catch (e) {
+      toast.error('Не удалось обновить компанию');
+    }
+  }
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
           <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новую компанию" : "Обновить эту компанию"}</h2>
           <Form 
             className='grid gap-2' 
-            method={type} 
-            action=""
+            onSubmit={handleSubmit} 
           >
             {/* Name of company */}
             <div className="input-wrapper">
