@@ -8,23 +8,7 @@ import CreateDesign from '../components/forms/CreateDesign'
 import CreateCase from '../components/forms/CreateCase'
 import { instance } from '../api/axios.api'
 import { ICompany, IResponseLoader } from '../types/types'
-import { redirect, useLoaderData, useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '../store/hooks'
-import { useAuth } from '../hooks/useAuth'
-import { logout } from '../store/user/userSlice'
-import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper'
-import { toast } from 'react-toastify'
-import { openCompanyForm } from '../store/user/companySlice'
-import { closeFieldForm } from '../store/user/fieldSlice'
-import { closeSiteForm } from '../store/user/siteSlice'
-import { closeWellForm } from '../store/user/wellSlice'
-import { closeWellBoreForm } from '../store/user/wellBoreSlice'
-import { closeDesignForm } from '../store/user/designSlice'
-import { FaSignOutAlt } from 'react-icons/fa'
-import { FaGear } from 'react-icons/fa6'
-import { MdPeople } from 'react-icons/md'
-import { HiMiniSquares2X2 } from 'react-icons/hi2'
-import SideBarMenu from '../components/SideBarItem'
+import { useLoaderData } from 'react-router-dom'
 import SideBar from '../components/SideBar'
 import CreateField from '../components/forms/CreateField'
 
@@ -52,6 +36,7 @@ const Home: FC = () => {
   const isWellBoreFormOpened = useWellBoreFormOpen()
   const isDesignFormOpened = useDesignFormOpen()
   const isCaseFormOpened = useCaseFormOpen()
+  const { companies: initialCompanies = [] } = useLoaderData() as IResponseLoader || {};
 
   let content;
   if (isCompanyFormOpened) {
@@ -69,7 +54,17 @@ const Home: FC = () => {
   } else if (isCaseFormOpened) {
     content = <CreateCase />
   } else {
-    content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
+    content = <div className='w-screen flex flex-col justify-start items-center'>
+      {initialCompanies.length > 0 ? 
+      <div>
+        Тут ваши компании
+        <ul>
+          {initialCompanies.map((company, i) => <li key={i}>
+            {company.name}
+          </li>)}
+        </ul>
+      </div> : "Создайте компнанию"}
+    </div>
   }
 
   return (

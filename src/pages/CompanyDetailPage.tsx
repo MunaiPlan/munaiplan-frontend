@@ -4,22 +4,14 @@ import { instance } from '../api/axios.api';
 import { ICompany } from '../types/types';
 import { toast } from 'react-toastify';
 import SideBar from '../components/SideBar';
-import { FaPen, FaTrash } from 'react-icons/fa';
 import CreateCompany from '../components/forms/CreateCompany';
 import { useDispatch } from 'react-redux';
-import { openCompanyForm } from '../store/user/companySlice';
-import { closeFieldForm } from '../store/user/fieldSlice';
-import { closeSiteForm } from '../store/user/siteSlice';
-import { closeWellForm } from '../store/user/wellSlice';
-import { closeWellBoreForm } from '../store/user/wellBoreSlice';
-import { closeDesignForm } from '../store/user/designSlice';
 
 const CompanyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [company, setCompany] = useState<ICompany | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCompany = async () => {

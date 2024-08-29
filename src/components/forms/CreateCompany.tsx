@@ -1,5 +1,5 @@
 import {FC, useState} from 'react'
-import { Form } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import { ICompany, IField } from '../../types/types'
 import { useAppDispatch } from '../../store/hooks';
 import { openCompanyForm } from '../../store/user/companySlice';
@@ -31,9 +31,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
   const [phoneCompany, setPhoneCompany] = useState(prevPhone)
 
   const dispatch = useAppDispatch()
-  const companyCreateFormOpenHandler = () => {
-    dispatch(openCompanyForm())
-  }
+  const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -50,7 +48,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
         };
         await instance.post('/api/v1/companies', newCompany)
         toast.success("Company was added")
-        window.location.reload();
+        navigate("/")
       }
       if (type == 'put' && id) {
         const updatedCompany = {
@@ -61,10 +59,10 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
           address: addressCompany,
           phone: phoneCompany
         };
-        const response = await instance.put(`/api/v1/companies/${id}`, updatedCompany);
+        await instance.put(`/api/v1/companies/${id}`, updatedCompany);
         toast.success("Компания была успешно обновлено");
         if (onSuccess) onSuccess();
-        window.location.reload();
+        navigate('/')
       }
     } catch (e) {
       toast.error('Не удалось обновить компанию');

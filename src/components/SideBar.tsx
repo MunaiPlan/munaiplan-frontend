@@ -8,7 +8,6 @@ import { useAuth } from '../hooks/useAuth';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
-import { removeTokenFromLocalStorage } from '../helpers/localStorage.helper';
 import { toast } from 'react-toastify';
 import { openCompanyForm } from '../store/user/companySlice';
 import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
@@ -31,7 +30,6 @@ const SideBar: FC = () => {
 
   const logoutHandler = () => {
     dispatch(logout())
-    removeTokenFromLocalStorage('token')
     toast.success('You successfully logged out')
     navigate('/auth')
   }
@@ -66,26 +64,26 @@ const SideBar: FC = () => {
       <div id="footer" className="flex bottom-0 left-0 w-full bg-[#16171B] h-1/5 pl-4 pr-4 pt-5 border-t border-gray-400 text-white items-start">
         <div className='flex flex-col flex-grow'>
           <div className='flex justify-start items-center'>
-            <HiMiniSquares2X2 className='mr-2 text-gray-500' />
+            <HiMiniSquares2X2 className='mr-2 text-white' />
             <button onClick={() => navigate('/catalog')}>
               Каталог
             </button>
           </div>
           <div className='flex justify-start items-center mt-2'>
-            <MdPeople className='mr-2 text-gray-500' />
+            <MdPeople className='mr-2 text-white' />
             <button onClick={() => navigate('/account')}>
               Аккаунт
             </button>
           </div>
           <div className='flex justify-start items-center mt-2 mb-2'>
-            <FaGear className='mr-2 text-gray-500' />
+            <FaGear className='mr-2 text-white' />
             <button onClick={() => navigate('/settings')}>
               Настройки
             </button>
           </div>
         </div>
         <div className='flex items-center justify-end ml-4'>
-          <FaSignOutAlt className='mr-2 text-gray-500'/>
+          <FaSignOutAlt className='mr-2 text-white'/>
           <button onClick={logoutHandler}>
             Выйти
           </button>

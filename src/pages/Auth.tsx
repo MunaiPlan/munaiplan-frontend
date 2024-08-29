@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { setTokenToLocalStorage } from '../helpers/localStorage.helper';
 
 const Auth: FC = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +34,6 @@ const Auth: FC = () => {
         '123e4567-e89b-12d3-a456-426614174000'
       );
       if (data) {
-        setTokenToLocalStorage('token', data.token)
         dispatch(login(data));
         toast.success('Вы успешно вошли в аккаунт');
         navigate('/');
