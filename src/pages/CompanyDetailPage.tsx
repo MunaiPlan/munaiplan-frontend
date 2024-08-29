@@ -76,7 +76,6 @@ const CompanyDetail: React.FC = () => {
                 className='btn hover:btn-green items-center justify-center'
                 onClick={() => {
                   setIsEdit(true);
-                  companyCreateFormOpenHandler();
                 }}
               >
                 <FaPen />
@@ -100,7 +99,6 @@ const CompanyDetail: React.FC = () => {
               prevPhone={company.phone}
               type='put'
               id={id}
-              setIsEdit={setIsEdit}
             />
           )
         )}

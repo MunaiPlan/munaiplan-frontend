@@ -46,25 +46,20 @@ export const companiesLoader = async() => {
 export const companiesAction = async({request }: any) => {
   switch (request.method) {
     case "POST": {
-      try {
-        const formData = await request.formData()
-        console.log(formData)
-        console.log(formData.get("name"))
-        const newCompany = {
-          name: formData.get("name"),
-          division: formData.get("division"),
-          group: formData.get("group"),
-          representative: formData.get("representative"),
-          address: formData.get("address"),
-          phone: formData.get("phone")
-        }
-        await instance.post('/api/v1/companies', newCompany)
-        toast.success("Company was added")
-        return null
-      } catch (err: any) {
-          const error = err.response?.data.message || 'An error occurred during login';
-          toast.error(error.toString());
+      const formData = await request.formData()
+      console.log(formData)
+      console.log(formData.get("name"))
+      const newCompany = {
+        name: formData.get("name"),
+        division: formData.get("division"),
+        group: formData.get("group"),
+        representative: formData.get("representative"),
+        address: formData.get("address"),
+        phone: formData.get("phone")
       }
+      await instance.post('/api/v1/companies', newCompany)
+      toast.success("Company was added")
+      return null
     }
     case "DELETE": {
         const formData = await request.formData()
@@ -74,11 +69,10 @@ export const companiesAction = async({request }: any) => {
         return redirect('/');
     }
     case "PUT": {
-      console.log("PUT works")
-      toast.success("YEAH")
-      const formData = await request.formData()
-      const companyID = formData.get("id")
-      console.log(companyID)
+      console.log("PUT works");
+      const formData = await request.formData();
+      const companyID = formData.get("id");
+      console.log("Company ID:", companyID);
       const updatedCompany = {
         name: formData.get("name"),
         division: formData.get("division"),
@@ -86,9 +80,19 @@ export const companiesAction = async({request }: any) => {
         representative: formData.get("representative"),
         address: formData.get("address"),
         phone: formData.get("phone")
+      };
+      console.log("Updated Company:", updatedCompany);
+      
+      // API call
+      try {
+        const response = await instance.put(`/api/v1/companies/${companyID}`, updatedCompany);
+        console.log("Response:", response);
+        toast.success("Компания была успешно обновлено");
+        return redirect('/');
+      } catch (error) {
+        console.error("Update failed:", error);
+        toast.error("Failed to update the company");
       }
-      await instance.patch(`/api/v1/companies/${companyID}`, updatedCompany)
-      toast.success("Компания была успешно обновлено")
     }
   }
 }
@@ -123,11 +127,11 @@ const Home: FC = () => {
   }
 
   return (
-    <div className='h-screen w-full'>
-      <SideBar />
-      <div className='flex h-screen'>
-        {content}
-      </div>
+    <div className="'h-screen w-full">
+        <SideBar />
+        <div className="flex h-screen">
+            {content}    
+        </div>
     </div>
   )
 }

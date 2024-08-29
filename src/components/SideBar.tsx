@@ -37,6 +37,7 @@ const SideBar: FC = () => {
   }
 
   const companyCreateFormOpenHandler = () => {
+    navigate("/")
     dispatch(openCompanyForm())
     dispatch(closeFieldForm())
     dispatch(closeSiteForm())

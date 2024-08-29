@@ -1,8 +1,8 @@
 import {FC, useState} from 'react'
-import { useAppDispatch } from '../../store/hooks'
-import { createCompany, openCompanyForm } from '../../store/user/companySlice'
-import { Form, useNavigate } from 'react-router-dom'
+import { Form } from 'react-router-dom'
 import { ICompany, IField } from '../../types/types'
+import { useAppDispatch } from '../../store/hooks';
+import { openCompanyForm } from '../../store/user/companySlice';
 
 interface ICompanyForm {
   type: "post" | "put";
@@ -19,16 +19,15 @@ interface ICompanyForm {
 
 
 const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, fields, setIsEdit}) => {
+
+  const [nameCompany, setNameCompany] = useState(prevName)
+  const [divisionCompany, setDivisionCompany] = useState(prevDivision)
+  const [groupCompany, setGroupCompany] = useState(prevGroup)
+  const [representativeCompany, setRepresentativeCompany] = useState(prevRepresentative)
+  const [addressCompany, setAddressCompany] = useState(prevAddress)
+  const [phoneCompany, setPhoneCompany] = useState(prevPhone)
+
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-
-  const [nameCompany, setNameCompany] = useState("")
-  const [divisionCompany, setDivisionCompany] = useState("")
-  const [groupCompany, setGroupCompany] = useState("")
-  const [representativeCompany, setRepresentativeCompany] = useState("")
-  const [addressCompany, setAddressCompany] = useState("")
-  const [phoneCompany, setPhoneCompany] = useState("")
-
   const companyCreateFormOpenHandler = () => {
     dispatch(openCompanyForm())
   }
@@ -36,11 +35,11 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
-          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">Создать новую компанию</h2>
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новую компанию" : "Обновить эту компанию"}</h2>
           <Form 
             className='grid gap-2' 
             method={type} 
-            action="/"
+            action=""
           >
             {/* Name of company */}
             <div className="input-wrapper">
@@ -52,7 +51,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 type="text"
                 name='name'
                 placeholder={type=="put" ? prevName : "Введите имя компании"} 
-                value={type=="put" ? prevName : nameCompany}
+                value={nameCompany}
                 onChange={(e) => setNameCompany(e.target.value)}
                 required
               />
@@ -69,7 +68,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 type="text"
                 name='division'
                 placeholder={type=="put" ? prevDivision : "Введите дивизию компании"} 
-                value={type=="put" ? prevDivision : divisionCompany}
+                value={divisionCompany}
                 onChange={(e) => setDivisionCompany(e.target.value)}
                 required
               />
@@ -85,7 +84,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 type="text"
                 name='group'
                 placeholder={type=="put" ? prevGroup : "Введите группу компании"} 
-                value={type=="put" ? prevGroup : groupCompany}
+                value={groupCompany}
                 onChange={(e) => setGroupCompany(e.target.value)}
                 required
               />
@@ -102,7 +101,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 name='representative'
                 placeholder={type=="put" ? prevRepresentative : "Введите ФИО представителя"} 
                 onChange={(e) => setRepresentativeCompany(e.target.value)}
-                value={type=="put" ? prevRepresentative : representativeCompany}
+                value={representativeCompany}
                 required
               />
             </div>
@@ -117,7 +116,7 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 type="text"
                 name='address'
                 placeholder={type=="put" ? prevAddress : "Введите адрес компании"} 
-                value={type=="put" ? prevAddress : addressCompany}
+                value={addressCompany}
                 onChange={(e) => setAddressCompany(e.target.value)}
                 required
               />
@@ -133,19 +132,19 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
                 type="text"
                 name='phone'
                 placeholder={type=="put" ? prevPhone : "Введите телефонный номер компании"} 
-                value={type=="put" ? prevPhone : phoneCompany}
+                value={phoneCompany}
                 onChange={(e) => setPhoneCompany(e.target.value)}
                 required
               />
             </div>
             {/* Submit button */}
-            <div className="flex items-center justify-between mt-3 mx-6">
-                <button type="submit" className='w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+            <div className="flex flex-col items-center justify-between mt-3 mx-6">
+                <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
                     {type === 'put' ? 'Обновить' : 'Создать'}
                 </button>
-                { type === 'put' && (<button className="btn btn-red" onClick={() => {
+                { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
                     if(setIsEdit) {setIsEdit(false);}
-                }}>Close</button>)}
+                }}>Закрыть</button>)}
             </div>
           </Form>
       </div>

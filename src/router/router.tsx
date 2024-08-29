@@ -7,8 +7,6 @@ import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
-import CreateCompany from "../components/forms/CreateCompany";
-import Company from "../pages/CompanyDetailPage";
 import CompanyDetail from "../pages/CompanyDetailPage";
 
 export const router = createBrowserRouter([

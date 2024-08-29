@@ -34,6 +34,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+    console.log(item.id)
   };
 
   const fieldCreateFormOpenHandler = () => {
@@ -118,7 +119,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
 
   const goTo = () => {
     if (level == 0) {
-      navigate(`/companies/${item.id}`)
+      navigate(`/${item.id}`)
     }
   }
 
@@ -127,7 +128,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       <div className="flex gap-x-1 items-center justify-start mt-2">
         <div className="flex items-center">
           {item.name.split(' ')[0] === "Кейс" ? (<FaRegFile className='mr-1'/>) : (isOpen ? <IoIosArrowDown onClick={handleToggle} className='mr-1'/> : <IoIosArrowForward onClick={handleToggle} className='mr-1'/>)}   
-          <label onClick={goTo}>{item.name}</label>
+          <label onClick={goTo}>{item.name.length > 0 ? item.name : "   "}</label>
         </div>
         {/* {hasChildren && (
           <button onClick={handleToggle}>
