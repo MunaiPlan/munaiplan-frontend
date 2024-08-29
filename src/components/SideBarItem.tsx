@@ -38,8 +38,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   };
 
   const fieldCreateFormOpenHandler = () => {
-    dispatch(openFieldForm())
     dispatch(closeCompanyForm())
+    dispatch(openFieldForm())
     dispatch(closeSiteForm())
     dispatch(closeWellForm())
     dispatch(closeWellBoreForm())
@@ -120,6 +120,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const goTo = () => {
     if (level == 0) {
       navigate(`/${item.id}`)
+    } else if (level == 1) {
+      navigate(`/fields/${item.id}`)
     }
   }
 

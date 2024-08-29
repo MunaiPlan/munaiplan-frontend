@@ -30,7 +30,6 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
   const [addressCompany, setAddressCompany] = useState(prevAddress)
   const [phoneCompany, setPhoneCompany] = useState(prevPhone)
 
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent) => {

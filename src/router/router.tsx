@@ -7,7 +7,8 @@ import Settings from "../pages/Settings";
 import Account from "../pages/Accout";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
-import CompanyDetail from "../pages/CompanyDetailPage";
+import CompanyDetail from "../pages/DetailedPages/CompanyDetailPage";
+import FieldDetail from "../pages/DetailedPages/FieldDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <CompanyDetail />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: 'fields/:id',
+                element: (
+                    <ProtectedRoute> 
+                        <FieldDetail />
                     </ProtectedRoute>
                 )
             }

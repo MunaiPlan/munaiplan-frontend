@@ -1,35 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { instance } from '../api/axios.api';
-import { ICompany } from '../types/types';
+import { instance } from '../../api/axios.api';
+import { IField } from '../../types/types';
 import { toast } from 'react-toastify';
-import SideBar from '../components/SideBar';
-import CreateCompany from '../components/forms/CreateCompany';
+import SideBar from '../../components/SideBar';
+import CreateCompany from '../../components/forms/CreateCompany';
 import { useDispatch } from 'react-redux';
+import CreateField from '../../components/forms/CreateField';
 
-const CompanyDetail: React.FC = () => {
+const FieldDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [company, setCompany] = useState<ICompany | null>(null);
+  const [field, setField] = useState<IField | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCompany = async () => {
+    const fetchField = async () => {
       try {
-        const response = await instance.get<ICompany>(`/api/v1/companies/${id}`);
-        setCompany(response.data);
+        const response = await instance.get<IField>(`/api/v1/fields/${id}`);
+        setField(response.data);
       } catch (error) {
-        toast.error('Failed to load company details');
+        toast.error('Failed to load field details');
       }
     };
 
-    fetchCompany();
+    fetchField();
   }, [id]);
 
   const handleDelete = async () => {
     try {
-      await instance.delete(`/api/v1/companies/${id}`);
-      toast.success('Company deleted successfully');
+      await instance.delete(`/api/v1/fields/${id}`);
+      toast.success('Месторождение было удалено');
       navigate('/');
     } catch (error) {
       toast.error('Failed to delete the company');
@@ -40,7 +41,7 @@ const CompanyDetail: React.FC = () => {
     setIsEdit(false);
   };
 
-  if (!company) {
+  if (!field) {
     return <div>Loading...</div>;
   }
 
@@ -54,12 +55,10 @@ const CompanyDetail: React.FC = () => {
           <>
             <div className='flex flex-col justify-center items-center w-full'>
               <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
-                <h1>О компании: <label className='font-bold'>{company.name}</label></h1>
-                <p>Дивизия: <label className='font-bold'>{company.division}</label></p>
-                <p>Группа: <label className='font-bold'>{company.group}</label></p>
-                <p>Представитель: <label className='font-bold'>{company.representative}</label></p>
-                <p>Адрес: <label className='font-bold'>{company.address}</label></p>
-                <p>Телефонный номер: <label className='font-bold'>{company.phone}</label></p>
+                <h1>О месторождении: <label className='font-bold'>{field.name}</label></h1>
+                <p>Описание: <label className='font-bold'>{field.description}</label></p>
+                <p>Уровень сокращения: <label className='font-bold'>{field.reductionLevel}</label></p>
+                <p>Активная полевая единица: <label className='font-bold'>{field.activeFieldUnit}</label></p>
               </div>
             </div>
             <div className='flex w-full items-center justify-center gap-x-4'>
@@ -80,17 +79,16 @@ const CompanyDetail: React.FC = () => {
             </div>
           </>
         ) : (
-          company && (
-            <CreateCompany
-              prevName={company.name}
-              prevDivision={company.division}
-              prevGroup={company.group}
-              prevAddress={company.address}
-              prevRepresentative={company.representative}
-              prevPhone={company.phone}
+          field && (
+            <CreateField
+              prevName={field.name}
+              prevDescription={field.description}
+              prevReductionLevel={field.reductionLevel}
+              prevActiveFieldUnit={field.activeFieldUnit}
               type='put'
               id={id}
               onSuccess={handleUpdateSuccess}
+              companyId={field.companyId}
             />
           )
         )}
@@ -99,4 +97,4 @@ const CompanyDetail: React.FC = () => {
   );
 };
 
-export default CompanyDetail;
+export default FieldDetail;
