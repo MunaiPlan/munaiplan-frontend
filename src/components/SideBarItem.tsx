@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { FaRegFile } from "react-icons/fa";
 import { useAppDispatch } from '../store/hooks';
-import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
+import { closeFieldForm, openFieldForm, setCompanyId } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
 import { closeSiteForm, openSiteForm } from '../store/user/siteSlice';
 import { closeWellForm, openWellForm } from '../store/user/wellSlice';
@@ -18,7 +18,7 @@ interface MenuItemProps {
 }
 
 export interface MenuItem {
-  id: number;
+  id: string;
   name: string;
   children?: MenuItem[];
 }
@@ -31,11 +31,6 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "кейс"];
-
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-    console.log(item.id)
-  };
 
   const fieldCreateFormOpenHandler = () => {
     dispatch(closeCompanyForm())
@@ -116,6 +111,14 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     }
     navigate('/')
   }
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    if (level == 0) {
+      dispatch(setCompanyId(item.id))
+    }
+    console.log(item.id)
+  };
 
   const goTo = () => {
     if (level == 0) {

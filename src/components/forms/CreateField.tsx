@@ -1,12 +1,10 @@
 import { ISite } from "../../types/types"
 import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import { createCompany, openCompanyForm } from '../../store/user/companySlice'
 import { toast } from 'react-toastify'
-import { companyService } from '../../services/forms.service'
 import { Form, useNavigate } from 'react-router-dom'
 import { instance } from '../../api/axios.api'
-import { ICompany, IField } from '../../types/types'
+import { store } from "../../store/store"
 
 interface IFieldForm {
   type: "post" | "put";
@@ -18,7 +16,7 @@ interface IFieldForm {
   sites?: ISite[];
   setIsEdit?: (edit: boolean) => void;
   onSuccess?: () => void
-  companyId: string
+  companyId: string | null
 }
 
 
@@ -31,38 +29,48 @@ const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevR
   const [reductionLevelField, setReductionLevelField] = useState(prevReductionLevel)
   const [activeFieldUnitField, setActiveFieldUnitField] = useState(prevActiveFieldUnit)
 
+  const getCompanyIdFromStore = (): string | null => {
+    const state = store.getState(); // Access the current state
+    return state.field.companyId; // Assuming your userSlice is named 'user' and stores the user info in 'user'
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      if (type == 'post') {
-        const newField = {
-          body: {
-            name: nameField,
-            description: descriptionField,
-            reductionLevel: reductionLevelField,
-            activeFieldUnit: activeFieldUnitField,
-          },
-          companyId
-        };
-        console.log(newField)
-        await instance.post('/api/v1/fields', newField)
-        toast.success("Новое месторождение было добавлено")
-        navigate("/")
+    if (type == 'post') {
+      const newField = {
+        name: nameField,
+        description: descriptionField,
+        reductionLevel: reductionLevelField,
+        activeFieldUnit: activeFieldUnitField,
+      };
+        
+      try {
+        companyId = getCompanyIdFromStore()
+        toast.success(companyId)
+        await instance.post(`/api/v1/fields?companyId=${companyId}`, newField);
+        toast.success("Новое месторождение было добавлено");
+        navigate("/");
+      } catch (error) {
+        toast.error("Ошибка при добавлении месторождения");
+        console.error(error);
       }
-      if (type == 'put' && id) {
-        const updatedField = {
-          name: nameField,
-          description: descriptionField,
-          reductionLevel: reductionLevelField,
-          activeFieldUnit: activeFieldUnitField,
-        };
+    }
+    if (type == 'put' && id) {
+      const updatedField = {
+        name: nameField,
+        description: descriptionField,
+        reductionLevel: reductionLevelField,
+        activeFieldUnit: activeFieldUnitField,
+      };
+      try {
         await instance.put(`/api/v1/fields/${id}`, updatedField);
-        toast.success("Месторождение была успешно обновлено");
-        if (onSuccess) onSuccess();
-        navigate('/')
+        toast.success("Месторождение было обновлено");
+        navigate("/");
+      } catch (error) {
+        toast.error("Ошибка при обновлении месторождения");
+        console.error(error);
       }
-    } catch (e) {
-      toast.error('Не удалось обновить месторождение');
+
     }
   }
 

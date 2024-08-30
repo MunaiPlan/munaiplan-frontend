@@ -38,19 +38,22 @@ export const FieldSlice = createSlice({
     closeFieldForm: (state) => {
       state.isFieldFormOpened = false
     },
+    setCompanyId: (state, action: PayloadAction<string>) => {
+      state.companyId = action.payload
+    },
     createField: (state, action: PayloadAction<IField>) => {
-        state.companyId = action.payload.companyId
-        state.name = action.payload.name
-        state.description = action.payload.description
-        state.reductionLevel = action.payload.reductionLevel
-        state.activeFieldUnit = action.payload.activeFieldUnit
-        state.company = action.payload.company
-        state.sites = action.payload.sites
+      state.companyId = action.payload.companyId
+      state.name = action.payload.name
+      state.description = action.payload.description
+      state.reductionLevel = action.payload.reductionLevel
+      state.activeFieldUnit = action.payload.activeFieldUnit
+      state.company = action.payload.company
+      state.sites = action.payload.sites
     },
   },
 })
 
-export const { openFieldForm, closeFieldForm, createField } = FieldSlice.actions
+export const { openFieldForm, closeFieldForm, createField, setCompanyId } = FieldSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectField = (state: RootState) => state.field
