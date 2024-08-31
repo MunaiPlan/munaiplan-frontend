@@ -31,7 +31,7 @@ async function returnFields(companyId: string): Promise<IField[]> {
 }
 
 async function returnSites(fieldId: string): Promise<ISite[]> {
-    console.log("Site")
+    console.log(fieldId)
     const sitesResponse = await instance.get<ISite[]>(`/api/v1/sites/?fieldId=${fieldId}`);
     const sites: ISite[] = sitesResponse.data;
     console.log(sites)
@@ -49,15 +49,19 @@ async function returnSites(fieldId: string): Promise<ISite[]> {
     }
 }
 
-async function returnWells(siteId: string): Promise<IWell[]> {
+async function returnWells(siteId: string): Promise<IWell[]> { 
     const wellsResponse = await instance.get<IWell[]>(`/api/v1/wells/?siteId=${siteId}`);
     const wells: IWell[] = wellsResponse.data;
     const tempWells: IWell[] = [];
-    for (const well of wells) {
-        const wellBores = await returnWellBores(well.id); // Resolving the promise here
-        tempWells.push({ ...well, wellBores }); // Assigning resolved wellbores to the well
+    if (wells) {
+        for (const well of wells) {
+            const wellBores = await returnWellBores(well.id); // Resolving the promise here
+            tempWells.push({ ...well, wellBores }); // Assigning resolved wellbores to the well
+        }
+        return tempWells;
+    } else {
+        return wells
     }
-    return tempWells;
 }
 
 async function returnWellBores(wellId: string): Promise<IWellBore[]> {
