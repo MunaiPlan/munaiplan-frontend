@@ -1,185 +1,207 @@
 import {FC, useState} from 'react'
-import { useAppDispatch } from '../../store/hooks'
-import { openSiteForm, createSite } from '../../store/user/siteSlice'
-import { toast } from 'react-toastify'
-import { siteService } from '../../services/forms.service'
-import { IWell } from '../../types/types'
+import { Form, useNavigate } from 'react-router-dom'
+import { ICompany, IField, IWell } from '../../types/types'
+import { useAppDispatch } from '../../store/hooks';
+import { openCompanyForm } from '../../store/user/companySlice';
+import { instance } from '../../api/axios.api';
+import { toast } from 'react-toastify';
 
-const CreateSite: FC = () => {
-  const dispatch = useAppDispatch()
+interface ISiteForm {
+  type: "post" | "put";
+  id?: string;
+  prevName: string;
+  prevArea: string;
+  prevBlock: string;
+  prevAzimuth: string;
+  prevCountry: string;
+  prevState: string;
+  prevRegion: string;
+  wells?: IWell[];
+  setIsEdit?: (edit: boolean) => void;
+  onSuccess?: () => void
+}
 
-  const [nameSite, setNameSite] = useState("")
-  const [areaSite, setAreaSite] = useState<number>(0)
-  const [blockSite, setBlockSite] = useState("")
-  const [azimuthSite, setAzimuthSite] = useState<number>(0)
-  const [countrySite, setCountrySite] = useState("")
-  const [stateSite, setStateSite] = useState("")
-  const [regionSite, setRegionSite] = useState("")
-  const [wellsSite, setWellsSite] = useState<IWell[]>([])
 
-  const siteCreateFormOpenHandler = () => {
-    dispatch(openSiteForm())
-  }
+const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlock, prevAzimuth, prevCountry, prevState, prevRegion, wells, setIsEdit, onSuccess}) => {
 
-  const createSiteHandle = () => {
-    dispatch(createSite({
-      id: "",
-      name: nameSite,
-      area: areaSite,
-      block: blockSite,
-      azimuth: azimuthSite,
-      country: countrySite,
-      state: stateSite,
-      region: regionSite,
-      wells: wellsSite,
-    }))
-    toast.success('Site was successfully created')
-    siteCreateFormOpenHandler()
-  }
+  const [nameSite, setNameSite] = useState(prevName)
+  const [areaSite, setAreaSite] = useState(prevArea)
+  const [blockSite, setBlockSite] = useState(prevName)
+  const [azimuthSite, setAzimuthSite] = useState(prevArea)
+  const [countrySite, setCountrySite] = useState(prevName)
+  const [stateSite, setStateSite] = useState(prevArea)
+  const [regionSite, setRegionSite] = useState(prevRegion)
 
-  const createSiteHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
     try {
-      e.preventDefault()
-      const data = await siteService.createSite({
-        id: "",
-        name: nameSite,
-        area: areaSite,
-        block: blockSite,
-        azimuth: azimuthSite,
-        country: countrySite,
-        state: stateSite,
-        region: regionSite,
-        wells: wellsSite,
-      })
-      if (data){
-        toast.success('Site was successfully created')
+      if (type == 'post') {
+        const newSite = {
+          name: nameSite,
+          area: areaSite,
+          block: blockSite,
+          azimuth: azimuthSite,
+          country: countrySite,
+          state: stateSite,
+          region: regionSite
+        };
+        await instance.post('/api/v1/sites', newSite)
+        toast.success("Site was added")
+        navigate("/")
       }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a field'
-      toast.error(error.toString()) 
+      if (type == 'put' && id) {
+        const updatedSite = {
+          name: nameSite,
+          area: areaSite,
+          block: blockSite,
+          azimuth: azimuthSite,
+          country: countrySite,
+          state: stateSite,
+          region: regionSite
+        };
+        await instance.put(`/api/v1/sites/${id}`, updatedSite);
+        toast.success("Куст был успешно обновлен");
+        if (onSuccess) onSuccess();
+        navigate('/')
+      }
+    } catch (e) {
+      toast.error('Не удалось обновить куст');
     }
   }
-
   return (
-    <div className='w-screen flex flex-col justify-center items-center overflow-auto'>  
-        <div className="w-3/4 max-w-md justify-center items-center">
-          <h2 className="text-3xl font-bold mt-16 mb-8 justify-center flex font-montserrat">Создать куст</h2>
-          <form 
-            // onSubmit={createSiteHandler}
-            className="mb-7">
+    <div className='w-screen flex flex-col justify-center items-center'>  
+        <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новую компанию" : "Обновить эту компанию"}</h2>
+          <Form 
+            className='grid gap-2' 
+            onSubmit={handleSubmit} 
+          >
             {/* Name of site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="nameOfSite">
-                Имя месторождении
+            <div className="input-wrapper">
+              <label htmlFor="nameSite">
+                Имя куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="nameOfSite"
+                id="nameSite"
                 type="text"
-                placeholder="Введите имя куста"
+                name='name'
+                placeholder={type=="put" ? prevName : "Введите имя куста"} 
+                value={nameSite}
                 onChange={(e) => setNameSite(e.target.value)}
                 required
               />
+              <input type="hidden" name="id" value={id}/>
             </div>
 
             {/* Area of site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="areaOfSite">
+            <div className="input-wrapper">
+              <label htmlFor="areaSite">
                 Площадь куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="areaOfSite"
+                id="areaSite"
                 type="text"
-                placeholder="Введите площадь куста"
-                onChange={(e) => setAreaSite(parseFloat(e.target.value))}
+                name='area'
+                placeholder={type=="put" ? prevArea : "Введите площадь куста"} 
+                value={areaSite}
+                onChange={(e) => setAreaSite(e.target.value)}
                 required
               />
             </div>
 
             {/* Block of site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="blockOfSite">
+            <div className="input-wrapper">
+              <label htmlFor="blockSite">
                 Блок куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="areaOfSite"
+                id="blockSite"
                 type="text"
-                placeholder="Введите уровень редукции месторождении"
+                name='block'
+                placeholder={type=="put" ? prevBlock : "Введите блок куста"} 
+                value={blockSite}
                 onChange={(e) => setBlockSite(e.target.value)}
                 required
               />
             </div>
 
-            {/* Azimuth of Site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="azimuthOfSite">
+            {/* Azimuth of site */}
+            <div className="input-wrapper">
+              <label htmlFor="azimuthSite">
                 Азимут куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="azimuthOfSite"
+                id="azimuthSite"
                 type="text"
-                placeholder="Введите азимут куста"
-                onChange={(e) => setAzimuthSite(parseFloat(e.target.value))}
+                name='azimuth'
+                placeholder={type=="put" ? prevAzimuth : "Введите азимут куста"} 
+                onChange={(e) => setAzimuthSite(e.target.value)}
+                value={azimuthSite}
                 required
               />
             </div>
 
-            {/* Country of Site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="countryOfSite">
+            {/* Country of site */}
+            <div className="input-wrapper">
+              <label htmlFor="countrySite">
                 Страна куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="countryOfSite"
+                id="countrySite"
                 type="text"
-                placeholder="Введите страну куста"
+                name='country'
+                placeholder={type=="put" ? prevCountry : "Введите страну куста"} 
+                value={countrySite}
                 onChange={(e) => setCountrySite(e.target.value)}
                 required
               />
             </div>
 
-            {/* State of Site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="siteOfSite">
+            {/* State of site */}
+            <div className="input-wrapper">
+              <label htmlFor="stateSite">
                 Штат куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="siteOfSite"
+                id="stateSite"
                 type="text"
-                placeholder="Введите штат куста"
+                name='state'
+                placeholder={type=="put" ? prevState : "Введите штат куста"} 
+                value={stateSite}
                 onChange={(e) => setStateSite(e.target.value)}
                 required
               />
             </div>
 
-            {/* Region of Site */}
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2 font-montserrat" htmlFor="regionOfSite">
+            {/* Region of site */}
+            <div className="input-wrapper">
+              <label htmlFor="regionSite">
                 Регион куста
               </label>
               <input
-                className="border-t-0 border-l-0 border-r-0 border-b-1 border-[#F2F5FA] rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline font-montserrat"
-                id="regionOfSite"
+                id="regionSite"
                 type="text"
-                placeholder="Введите регион куста"
+                name='region'
+                placeholder={type=="put" ? prevRegion : "Введите регион куста"} 
+                value={regionSite}
                 onChange={(e) => setRegionSite(e.target.value)}
                 required
               />
             </div>
-            
-            <div className="flex items-center justify-between">
-              <button
-                onClick={createSiteHandle}
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" // type='submit'
-              >Создать куст</button>
+
+            {/* Submit button */}
+            <div className="flex flex-col items-center justify-between mt-3 mx-6">
+                <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+                    {type === 'put' ? 'Обновить' : 'Создать'}
+                </button>
+                { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
+                    if(setIsEdit) {setIsEdit(false);}
+                }}>Закрыть</button>)}
             </div>
-          </form>
+          </Form>
       </div>
     </div>
   )

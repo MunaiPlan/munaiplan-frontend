@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react'
+import {Children, FC, useEffect, useState} from 'react'
 import SideBarMenu, { MenuItem } from './SideBarItem';
 import { HiMiniSquares2X2 } from "react-icons/hi2";
 import { MdPeople } from "react-icons/md";
@@ -17,7 +17,10 @@ import { closeWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm } from '../store/user/designSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '@reduxjs/toolkit/query';
-import { IResponseLoader } from '../types/types';
+import { ICase, ICompany, IDesign, IField, IResponseLoader, ISite, IWell, IWellBore } from '../types/types';
+import instance from '../api/axios.api';
+import { returnCompanies } from '../helpers/dataLoader';
+import { convertFieldsToMenuItems } from '../helpers/menuItemTurner';
 
 const SideBar: FC = () => {
   const isAuth = useAuth()
@@ -44,6 +47,26 @@ const SideBar: FC = () => {
     dispatch(closeDesignForm())
   }
 
+    const [companies, setCompanies] = useState<ICompany[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // Ensure initialCompanies is an array and is not empty
+            if (Array.isArray(initialCompanies) && initialCompanies.length > 0) {
+                try {
+                    // Await returnCompanies with initialCompanies
+                    const tempCompanyData = await returnCompanies(initialCompanies);
+                    setCompanies(tempCompanyData); // Update state with fully resolved data
+                } catch (error) {
+                    console.error("Error fetching company data:", error);
+                }
+            }
+        };
+
+        fetchData();
+        console.log(companies)
+    }, [initialCompanies]);
+
   return isAuth ? 
     (<div className='flex flex-col w-1/5 bg-[#16171B] text-white fixed h-screen'>
       <h1 className='flex text-4xl font-semibold font-montserrat mt-12 mb-16 justify-center items-start' onClick={() => {navigate("/")}}>MunaiPlan</h1>
@@ -55,8 +78,13 @@ const SideBar: FC = () => {
       {/* Dropdown */}
       <div className='flex flex-col ml-10 mr-10 mb-6 overflow-y-auto flex-grow'>
         <div className='flex flex-col gap-x-1 items-start justify-center'>
-          {initialCompanies.map((item) => (
-            <SideBarMenu key={item.id} item={item} />
+          {companies.map((company) => (
+            <SideBarMenu key={company.id} 
+              item={{
+                id: company.id,
+                name: company.name,
+                children: convertFieldsToMenuItems(company.fields || []), // Transform fields to MenuItem[]
+            }} />
           ))}
         </div>
       </div>

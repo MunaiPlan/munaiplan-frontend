@@ -10,6 +10,7 @@ import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
 import { Navigate, useNavigate } from 'react-router-dom';
+import instance from '../api/axios.api';
 
 
 interface MenuItemProps {
@@ -118,6 +119,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       dispatch(setCompanyId(item.id))
     }
     console.log(item.id)
+    console.log(item.children)
   };
 
   const goTo = () => {
@@ -127,6 +129,12 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       navigate(`/fields/${item.id}`)
     }
   }
+
+  // const loadFields = () => {
+  //   if (level == 0) {
+  //     const fields = instance.get(`/api/v1/fields/?companyId=${companyId}`)
+  //   }
+  // }
 
   return (
     <>

@@ -67,7 +67,7 @@ export interface IResponseUserData {
 
 
 export interface ICompany {
-    id: number
+    id: string
     name: string
     division: string
     group: string
@@ -78,6 +78,7 @@ export interface ICompany {
 }
 
 export interface IField {
+    id: string
     companyId: string
     name: string
     description: string

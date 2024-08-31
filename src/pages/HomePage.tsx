@@ -44,7 +44,7 @@ const Home: FC = () => {
   } else if (isFieldFormOpened) {
     content = <CreateField type={"post"} prevName={""} prevDescription={""} prevReductionLevel={""} prevActiveFieldUnit={""} companyId=''/>
   } else if (isSiteFormOpened) { 
-    content = <CreateSite />
+    content = <CreateSite type={"post"} prevName={""} prevArea={""} prevAzimuth={""} prevBlock={""} prevCountry={""} prevRegion={""} prevState={""} />
   } else if (isWellFormOpened){
     content = <CreateWell />
   } else if (isWellBoreFormOpened) {
