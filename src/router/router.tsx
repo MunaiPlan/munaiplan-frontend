@@ -64,6 +64,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'fields/:id',
+                loader: companiesLoader,
                 element: (
                     <ProtectedRoute> 
                         <FieldDetail />

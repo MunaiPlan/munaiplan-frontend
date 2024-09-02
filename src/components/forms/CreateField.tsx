@@ -40,13 +40,12 @@ const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevR
       const newField = {
         name: nameField,
         description: descriptionField,
-        reductionLevel: reductionLevelField,
-        activeFieldUnit: activeFieldUnitField,
+        reduction_level: reductionLevelField,
+        active_field_unit: activeFieldUnitField,
       };
         
       try {
         companyId = getCompanyIdFromStore()
-        toast.success(companyId)
         await instance.post(`/api/v1/fields?companyId=${companyId}`, newField);
         toast.success("Новое месторождение было добавлено");
         navigate("/");
@@ -59,8 +58,8 @@ const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevR
       const updatedField = {
         name: nameField,
         description: descriptionField,
-        reductionLevel: reductionLevelField,
-        activeFieldUnit: activeFieldUnitField,
+        reduction_level: reductionLevelField,
+        active_field_unit: activeFieldUnitField,
       };
       try {
         await instance.put(`/api/v1/fields/${id}`, updatedField);
@@ -77,7 +76,7 @@ const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevR
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
-          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">Создать новое месторождение</h2>
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type=="post" ? "Создать новое месторождение" : "Обновить месторождение"}</h2>
           <Form 
             className='grid gap-2' 
             onSubmit={handleSubmit}

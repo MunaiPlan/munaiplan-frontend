@@ -18,6 +18,10 @@ const FieldDetail: React.FC = () => {
     const fetchField = async () => {
       try {
         const response = await instance.get<IField>(`/api/v1/fields/${id}`);
+        toast.success(response.data.name)
+        toast.success(response.data.description)
+        toast.success(response.data.active_field_unit)
+        toast.success(response.data.reduction_level)
         setField(response.data);
       } catch (error) {
         toast.error('Failed to load field details');
@@ -57,8 +61,8 @@ const FieldDetail: React.FC = () => {
               <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
                 <h1>О месторождении: <label className='font-bold'>{field.name}</label></h1>
                 <p>Описание: <label className='font-bold'>{field.description}</label></p>
-                <p>Уровень сокращения: <label className='font-bold'>{field.reductionLevel}</label></p>
-                <p>Активная полевая единица: <label className='font-bold'>{field.activeFieldUnit}</label></p>
+                <p>Уровень сокращения: <label className='font-bold'>{field.reduction_level}</label></p>
+                <p>Активная полевая единица: <label className='font-bold'>{field.active_field_unit}</label></p>
               </div>
             </div>
             <div className='flex w-full items-center justify-center gap-x-4'>
@@ -83,8 +87,8 @@ const FieldDetail: React.FC = () => {
             <CreateField
               prevName={field.name}
               prevDescription={field.description}
-              prevReductionLevel={field.reductionLevel}
-              prevActiveFieldUnit={field.activeFieldUnit}
+              prevReductionLevel={field.reduction_level}
+              prevActiveFieldUnit={field.active_field_unit}
               type='put'
               id={id}
               onSuccess={handleUpdateSuccess}

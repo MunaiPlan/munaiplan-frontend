@@ -82,8 +82,8 @@ export interface IField {
     companyId: string
     name: string
     description: string
-    reductionLevel: string
-    activeFieldUnit: string
+    reduction_level: string
+    active_field_unit: string
     company: ICompany | undefined
     sites: ISite[]
 }
