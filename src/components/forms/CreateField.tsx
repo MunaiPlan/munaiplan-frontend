@@ -20,8 +20,7 @@ interface IFieldForm {
 }
 
 
-const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevReductionLevel, prevActiveFieldUnit, setIsEdit, onSuccess, companyId}) => {
-  const dispatch = useAppDispatch()
+const CreateField: FC<IFieldForm> = ({type, id, prevName, prevDescription, prevReductionLevel, prevActiveFieldUnit, setIsEdit, companyId}) => {
   const navigate = useNavigate()
 
   const [nameField, setNameField] = useState(prevName)

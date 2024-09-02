@@ -4,7 +4,7 @@ import { FaRegFile } from "react-icons/fa";
 import { useAppDispatch } from '../store/hooks';
 import { closeFieldForm, openFieldForm, setCompanyId } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
-import { closeSiteForm, openSiteForm } from '../store/user/siteSlice';
+import { closeSiteForm, openSiteForm, setFieldId } from '../store/user/siteSlice';
 import { closeWellForm, openWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
@@ -117,6 +117,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     setIsOpen(!isOpen);
     if (level == 0) {
       dispatch(setCompanyId(item.id))
+    } else if (level == 1) {
+      dispatch(setFieldId(item.id))
     }
     console.log(item.id)
     console.log(item.children)

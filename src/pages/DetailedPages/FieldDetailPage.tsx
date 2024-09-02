@@ -18,10 +18,6 @@ const FieldDetail: React.FC = () => {
     const fetchField = async () => {
       try {
         const response = await instance.get<IField>(`/api/v1/fields/${id}`);
-        toast.success(response.data.name)
-        toast.success(response.data.description)
-        toast.success(response.data.active_field_unit)
-        toast.success(response.data.reduction_level)
         setField(response.data);
       } catch (error) {
         toast.error('Failed to load field details');

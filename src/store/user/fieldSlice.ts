@@ -45,8 +45,8 @@ export const FieldSlice = createSlice({
       state.companyId = action.payload.companyId
       state.name = action.payload.name
       state.description = action.payload.description
-      state.reductionLevel = action.payload.reductionLevel
-      state.activeFieldUnit = action.payload.activeFieldUnit
+      state.reductionLevel = action.payload.reduction_level
+      state.activeFieldUnit = action.payload.active_field_unit
       state.company = action.payload.company
       state.sites = action.payload.sites
     },

@@ -7,6 +7,7 @@ import { ISite, IWell } from '../../types/types'
 interface SiteState {
     id: string | null,
     name: string | null,
+    fieldId: string | null,
     area: number | null
     block: string | null
     azimuth: number | null
@@ -29,6 +30,7 @@ const initialState: SiteState = {
   region: null,
   wells: [],
   isSiteFormOpened: false,
+  fieldId: null
 }
 
 export const SiteSlice = createSlice({
@@ -53,10 +55,13 @@ export const SiteSlice = createSlice({
         state.region = action.payload.region
         state.wells = action.payload.wells
     },
+    setFieldId: (state, action: PayloadAction<string>) => {
+      state.fieldId = action.payload
+    },
   },
 })
 
-export const { openSiteForm, createSite, closeSiteForm } = SiteSlice.actions
+export const { openSiteForm, createSite, closeSiteForm, setFieldId } = SiteSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSite = (state: RootState) => state.site

@@ -1,18 +1,18 @@
 import {FC, useState} from 'react'
 import { Form, useNavigate } from 'react-router-dom'
-import { ICompany, IField, IWell } from '../../types/types'
-import { useAppDispatch } from '../../store/hooks';
-import { openCompanyForm } from '../../store/user/companySlice';
+import { IWell } from '../../types/types'
 import { instance } from '../../api/axios.api';
 import { toast } from 'react-toastify';
+import { store } from '../../store/store';
 
 interface ISiteForm {
   type: "post" | "put";
   id?: string;
+  fieldId: string;
   prevName: string;
-  prevArea: string;
+  prevArea: number;
   prevBlock: string;
-  prevAzimuth: string;
+  prevAzimuth: number;
   prevCountry: string;
   prevState: string;
   prevRegion: string;
@@ -22,17 +22,22 @@ interface ISiteForm {
 }
 
 
-const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlock, prevAzimuth, prevCountry, prevState, prevRegion, wells, setIsEdit, onSuccess}) => {
+const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlock, prevAzimuth, prevCountry, prevState, prevRegion, wells, setIsEdit, onSuccess, fieldId}) => {
 
   const [nameSite, setNameSite] = useState(prevName)
   const [areaSite, setAreaSite] = useState(prevArea)
   const [blockSite, setBlockSite] = useState(prevName)
   const [azimuthSite, setAzimuthSite] = useState(prevArea)
   const [countrySite, setCountrySite] = useState(prevName)
-  const [stateSite, setStateSite] = useState(prevArea)
+  const [stateSite, setStateSite] = useState(prevState)
   const [regionSite, setRegionSite] = useState(prevRegion)
 
   const navigate = useNavigate()
+
+  const getFieldIdFromStore = (): string | null => {
+    const state = store.getState(); // Access the current state
+    return state.site.fieldId; // Assuming your userSlice is named 'user' and stores the user info in 'user'
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -48,9 +53,15 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
           state: stateSite,
           region: regionSite
         };
-        await instance.post('/api/v1/sites', newSite)
-        toast.success("Site was added")
-        navigate("/")
+        try {
+          const fieldId = getFieldIdFromStore()
+          await instance.post(`/api/v1/sites/?fieldId=${fieldId}`, newSite)
+          toast.success("Site was added")
+          navigate("/")
+        } catch (error) {
+          toast.error("Ошибка при добавлении куста");
+          console.error(error);
+        }
       }
       if (type == 'put' && id) {
         const updatedSite = {
@@ -62,9 +73,8 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
           state: stateSite,
           region: regionSite
         };
-        await instance.put(`/api/v1/sites/${id}`, updatedSite);
+        await instance.put(`/api/v1/sites/${id}?fieldId=${fieldId}`, updatedSite);
         toast.success("Куст был успешно обновлен");
-        if (onSuccess) onSuccess();
         navigate('/')
       }
     } catch (e) {
@@ -74,7 +84,7 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
-          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новую компанию" : "Обновить эту компанию"}</h2>
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новый куст" : "Обновить этот куст"}</h2>
           <Form 
             className='grid gap-2' 
             onSubmit={handleSubmit} 
@@ -105,9 +115,8 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
                 id="areaSite"
                 type="text"
                 name='area'
-                placeholder={type=="put" ? prevArea : "Введите площадь куста"} 
-                value={areaSite}
-                onChange={(e) => setAreaSite(e.target.value)}
+                placeholder={type=="put" ? prevArea.toString() : "Введите площадь куста"} 
+                onChange={(e) => setAreaSite(parseFloat(e.target.value))}
                 required
               />
             </div>
@@ -137,9 +146,8 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
                 id="azimuthSite"
                 type="text"
                 name='azimuth'
-                placeholder={type=="put" ? prevAzimuth : "Введите азимут куста"} 
-                onChange={(e) => setAzimuthSite(e.target.value)}
-                value={azimuthSite}
+                placeholder={type=="put" ? prevAzimuth.toString() : "Введите азимут куста"} 
+                onChange={(e) => setAzimuthSite(parseFloat(e.target.value))}
                 required
               />
             </div>
