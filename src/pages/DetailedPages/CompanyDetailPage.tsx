@@ -5,7 +5,6 @@ import { ICompany } from '../../types/types';
 import { toast } from 'react-toastify';
 import SideBar from '../../components/SideBar';
 import CreateCompany from '../../components/forms/CreateCompany';
-import { useDispatch } from 'react-redux';
 
 const CompanyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

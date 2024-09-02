@@ -9,8 +9,7 @@ import { closeWellForm, openWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
-import { Navigate, useNavigate } from 'react-router-dom';
-import instance from '../api/axios.api';
+import { useNavigate } from 'react-router-dom';
 
 
 interface MenuItemProps {
@@ -94,7 +93,6 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   }
 
   const func = () => {
-    let content;
     if (level === 0) {
       fieldCreateFormOpenHandler()
     } else if (level === 1) {
@@ -107,9 +105,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       designCreateFormOpenHandler()
     } else if (level === 5){
       caseCreateFormOpenHandler()
-    } else {
-      content = <div className='w-screen flex flex-col justify-start items-center'>Тут ваши компании</div>
-    }
+    } 
     navigate('/')
   }
 

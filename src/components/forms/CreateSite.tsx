@@ -22,7 +22,7 @@ interface ISiteForm {
 }
 
 
-const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlock, prevAzimuth, prevCountry, prevState, prevRegion, wells, setIsEdit, onSuccess, fieldId}) => {
+const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlock, prevAzimuth, prevCountry, prevState, prevRegion, setIsEdit, fieldId}) => {
 
   const [nameSite, setNameSite] = useState(prevName)
   const [areaSite, setAreaSite] = useState(prevArea)

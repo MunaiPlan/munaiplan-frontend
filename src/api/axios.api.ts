@@ -1,10 +1,8 @@
 import axios from "axios";
 import { store } from "../store/store"; // Import your Redux store
-import { login, logout } from "../store/user/userSlice"; // Assuming you have a logout action
+import { logout } from "../store/user/userSlice"; // Assuming you have a logout action
 import { isTokenExpired } from "../helpers/tokenExpirationChecker";
 import type { IUser } from "../types/types"; 
-import { authService } from "../services/auth.service";
-import { toast } from "react-toastify";
 
 // Axios instance configuration
 export const instance = axios.create({
@@ -19,7 +17,7 @@ const getUserFromStore = (): IUser | null => {
 
 // Check authentication status
 const checkAuth = (dispatch: any, user: IUser) => {
-    const { tokenExpiresAt, refreshTokenExpiresAt } = user;
+    const { tokenExpiresAt } = user;
 
 
 

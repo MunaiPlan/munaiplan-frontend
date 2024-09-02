@@ -1,5 +1,4 @@
-import React from 'react';
-import { ICompany, IField, ISite, IWell, IWellBore, IDesign, ICase } from '../types/types';
+import { IField, ISite, IWell, IWellBore, IDesign, ICase } from '../types/types';
 import { MenuItem } from '../components/SideBarItem';
 
 // Function to convert fields to MenuItem[]

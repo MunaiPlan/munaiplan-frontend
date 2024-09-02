@@ -1,24 +1,21 @@
-import {Children, FC, useEffect, useState} from 'react'
-import SideBarMenu, { MenuItem } from './SideBarItem';
+import {FC, useEffect, useState} from 'react'
+import SideBarMenu from './SideBarItem';
 import { HiMiniSquares2X2 } from "react-icons/hi2";
 import { MdPeople } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from '../hooks/useAuth';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch } from '../store/hooks';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { logout } from '../store/user/userSlice';
 import { toast } from 'react-toastify';
 import { openCompanyForm } from '../store/user/companySlice';
-import { closeFieldForm, openFieldForm } from '../store/user/fieldSlice';
+import { closeFieldForm } from '../store/user/fieldSlice';
 import { closeSiteForm } from '../store/user/siteSlice';
 import { closeWellForm } from '../store/user/wellSlice';
 import { closeWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm } from '../store/user/designSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
-import { ICase, ICompany, IDesign, IField, IResponseLoader, ISite, IWell, IWellBore } from '../types/types';
-import instance from '../api/axios.api';
+import { ICompany, IResponseLoader } from '../types/types';
 import { returnCompanies } from '../helpers/dataLoader';
 import { convertFieldsToMenuItems } from '../helpers/menuItemTurner';
 

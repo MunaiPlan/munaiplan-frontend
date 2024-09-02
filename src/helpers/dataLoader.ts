@@ -1,6 +1,5 @@
-import { useLoaderData } from "react-router-dom";
 import instance from "../api/axios.api";
-import { ICase, ICompany, IDesign, IField, IResponseLoader, ISite, IWell, IWellBore } from "../types/types";
+import { ICase, ICompany, IDesign, IField, ISite, IWell, IWellBore } from "../types/types";
 
 export async function returnCompanies(companies: ICompany[]): Promise<ICompany[]> {
     const tempCompanies: ICompany[] = [];

@@ -2,14 +2,10 @@ import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { createWell, openWellForm } from '../../store/user/wellSlice'
 import { toast } from 'react-toastify'
-import { wellService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { IWell, IWellBore } from '../../types/types'
 import TextField from '../textField'
 
 const CreateWell: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   const [nameWell, setNameWell] = useState("")
   const [descriptionWell, setDescriptionWell] = useState("")
@@ -20,7 +16,6 @@ const CreateWell: FC = () => {
   const [workingGroupWell, setWorkingGroupWell] = useState("")
   const [activeWellUnitWell, setActiveWellUnitWell] = useState("")
   const [createdAtWell, setCreatedAt] = useState<Date>(new Date)
-  const [wellBoresWell, setWellBoresWell] = useState<IWellBore[]>([])
   
 
   const wellCreateFormOpenHandler = () => {
@@ -28,6 +23,7 @@ const CreateWell: FC = () => {
   }
 
   const createWellHandle = () => {
+    setCreatedAt(new Date())
     console.log("It works 1")
     dispatch(createWell({
       id: "",
@@ -40,36 +36,10 @@ const CreateWell: FC = () => {
       workingGroup: workingGroupWell,
       activeWellUnit: activeWellUnitWell,
       createdAt: createdAtWell,
-      wellBores: wellBoresWell
+      wellBores: []
     }))
     toast.success('Well was successfully created')
     wellCreateFormOpenHandler()
-  }
-
-  const createWellHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await wellService.createWell({
-        id: "",
-        name: nameWell,
-        description: descriptionWell,
-        location: locationWell,
-        universalWellIdentifier: universalWellIdentifierWell,
-        type: typeWell,
-        wellNumber: wellNumberWell,
-        workingGroup: workingGroupWell,
-        activeWellUnit: activeWellUnitWell,
-        createdAt: createdAtWell,
-        wellBores: wellBoresWell
-      })
-      if (data){
-        toast.success('Well was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a company'
-      toast.error(error.toString()) 
-    }
   }
 
   return (

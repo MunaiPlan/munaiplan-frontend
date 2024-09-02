@@ -1,8 +1,6 @@
 import {FC, useState} from 'react'
 import { Form, useNavigate } from 'react-router-dom'
-import { ICompany, IField } from '../../types/types'
-import { useAppDispatch } from '../../store/hooks';
-import { openCompanyForm } from '../../store/user/companySlice';
+import { IField } from '../../types/types'
 import { instance } from '../../api/axios.api';
 import { toast } from 'react-toastify';
 
@@ -21,7 +19,7 @@ interface ICompanyForm {
 }
 
 
-const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, fields, setIsEdit, onSuccess}) => {
+const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivision, prevGroup, prevRepresentative, prevAddress, prevPhone, setIsEdit, onSuccess}) => {
 
   const [nameCompany, setNameCompany] = useState(prevName)
   const [divisionCompany, setDivisionCompany] = useState(prevDivision)

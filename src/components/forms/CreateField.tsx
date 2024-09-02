@@ -1,6 +1,5 @@
 import { ISite } from "../../types/types"
 import {FC, useState} from 'react'
-import { useAppDispatch } from '../../store/hooks'
 import { toast } from 'react-toastify'
 import { Form, useNavigate } from 'react-router-dom'
 import { instance } from '../../api/axios.api'

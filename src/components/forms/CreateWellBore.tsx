@@ -2,14 +2,10 @@ import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { createWellBore, openWellBoreForm } from '../../store/user/wellBoreSlice'
 import { toast } from 'react-toastify'
-import { wellBoreService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { IDesign, IWellBore } from '../../types/types'
 import TextField from '../textField'
 
 const CreateWellBore: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   const [nameWelBore, setNameWellBore] = useState("")
   const [bottomLocationWellBore, setBottomLocationWellBore] = useState("")
@@ -25,8 +21,6 @@ const CreateWellBore: FC = () => {
   const [maximumTorqueWellBore, setMaximumTorqueWellBore] = useState<number>(0)
   const [downStaticFrictionWellBore, setDownStaticFrictionWellBore] = useState<number>(0)
   const [depthIntervalWellBore, setDepthIntervalWellBore] = useState<number>(0)
-  const [wellBoresDesigns, setWellBoresDesigns] = useState<IDesign[]>([])
-  const [createdAtWellBore, setCreatedAtWellBore] = useState<Date>(new Date())
   
 
   const wellBoreCreateFormOpenHandler = () => {
@@ -51,43 +45,11 @@ const CreateWellBore: FC = () => {
       maximumTorque: maximumTorqueWellBore,
       downStaticFriction: downStaticFrictionWellBore,
       depthInterval: depthIntervalWellBore,
-      designs: wellBoresDesigns,
-      createdAt: createdAtWellBore
+      designs: [],
+      createdAt: new Date()
     }))
     toast.success('WellBore was successfully created')
     wellBoreCreateFormOpenHandler()
-  }
-
-  const createWellBoreHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await wellBoreService.createWellBore({
-        id: "",
-        name: nameWelBore,
-        bottomLocation: bottomLocationWellBore,
-        wellBoreDepth: wellBoreDepthWellBore,
-        averageHookLead: averageHookLeadWellBore,
-        riserPressure: riserPressureWellBore,
-        averageInLetFlow: averageInLetFlowWellBore,
-        averageColumnRotationFrequency: averageColumnRotationFrequencyWellBore,
-        maximumColumnRotationFrequency: maximumColumnRotationFrequencyWellBore,
-        averageWeightOnBit: averageWeightOnBitWellBore,
-        maximumWeightOnBit: maximumWeightOnBitWellBore,
-        averageTorque: averageTorqueWellBore,
-        maximumTorque: maximumTorqueWellBore,
-        downStaticFriction: downStaticFrictionWellBore,
-        depthInterval: depthIntervalWellBore,
-        designs: wellBoresDesigns,
-        createdAt: createdAtWellBore
-      })
-      if (data){
-        toast.success('WellBore was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a wellbore'
-      toast.error(error.toString()) 
-    }
   }
 
   return (

@@ -2,14 +2,10 @@ import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { createCase, openCaseForm } from '../../store/user/caseSlice'
 import { toast } from 'react-toastify'
-import { CaseService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { ICase } from '../../types/types'
 import TextField from '../textField'
 
 const CreateCase: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   const [nameCase, setNameCase] = useState("")
   const [descriptionCase, setDescriptionCase] = useState("")
@@ -34,27 +30,6 @@ const CreateCase: FC = () => {
     }))
     toast.success('Case was successfully created')
     caseCreateFormOpenHandler()
-  }
-
-  const createCaseHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await CaseService.createCase({
-        id: "",
-        caseName: nameCase,
-        caseDescription: descriptionCase,
-        drillDepth: drillDepthCase,
-        pipeSize: pipeSizeCase,
-        createdAt: createdAtCase      
-      })
-      if (data){
-        toast.success('Case was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a case'
-      toast.error(error.toString()) 
-    }
   }
 
   return (
@@ -113,6 +88,7 @@ const CreateCase: FC = () => {
                 onChangeFunction={(value) => {
                     if (typeof value === 'number') {
                         setPipeSizeCase(value);
+                        setCreatedAtCase(new Date());
                     }
                 }}            
             />

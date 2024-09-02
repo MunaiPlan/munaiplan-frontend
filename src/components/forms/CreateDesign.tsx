@@ -2,22 +2,16 @@ import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { createDesign, openDesignForm } from '../../store/user/designSlice'
 import { toast } from 'react-toastify'
-import { DesignService } from '../../services/forms.service'
-import { useNavigate } from 'react-router-dom'
-import { IDesign, ICase, ITrajectory } from '../../types/types'
 import TextField from '../textField'
 
 const CreateDesign: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   const [namePlanDesign, setNamePlanDesign] = useState("")
   const [stageDesign, setStageDesign] = useState("")
   const [versionDesign, setVersionDesign] = useState("")
   const [actualDateDesign, setActualDateDesign] = useState<Date>(new Date)
-  const [casesDesign, setCasesDesign] = useState<ICase[]>([])
   const [createdAtDesign, setCreatedAtDesign] = useState<Date>(new Date)
-  const [trajectoriesDesign, setTrajectoriesDesign] = useState<IDesign[]>([])
   
 
   const designCreateFormOpenHandler = () => {
@@ -32,36 +26,14 @@ const CreateDesign: FC = () => {
       stage: stageDesign,
       version: versionDesign,
       actualDate: actualDateDesign,
-      cases: casesDesign,
-      trajectories: trajectoriesDesign,
+      cases: [],
+      trajectories: [],
       createdAt: createdAtDesign
     }))
     toast.success('Design was successfully created')
     designCreateFormOpenHandler()
   }
 
-  const createDesignHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault()
-      const data = await DesignService.createDesign({
-        id: "",
-        planName: namePlanDesign,
-        stage: stageDesign,
-        version: versionDesign,
-        actualDate: actualDateDesign,
-        cases: casesDesign,
-        trajectories: trajectoriesDesign,
-        createdAt: createdAtDesign
-      })
-      if (data){
-        toast.success('Design was successfully created')
-      }
-    }
-    catch (err: any) {
-      const error = err.response?.data?.message || 'An error occurred during creating a design'
-      toast.error(error.toString()) 
-    }
-  }
 
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
@@ -93,6 +65,8 @@ const CreateDesign: FC = () => {
                 onChangeFunction={(value) => {
                     if (typeof value === 'string') {
                         setStageDesign(value);
+                        setActualDateDesign(new Date())
+                        setCreatedAtDesign(new Date())
                     }
                 }}
             />
