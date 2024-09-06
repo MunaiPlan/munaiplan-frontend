@@ -98,6 +98,7 @@ export interface ISite {
     state: string
     region: string
     wells: IWell[]
+    fieldId: string
 }
 
 export interface IWell {
@@ -105,13 +106,14 @@ export interface IWell {
     name: string
     description: string
     location: string
-    universalWellIdentifier: string
+    universal_well_identifier: string
     type: string
-    wellNumber: string
-    workingGroup: string
-    activeWellUnit: string
+    well_number: string
+    working_group: string
+    active_well_unit: string
     wellBores: IWellBore[]
     createdAt: Date
+    siteId: string
 }
 
 export interface IWellBore {

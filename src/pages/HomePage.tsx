@@ -46,7 +46,7 @@ const Home: FC = () => {
   } else if (isSiteFormOpened) { 
     content = <CreateSite type={"post"} prevName={""} prevArea={0} prevAzimuth={0} prevBlock={""} fieldId='' prevCountry={""} prevRegion={""} prevState={""} />
   } else if (isWellFormOpened){
-    content = <CreateWell />
+    content = <CreateWell type={"post"} prevName={""} prevDescription={""} prevLocation={""} prevType={""} prevActiveWellUnit={""} prevUniversalWellIdentifier={""} prevWellNumber={""} prevWorkingGroup={""} siteId='' />
   } else if (isWellBoreFormOpened) {
     content = <CreateWellBore />
   } else if (isDesignFormOpened) {

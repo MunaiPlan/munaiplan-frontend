@@ -5,7 +5,7 @@ import { useAppDispatch } from '../store/hooks';
 import { closeFieldForm, openFieldForm, setCompanyId } from '../store/user/fieldSlice';
 import { closeCompanyForm } from '../store/user/companySlice';
 import { closeSiteForm, openSiteForm, setFieldId } from '../store/user/siteSlice';
-import { closeWellForm, openWellForm } from '../store/user/wellSlice';
+import { closeWellForm, openWellForm, setSiteId } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
@@ -115,6 +115,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       dispatch(setCompanyId(item.id))
     } else if (level == 1) {
       dispatch(setFieldId(item.id))
+    } else if (level == 2) {
+      dispatch(setSiteId(item.id))
     }
     console.log(item.id)
     console.log(item.children)
@@ -125,14 +127,12 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       navigate(`/${item.id}`)
     } else if (level == 1) {
       navigate(`/fields/${item.id}`)
+    } else if (level == 2) {
+      navigate(`/sites/${item.id}`)
+    } else if (level == 3) {
+      navigate(`/wells/${item.id}`)
     }
   }
-
-  // const loadFields = () => {
-  //   if (level == 0) {
-  //     const fields = instance.get(`/api/v1/fields/?companyId=${companyId}`)
-  //   }
-  // }
 
   return (
     <>
@@ -141,11 +141,6 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
           {item.name.split(' ')[0] === "Кейс" ? (<FaRegFile className='mr-1'/>) : (isOpen ? <IoIosArrowDown onClick={handleToggle} className='mr-1'/> : <IoIosArrowForward onClick={handleToggle} className='mr-1'/>)}   
           <label onClick={goTo}>{item.name.length > 0 ? item.name : "   "}</label>
         </div>
-        {/* {hasChildren && (
-          <button onClick={handleToggle}>
-            {isOpen ? '-' : '+'}
-          </button>
-        )} */}
       </div>
       {isOpen && hasChildren ? (
         <div className="ml-4">

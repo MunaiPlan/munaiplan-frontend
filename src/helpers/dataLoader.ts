@@ -67,11 +67,13 @@ async function returnWellBores(wellId: string): Promise<IWellBore[]> {
     const wellBoresResponse = await instance.get<IWellBore[]>(`/api/v1/wellbores/?wellId=${wellId}`);
     const wellBores: IWellBore[] = wellBoresResponse.data;
     const tempWellBores: IWellBore[] = [];
-    for (const wellBore of wellBores) {
-        const designs = await returnDesigns(wellBore.id); // Resolving the promise here
-        tempWellBores.push({ ...wellBore, designs }); // Assigning resolved designs to the wellbore
-    }
-    return tempWellBores;
+    if (wellBores) {
+        for (const wellBore of wellBores) {
+            const designs = await returnDesigns(wellBore.id); // Resolving the promise here
+            tempWellBores.push({ ...wellBore, designs }); // Assigning resolved designs to the wellbore
+        }
+        return tempWellBores;
+    } return wellBores
 }
 
 async function returnDesigns(wellBoreId: string): Promise<IDesign[]> {

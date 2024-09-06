@@ -9,6 +9,8 @@ import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CompanyDetail from "../pages/DetailedPages/CompanyDetailPage";
 import FieldDetail from "../pages/DetailedPages/FieldDetailPage";
+import SiteDetail from "../pages/DetailedPages/SiteDetailPage";
+import WellDetail from "../pages/DetailedPages/WellDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -68,6 +70,24 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute> 
                         <FieldDetail />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: 'sites/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <SiteDetail />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: 'wells/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <WellDetail />
                     </ProtectedRoute>
                 )
             }

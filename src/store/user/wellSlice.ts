@@ -5,6 +5,7 @@ import { IWell, IWellBore } from '../../types/types'
 
 // Define a type for the slice state
 interface WellState {
+    siteId: string | null,
     id: string | null,
     name: string | null,
     description: string | null
@@ -21,6 +22,7 @@ interface WellState {
 
 // Define the initial state using that type
 const initialState: WellState = {
+    siteId: null,
     id: null,
     name:  null,
     description: null,
@@ -46,23 +48,13 @@ export const WellSlice = createSlice({
     closeWellForm: (state) => {
       state.isWellFormOpened = false
     },
-    createWell: (state, action: PayloadAction<IWell>) => {
-        state.id = action.payload.id
-        state.name = action.payload.name
-        state.description = action.payload.description
-        state.location = action.payload.location
-        state.universalWellIdentifier = action.payload.universalWellIdentifier
-        state.type = action.payload.type
-        state.wellNumber = action.payload.wellNumber
-        state.workingGroup = action.payload.workingGroup
-        state.activeWellUnit = action.payload.activeWellUnit
-        state.wellBores = action.payload.wellBores
-        state.createdAt = action.payload.createdAt
+    setSiteId: (state, action: PayloadAction<string>) => {
+      state.siteId = action.payload
     },
   },
 })
 
-export const { openWellForm, createWell, closeWellForm } = WellSlice.actions
+export const { openWellForm, closeWellForm, setSiteId } = WellSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectWell = (state: RootState) => state.well

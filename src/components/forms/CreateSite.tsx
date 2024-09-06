@@ -115,6 +115,7 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
                 id="areaSite"
                 type="text"
                 name='area'
+                value={areaSite}
                 placeholder={type=="put" ? prevArea.toString() : "Введите площадь куста"} 
                 onChange={(e) => setAreaSite(parseFloat(e.target.value))}
                 required
@@ -146,6 +147,7 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
                 id="azimuthSite"
                 type="text"
                 name='azimuth'
+                value={azimuthSite}
                 placeholder={type=="put" ? prevAzimuth.toString() : "Введите азимут куста"} 
                 onChange={(e) => setAzimuthSite(parseFloat(e.target.value))}
                 required
