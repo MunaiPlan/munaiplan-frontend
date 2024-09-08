@@ -22,7 +22,8 @@ interface WellBoreState {
     depthInterval: number | null,
     designs: IDesign[] | null,
     createdAt: Date | null,
-    isWellBoreFormOpened: boolean
+    isWellBoreFormOpened: boolean,
+    wellId: string | null
 }
 
 // Define the initial state using that type
@@ -44,7 +45,8 @@ const initialState: WellBoreState = {
     depthInterval: null,
     designs: null,
     createdAt: null,
-    isWellBoreFormOpened: false
+    isWellBoreFormOpened: false,
+    wellId: null
 }
 
 export const WellBoreSlice = createSlice({
@@ -58,29 +60,13 @@ export const WellBoreSlice = createSlice({
     closeWellBoreForm: (state) => {
       state.isWellBoreFormOpened = false
     },
-    createWellBore: (state, action: PayloadAction<IWellBore>) => {
-        state.id = action.payload.id
-        state.name = action.payload.name
-        state.bottomLocation = action.payload.bottomLocation
-        state.wellBoreDepth = action.payload.wellBoreDepth,
-        state.averageHookLead = action.payload.averageHookLead,
-        state.riserPressure = action.payload.riserPressure,
-        state.averageInLetFlow = action.payload.averageInLetFlow,
-        state.averageColumnRotationFrequency = action.payload.averageColumnRotationFrequency,
-        state.maximumColumnRotationFrequency = action.payload.maximumColumnRotationFrequency,
-        state.averageWeightOnBit = action.payload.averageWeightOnBit,
-        state.maximumWeightOnBit = action.payload.maximumWeightOnBit,
-        state.averageTorque = action.payload.averageTorque,
-        state.maximumTorque = action.payload.maximumTorque,
-        state.downStaticFriction = action.payload.downStaticFriction,
-        state.depthInterval = action.payload.depthInterval,
-        state.designs = action.payload.designs,
-        state.createdAt = action.payload.createdAt
+    setWellId: (state, action: PayloadAction<string>) => {
+      state.wellId = action.payload
     }
   }
 })
 
-export const { openWellBoreForm, createWellBore, closeWellBoreForm } = WellBoreSlice.actions
+export const { openWellBoreForm, closeWellBoreForm, setWellId } = WellBoreSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectWellBore = (state: RootState) => state.wellBore

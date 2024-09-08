@@ -13,7 +13,8 @@ interface DesignState {
     cases: ICase[] | null,
     trajectories: ITrajectory[] | null,
     createdAt: Date | null,
-    isDesignFormOpened: boolean
+    isDesignFormOpened: boolean,
+    wellboreId: string | null
 }
 
 // Define the initial state using that type
@@ -26,7 +27,8 @@ const initialState: DesignState = {
     cases: null,
     trajectories: null,
     createdAt: null,
-    isDesignFormOpened: false
+    isDesignFormOpened: false,
+    wellboreId: null
 }
 
 export const DesignSlice = createSlice({
@@ -49,11 +51,14 @@ export const DesignSlice = createSlice({
         state.cases = action.payload.cases,
         state.trajectories = action.payload.trajectories,
         state.createdAt = action.payload.createdAt
+    },
+    setWellboreId: (state, action: PayloadAction<string>) => {
+      state.wellboreId = action.payload
     }
   }
 })
 
-export const { openDesignForm, createDesign, closeDesignForm } = DesignSlice.actions
+export const { setWellboreId, openDesignForm, createDesign, closeDesignForm } = DesignSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectDesign = (state: RootState) => state.design

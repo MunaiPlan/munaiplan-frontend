@@ -11,6 +11,7 @@ import CompanyDetail from "../pages/DetailedPages/CompanyDetailPage";
 import FieldDetail from "../pages/DetailedPages/FieldDetailPage";
 import SiteDetail from "../pages/DetailedPages/SiteDetailPage";
 import WellDetail from "../pages/DetailedPages/WellDetailPage";
+import WellBoreDetail from "../pages/DetailedPages/WellBoreDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -90,7 +91,16 @@ export const router = createBrowserRouter([
                         <WellDetail />
                     </ProtectedRoute>
                 )
-            }
+            },
+            {
+                path: 'wellbores/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <WellBoreDetail />
+                    </ProtectedRoute>
+                )
+            },
         ]
     }
 ])

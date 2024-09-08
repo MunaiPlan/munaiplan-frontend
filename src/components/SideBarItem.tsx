@@ -6,11 +6,10 @@ import { closeFieldForm, openFieldForm, setCompanyId } from '../store/user/field
 import { closeCompanyForm } from '../store/user/companySlice';
 import { closeSiteForm, openSiteForm, setFieldId } from '../store/user/siteSlice';
 import { closeWellForm, openWellForm, setSiteId } from '../store/user/wellSlice';
-import { closeWellBoreForm, openWellBoreForm } from '../store/user/wellBoreSlice';
-import { closeDesignForm, openDesignForm } from '../store/user/designSlice';
+import { closeWellBoreForm, openWellBoreForm, setWellId } from '../store/user/wellBoreSlice';
+import { closeDesignForm, openDesignForm, setWellboreId } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
 import { useNavigate } from 'react-router-dom';
-
 
 interface MenuItemProps {
   item: MenuItem;
@@ -20,126 +19,136 @@ interface MenuItemProps {
 export interface MenuItem {
   id: string;
   name: string;
-  children?: MenuItem[];
+  children?: MenuItem[];  // Optional
 }
-
-
 
 const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const hasChildren = item.children && item.children.length > 0;
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const hasChildren = Array.isArray(item.children) && item.children.length > 0;  // Safeguard for undefined children
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "кейс"];
 
   const fieldCreateFormOpenHandler = () => {
-    dispatch(closeCompanyForm())
-    dispatch(openFieldForm())
-    dispatch(closeSiteForm())
-    dispatch(closeWellForm())
-    dispatch(closeWellBoreForm())
-    dispatch(closeDesignForm())
-    dispatch(closeCaseForm())
-  }
+    dispatch(closeCompanyForm());
+    dispatch(openFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(closeWellForm());
+    dispatch(closeWellBoreForm());
+    dispatch(closeDesignForm());
+    dispatch(closeCaseForm());
+  };
 
   const siteCreateFormOpenHandler = () => {
-    dispatch(openSiteForm())
-    dispatch(closeCompanyForm())
-    dispatch(closeFieldForm())
-    dispatch(closeWellForm())
-    dispatch(closeWellBoreForm())
-    dispatch(closeDesignForm())
-    dispatch(closeCaseForm())
-  }
+    dispatch(openSiteForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeWellForm());
+    dispatch(closeWellBoreForm());
+    dispatch(closeDesignForm());
+    dispatch(closeCaseForm());
+  };
 
   const wellCreateFormOpenHandler = () => {
-    dispatch(openWellForm())
-    dispatch(closeCompanyForm())
-    dispatch(closeFieldForm())
-    dispatch(closeSiteForm())
-    dispatch(closeWellBoreForm())
-    dispatch(closeDesignForm())
-    dispatch(closeCaseForm())
-  }
+    dispatch(openWellForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(closeWellBoreForm());
+    dispatch(closeDesignForm());
+    dispatch(closeCaseForm());
+  };
 
   const wellBoreCreateFormOpenHandler = () => {
-    dispatch(openWellBoreForm())
-    dispatch(closeWellForm())
-    dispatch(closeCompanyForm())
-    dispatch(closeFieldForm())
-    dispatch(closeSiteForm())
-    dispatch(closeDesignForm())
-    dispatch(closeCaseForm())
-  }
+    dispatch(openWellBoreForm());
+    dispatch(closeWellForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(closeDesignForm());
+    dispatch(closeCaseForm());
+  };
 
   const designCreateFormOpenHandler = () => {
-    dispatch(closeWellBoreForm())
-    dispatch(closeWellForm())
-    dispatch(closeCompanyForm())
-    dispatch(closeFieldForm())
-    dispatch(closeSiteForm())
-    dispatch(openDesignForm())
-    dispatch(closeCaseForm())
-  }
+    dispatch(closeWellBoreForm());
+    dispatch(closeWellForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(openDesignForm());
+    dispatch(closeCaseForm());
+  };
 
   const caseCreateFormOpenHandler = () => {
-    dispatch(openCaseForm())
-    dispatch(closeWellBoreForm())
-    dispatch(closeWellForm())
-    dispatch(closeCompanyForm())
-    dispatch(closeFieldForm())
-    dispatch(closeSiteForm())
-    dispatch(closeDesignForm())
-  }
+    dispatch(openCaseForm());
+    dispatch(closeWellBoreForm());
+    dispatch(closeWellForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(closeDesignForm());
+  };
 
   const func = () => {
     if (level === 0) {
-      fieldCreateFormOpenHandler()
+      fieldCreateFormOpenHandler();
     } else if (level === 1) {
-      siteCreateFormOpenHandler()
-    } else if (level === 2) { 
-      wellCreateFormOpenHandler()
+      siteCreateFormOpenHandler();
+    } else if (level === 2) {
+      wellCreateFormOpenHandler();
     } else if (level === 3) {
-      wellBoreCreateFormOpenHandler()
+      wellBoreCreateFormOpenHandler();
     } else if (level === 4) {
-      designCreateFormOpenHandler()
-    } else if (level === 5){
-      caseCreateFormOpenHandler()
-    } 
-    navigate('/')
-  }
+      designCreateFormOpenHandler();
+    } else if (level === 5) {
+      caseCreateFormOpenHandler();
+    }
+    navigate('/');
+  };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
-    if (level == 0) {
-      dispatch(setCompanyId(item.id))
-    } else if (level == 1) {
-      dispatch(setFieldId(item.id))
-    } else if (level == 2) {
-      dispatch(setSiteId(item.id))
+    if (level === 0) {
+      dispatch(setCompanyId(item.id));
+    } else if (level === 1) {
+      dispatch(setFieldId(item.id));
+    } else if (level === 2) {
+      dispatch(setSiteId(item.id));
+    } else if (level === 3) {
+      dispatch(setWellId(item.id));
+    } else if (level === 4) {
+      dispatch(setWellboreId(item.id));
     }
-    console.log(item.id)
-    console.log(item.children)
+    console.log(item.id);
+    console.log(item.children);
   };
 
   const goTo = () => {
-    if (level == 0) {
-      navigate(`/${item.id}`)
-    } else if (level == 1) {
-      navigate(`/fields/${item.id}`)
-    } else if (level == 2) {
-      navigate(`/sites/${item.id}`)
-    } else if (level == 3) {
-      navigate(`/wells/${item.id}`)
+    if (level === 0) {
+      navigate(`/${item.id}`);
+    } else if (level === 1) {
+      navigate(`/fields/${item.id}`);
+    } else if (level === 2) {
+      navigate(`/sites/${item.id}`);
+    } else if (level === 3) {
+      navigate(`/wells/${item.id}`);
+    } else if (level === 4) {
+      navigate(`/wellbores/${item.id}`);
     }
-  }
+  };
 
   return (
     <>
       <div className="flex gap-x-1 items-center justify-start mt-2">
         <div className="flex items-center">
-          {item.name.split(' ')[0] === "Кейс" ? (<FaRegFile className='mr-1'/>) : (isOpen ? <IoIosArrowDown onClick={handleToggle} className='mr-1'/> : <IoIosArrowForward onClick={handleToggle} className='mr-1'/>)}   
-          <label onClick={goTo}>{item.name.length > 0 ? item.name : "   "}</label>
+          {item.name && item.name.split(' ')[0] === 'Кейс' ? (
+            <FaRegFile className="mr-1" />
+          ) : isOpen ? (
+            <IoIosArrowDown onClick={handleToggle} className="mr-1" />
+          ) : (
+            <IoIosArrowForward onClick={handleToggle} className="mr-1" />
+          )}
+          <label onClick={goTo}>{item.name ? item.name : '   '}</label>
         </div>
       </div>
       {isOpen && hasChildren ? (
@@ -147,21 +156,19 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
           {item.children?.map((child) => (
             <SideBarMenu key={child.id} item={child} level={level + 1} />
           ))}
-          <button 
-            onClick={func}
-            className="text-gray-200 hover:text-gray-400 text-md mt-2 truncate">{"+ Создать " + entities[level]}
+          <button onClick={func} className="text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
+            {`+ Создать ${entities[level]}`}
           </button>
         </div>
-      ) : (isOpen && !hasChildren && (
-        <button 
-          onClick={func}
-          className="ml-4 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">{"+ Создать " + entities[level]}
-        </button>
-      )) 
-    }
+      ) : (
+        isOpen && (
+          <button onClick={func} className="ml-4 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
+            {`+ Создать ${entities[level]}`}
+          </button>
+        )
+      )}
     </>
   );
 };
-
 
 export default SideBarMenu;

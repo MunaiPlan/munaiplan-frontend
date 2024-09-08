@@ -1,10 +1,10 @@
+import { toast } from "react-toastify";
 import instance from "../api/axios.api";
 import { ICase, ICompany, IDesign, IField, ISite, IWell, IWellBore } from "../types/types";
 
 export async function returnCompanies(companies: ICompany[]): Promise<ICompany[]> {
     const tempCompanies: ICompany[] = [];
     for (const company of companies) {
-        console.log(company)
         const fields = await returnFields(company.id); // Resolving the promise here
         company.fields = fields
         tempCompanies.push({ ...company, fields }); // Assigning resolved fields to the company
@@ -18,7 +18,6 @@ async function returnFields(companyId: string): Promise<IField[]> {
     const tempFields: IField[] = [];
     if (fields) {
         for (const field of fields) {
-            console.log(field)
             const sites = await returnSites(field.id); // Resolving the promise here
             field.sites = sites
             tempFields.push({ ...field, sites }); // Assigning resolved sites to the field
@@ -30,18 +29,14 @@ async function returnFields(companyId: string): Promise<IField[]> {
 }
 
 async function returnSites(fieldId: string): Promise<ISite[]> {
-    console.log(fieldId)
     const sitesResponse = await instance.get<ISite[]>(`/api/v1/sites/?fieldId=${fieldId}`);
     const sites: ISite[] = sitesResponse.data;
-    console.log(sites)
     const tempSites: ISite[] = [];
     if (sites) {
         for (const site of sites) {
-            console.log(site)
             const wells = await returnWells(site.id); // Resolving the promise here
             tempSites.push({ ...site, wells }); // Assigning resolved wells to the site
         }
-        console.log('end')
         return tempSites;
     } else {
         return sites
@@ -77,14 +72,17 @@ async function returnWellBores(wellId: string): Promise<IWellBore[]> {
 }
 
 async function returnDesigns(wellBoreId: string): Promise<IDesign[]> {
-    const designsResponse = await instance.get<IDesign[]>(`/api/v1/designs/?wellBoreId=${wellBoreId}`);
+    const designsResponse = await instance.get<IDesign[]>(`/api/v1/designs/?wellboreId=${wellBoreId}`);
     const designs: IDesign[] = designsResponse.data;
     const tempDesigns: IDesign[] = [];
-    for (const design of designs) {
-        const cases = await returnCases(design.id); // Resolving the promise here
-        tempDesigns.push({ ...design, cases }); // Assigning resolved cases to the design
+    if (designs) {
+        for (const design of designs) {
+            const cases = await returnCases(design.id); // Resolving the promise here
+            tempDesigns.push({ ...design, cases }); // Assigning resolved cases to the design
+        }
+        return tempDesigns;
     }
-    return tempDesigns;
+    return []
 }
 
 async function returnCases(designId: string): Promise<ICase[]> {

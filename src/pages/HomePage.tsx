@@ -48,9 +48,9 @@ const Home: FC = () => {
   } else if (isWellFormOpened){
     content = <CreateWell type={"post"} prevName={""} prevDescription={""} prevLocation={""} prevType={""} prevActiveWellUnit={""} prevUniversalWellIdentifier={""} prevWellNumber={""} prevWorkingGroup={""} siteId='' />
   } else if (isWellBoreFormOpened) {
-    content = <CreateWellBore />
+    content = <CreateWellBore type={"post"} prevName={""} prevAverageColumnRotationFrequency={0} prevAverageHookLead={0} prevAverageInLetFlow={0} prevAverageTorque={0} prevAverageWeightOnBit={0} wellId='' prevBottomLocation={""} prevDepth={0} prevDepthIntervalWellBore={0} prevDownStaticFriction={0} prevMaximumColumnRotationFrequency={0} prevMaximumTorque={0} prevMaximumWeightOnBit={0} prevRiserPressure={0}/>
   } else if (isDesignFormOpened) {
-    content = <CreateDesign />
+    content = <CreateDesign type={"post"} prevName={""} prevActualDate={new Date()} prevStage={""} prevVersion={""} wellBoreId=''/>
   } else if (isCaseFormOpened) {
     content = <CreateCase />
   } else {

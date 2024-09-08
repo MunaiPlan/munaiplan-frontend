@@ -93,6 +93,8 @@ const WellDetail: React.FC = () => {
               prevWorkingGroup={well.working_group}
               type='put'
               id={id}
+              setIsEdit={setIsEdit}
+              
               onSuccess={handleUpdateSuccess}
               siteId={well.siteId}
             />

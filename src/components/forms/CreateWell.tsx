@@ -206,14 +206,9 @@ const CreateWell: FC<IWellForm> = ({
             <button type="submit" className="w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base">
               {type === 'put' ? 'Обновить' : 'Создать'}
             </button>
-            {type === 'put' && setIsEdit && (
-              <button
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base"
-                onClick={() => setIsEdit(false)}
-              >
-                Закрыть
-              </button>
-            )}
+            { type === 'put' && (<button type="button" className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
+              if(setIsEdit) {setIsEdit(false);}
+            }}>Закрыть</button>)}
           </div>
         </Form>
       </div>

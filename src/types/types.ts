@@ -119,21 +119,22 @@ export interface IWell {
 export interface IWellBore {
     id: string
     name: string
-    bottomLocation: string
-    wellBoreDepth: number
-    averageHookLead: number
-    riserPressure: number
-    averageInLetFlow: number
-    averageColumnRotationFrequency: number
-    maximumColumnRotationFrequency: number
-    averageWeightOnBit: number
-    maximumWeightOnBit: number
-    averageTorque: number
-    maximumTorque: number
-    downStaticFriction: number
-    depthInterval: number
+    bottom_hole_location: string
+    wellbore_depth: number
+    average_hook_load: number
+    riser_pressure: number
+    average_inlet_flow: number
+    average_column_rotation_frequency: number
+    maximum_column_rotation_frequency: number
+    average_weight_on_bit: number
+    maximum_weight_on_bit: number
+    average_torque: number
+    maximum_torque: number
+    down_static_friction: number
+    depth_interval: number
     designs: IDesign[]
     createdAt: Date
+    wellId: string
 }
 
 export interface IDesign {
