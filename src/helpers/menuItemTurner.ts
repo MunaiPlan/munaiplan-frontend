@@ -41,7 +41,7 @@ const convertWellBoresToMenuItems = (wellBores: IWellBore[]): MenuItem[] => {
 const convertDesignsToMenuItems = (designs: IDesign[]): MenuItem[] => {
   return designs.map(design => ({
     id: design.id,
-    name: design.planName,
+    name: design.plan_name,
     children: design.cases ? convertCasesToMenuItems(design.cases) : [], // Convert cases to MenuItem[]
   }));
 };

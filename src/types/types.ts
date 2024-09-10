@@ -139,13 +139,14 @@ export interface IWellBore {
 
 export interface IDesign {
     id: string
-    planName: string
+    plan_name: string
     stage: string
     version: string
     actualDate: Date
     cases: ICase[]
     trajectories: ITrajectory[]
     createdAt: Date
+    wellboreId: string
 }
 
 export interface ICase{

@@ -44,7 +44,7 @@ export const DesignSlice = createSlice({
     },
     createDesign: (state, action: PayloadAction<IDesign>) => {
         state.id = action.payload.id
-        state.namePlan = action.payload.planName
+        state.namePlan = action.payload.plan_name
         state.stage = action.payload.stage
         state.version = action.payload.version,
         state.actualDate = action.payload.actualDate,

@@ -12,6 +12,7 @@ import FieldDetail from "../pages/DetailedPages/FieldDetailPage";
 import SiteDetail from "../pages/DetailedPages/SiteDetailPage";
 import WellDetail from "../pages/DetailedPages/WellDetailPage";
 import WellBoreDetail from "../pages/DetailedPages/WellBoreDetailPage";
+import DesignDetail from "../pages/DetailedPages/DesignDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -101,6 +102,15 @@ export const router = createBrowserRouter([
                     </ProtectedRoute>
                 )
             },
+            {
+                path: 'designs/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <DesignDetail />
+                    </ProtectedRoute>
+                )
+            }
         ]
     }
 ])

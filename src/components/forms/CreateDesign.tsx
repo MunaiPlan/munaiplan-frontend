@@ -29,12 +29,19 @@ const CreateDesign: FC<IDesignForm> = ({type="post", id, prevName, prevStage, pr
   const navigate = useNavigate()
 
   const getWellboreIdFromStore = (): string | null => {
-    const state = store.getState(); // Access the current state
-    return state.design.wellboreId; // Assuming your userSlice is named 'user' and stores the user info in 'user'
+    const state = store.getState(); 
+    return state.design.wellboreId; 
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    const newDesign = {
+      plan_name: nameDesign,
+      stage: stageDesign,
+      version: versionDesign,
+      actual_date: actualDataDesign
+    };
 
     try {
       setActualDataDesign(new Date())
@@ -46,6 +53,9 @@ const CreateDesign: FC<IDesignForm> = ({type="post", id, prevName, prevStage, pr
           version: versionDesign,
           actual_date: actualDataDesign
         };
+        console.log("Design")
+        console.log(newDesign)
+        console.log(id)
         try {
           await instance.post(`/api/v1/designs/?wellboreId=${wellboreId}`, newDesign)
           toast.success("Design was added")
@@ -62,12 +72,12 @@ const CreateDesign: FC<IDesignForm> = ({type="post", id, prevName, prevStage, pr
           version: versionDesign,
           actual_date: actualDataDesign
         };
-        await instance.put(`/api/v1/designs/?wellboreId=${wellboreId}`, updatedDesign);
+        await instance.put(`/api/v1/designs/${id}`, updatedDesign);
         toast.success("Дизайн был успешно обновлен");
         navigate('/')
       }
     } catch (e) {
-      toast.error('Не удалось обновить дизайн');
+      toast.error('Не удалось обновить дизайн' + wellBoreId);
     }
   }
   return (

@@ -10,6 +10,7 @@ import { closeWellBoreForm, openWellBoreForm, setWellId } from '../store/user/we
 import { closeDesignForm, openDesignForm, setWellboreId } from '../store/user/designSlice';
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface MenuItemProps {
   item: MenuItem;
@@ -134,6 +135,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       navigate(`/wells/${item.id}`);
     } else if (level === 4) {
       navigate(`/wellbores/${item.id}`);
+    } else if (level === 5) {
+      navigate(`/designs/${item.id}`);
     }
   };
 
@@ -152,7 +155,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
         </div>
       </div>
       {isOpen && hasChildren ? (
-        <div className="ml-4">
+        <div className="ml-2">
           {item.children?.map((child) => (
             <SideBarMenu key={child.id} item={child} level={level + 1} />
           ))}
@@ -162,7 +165,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
         </div>
       ) : (
         isOpen && (
-          <button onClick={func} className="ml-4 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
+          <button onClick={func} className="ml-2 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
             {`+ Создать ${entities[level]}`}
           </button>
         )
