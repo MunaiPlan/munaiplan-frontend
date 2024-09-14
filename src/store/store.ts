@@ -7,6 +7,7 @@ import wellReducer from './user/wellSlice'
 import wellBoreReducer from './user/wellBoreSlice'
 import designReducer from './user/designSlice'
 import caseReducer from './user/caseSlice'
+import trajectorySlice from './user/trajectorySlice'
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     well: wellReducer,
     wellBore: wellBoreReducer,
     design: designReducer,
+    trajectory: trajectorySlice,
     case: caseReducer
   },
 })

@@ -1,5 +1,5 @@
 import {FC} from 'react'
-import { useCaseFormOpen, useCompanyFormOpen, useDesignFormOpen, useFieldFormOpen, useSiteFormOpen, useWellBoreFormOpen, useWellFormOpen } from '../hooks/useForms'
+import { useCaseFormOpen, useCompanyFormOpen, useDesignFormOpen, useFieldFormOpen, useSiteFormOpen, useTrajectoryFormOpen, useWellBoreFormOpen, useWellFormOpen } from '../hooks/useForms'
 import CreateCompany from '../components/forms/CreateCompany'
 import CreateSite from '../components/forms/CreateSite'
 import CreateWell from '../components/forms/CreateWell'
@@ -11,6 +11,8 @@ import { ICompany, IResponseLoader } from '../types/types'
 import { useLoaderData } from 'react-router-dom'
 import SideBar from '../components/SideBar'
 import CreateField from '../components/forms/CreateField'
+import CreateTraj from '../components/forms/CreateTrajectory'
+import CreateTrajectory from '../components/forms/CreateTrajectory'
 
 export const companiesLoader = async() => {
   try {
@@ -36,6 +38,7 @@ const Home: FC = () => {
   const isWellBoreFormOpened = useWellBoreFormOpen()
   const isDesignFormOpened = useDesignFormOpen()
   const isCaseFormOpened = useCaseFormOpen()
+  const isTrajectoryFormOpened = useTrajectoryFormOpen()
   const { companies: initialCompanies = [] } = useLoaderData() as IResponseLoader || {};
 
   let content;
@@ -51,8 +54,8 @@ const Home: FC = () => {
     content = <CreateWellBore type={"post"} prevName={""} prevAverageColumnRotationFrequency={0} prevAverageHookLead={0} prevAverageInLetFlow={0} prevAverageTorque={0} prevAverageWeightOnBit={0} wellId='' prevBottomLocation={""} prevDepth={0} prevDepthIntervalWellBore={0} prevDownStaticFriction={0} prevMaximumColumnRotationFrequency={0} prevMaximumTorque={0} prevMaximumWeightOnBit={0} prevRiserPressure={0}/>
   } else if (isDesignFormOpened) {
     content = <CreateDesign type={"post"} prevName={""} prevActualDate={new Date()} prevStage={""} prevVersion={""} wellBoreId=''/>
-  } else if (isCaseFormOpened) {
-    content = <CreateCase />
+  } else if (isTrajectoryFormOpened) {
+    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} prevAzimTrajectory={0} prevCustomerTrajectory={""} prevFieldTrajectory={''} prevInclTrajectory={0} prevJob_number={''} prevKelly_bushing_elev={0} prevMdTrajectory={0} prevProfile={''} prevProfileTypeTrajectory={''} prevProjectTrajectory={''} prevStructureTrajectory={''} prevSubSea={0} prevTVD={0} prevWell_head={''} prevYourRefTrajectory={''} prev_dogleg={0} prev_global_e_coord={0} prev_global_n_coord={0} prev_local_e_coord={0} prev_local_n_coord={0} prev_vertical_section={0} designId=''/>
   } else {
     content = <div className='w-screen flex flex-col justify-start items-center'>
       {initialCompanies.length > 0 ? 

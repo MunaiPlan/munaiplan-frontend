@@ -30,6 +30,11 @@ export const useDesignFormOpen = () => {
     return isDesignFormOpen
 }
 
+export const useTrajectoryFormOpen = () => {
+    const isTrajectoryFormOpen = useAppSelector((state) => state.trajectory.isTrajectoryFormOpened)
+    return isTrajectoryFormOpen
+}
+
 export const useCaseFormOpen = () => {
     const isCaseFormOpen = useAppSelector((state) => state.case.isCaseFormOpened)
     return isCaseFormOpen

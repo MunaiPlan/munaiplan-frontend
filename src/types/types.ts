@@ -159,7 +159,45 @@ export interface ICase{
 }
 
 export interface ITrajectory{
+    name: string
+    description: string
+    designId: string
+    headers: ITrajectoryHeader[]
+    units: ITrajectoryUnit[]
+    cases: ICase[]
+}
 
+export interface ITrajectoryHeader {
+    id: string
+    trajectoryId: string
+    customer: string
+    project: string
+    profile_type: string
+    field: string
+    your_ref: string
+    structure: string
+    job_number: string
+    well_head: string
+    kelly_bushing_elev: number
+    profile: string
+    createdAt: Date
+}
+
+export interface ITrajectoryUnit {
+    id: string
+    trajectoryId: string
+    md: number
+    incl: number
+    azim: number
+    sub_sea: number
+    tvd: number
+    local_n_coord: number
+    local_e_coord: number
+    global_n_coord: number
+    global_e_coord: number
+    dogleg: number
+    vertical_section: number
+    createdAt: Date
 }
 
 export interface IResponseLoader {

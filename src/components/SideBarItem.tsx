@@ -11,6 +11,7 @@ import { closeDesignForm, openDesignForm, setWellboreId } from '../store/user/de
 import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { openTrajectoryForm, setDesignId } from '../store/user/trajectorySlice';
 
 interface MenuItemProps {
   item: MenuItem;
@@ -28,7 +29,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const hasChildren = Array.isArray(item.children) && item.children.length > 0;  // Safeguard for undefined children
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "кейс"];
+  const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "траекторию", "кейс",];
 
   const fieldCreateFormOpenHandler = () => {
     dispatch(closeCompanyForm());
@@ -80,8 +81,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeCaseForm());
   };
 
-  const caseCreateFormOpenHandler = () => {
-    dispatch(openCaseForm());
+  const trajectoryCreateFormOpenHandler = () => {
+    dispatch(openTrajectoryForm());
     dispatch(closeWellBoreForm());
     dispatch(closeWellForm());
     dispatch(closeCompanyForm());
@@ -102,7 +103,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     } else if (level === 4) {
       designCreateFormOpenHandler();
     } else if (level === 5) {
-      caseCreateFormOpenHandler();
+      trajectoryCreateFormOpenHandler();
     }
     navigate('/');
   };
@@ -119,6 +120,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       dispatch(setWellId(item.id));
     } else if (level === 4) {
       dispatch(setWellboreId(item.id));
+    } else if (level === 5) {
+      dispatch(setDesignId(item.id))
     }
     console.log(item.id);
     console.log(item.children);
