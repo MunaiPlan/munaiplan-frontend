@@ -64,7 +64,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
   setIsEdit,
   onSuccess,
 }) => {
-  const [nameTrajectory, setNameTrajectory] = useState(prevName);
+  const [name_trajectory, setNameTrajectory] = useState(prevName);
   const [descriptionTrajectory, setDescriptionTrajectory] = useState(prevDescription);
   const [customerTrajectoryHeader, setCustomerTrajectoryHeader] = useState(prevCustomerTrajectory);
   const [projectTrajectoryHeader, setProjectTrajectoryHeader] = useState(prevProjectTrajectory);
@@ -99,7 +99,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
     event.preventDefault();
 
     const newTrajectory = {
-      name: nameTrajectory,
+      name: name_trajectory,
       description: descriptionTrajectory,
       trajectory_headers: {
         customer: customerTrajectoryHeader,
@@ -146,38 +146,40 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
   };
 
   return (
-    <div className="w-screen flex flex-col justify-center items-center">
-      <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto overflow-y-auto">
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="w-full max-w-2xl justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto overflow-y-auto">
         <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">
           {type === 'post' ? 'Создать новую траекторию' : 'Обновить эту траекторию'}
         </h2>
-        <Form className="grid grid-cols-2 gap-x-2" onSubmit={handleSubmit}>
+        <Form className="grid gap-x-2" onSubmit={handleSubmit}>
           {/* Name */}
-          <div className="input-wrapper grid-cols-12">
+          <div className="input-wrapper col-span-2">
             <label htmlFor="nameTrajectory">Имя траектории</label>
             <input
               id="nameTrajectory"
               type="text"
-              value={nameTrajectory}
+              value={name_trajectory}
+              placeholder={type == "put" ? name_trajectory : "Введите имя траектории"}
               onChange={(e) => setNameTrajectory(e.target.value)}
               required
             />
           </div>
 
           {/* Description */}
-          <div className="input-wrapper grid-cols-2">
+          <div className="input-wrapper col-span-2">
             <label htmlFor="descriptionTrajectory">Описание</label>
             <input
               id="descriptionTrajectory"
               type="text"
               value={descriptionTrajectory}
+              placeholder={type == "put" ? descriptionTrajectory : "Введите описание траектории"}
               onChange={(e) => setDescriptionTrajectory(e.target.value)}
               required
             />
           </div>
 
           {/* Trajectory Headers Group */}
-          <div className="grid-cols-1">
+          <div className="">
             <h3 className="font-medium">Заголовок траектории</h3>
 
             <div className="input-wrapper">
@@ -186,6 +188,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="customerTrajectory"
                 type="text"
                 value={customerTrajectoryHeader}
+                placeholder={type == "put" ? customerTrajectoryHeader : "Введите клиент траектории"}
                 onChange={(e) => setCustomerTrajectoryHeader(e.target.value)}
                 required
               />
@@ -197,6 +200,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="projectTrajectory"
                 type="text"
                 value={projectTrajectoryHeader}
+                placeholder={type == "put" ? projectTrajectoryHeader : "Введите проект траектории"}
                 onChange={(e) => setProjectTrajectoryHeader(e.target.value)}
                 required
               />
@@ -208,6 +212,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="profileTypeTrajectory"
                 type="text"
                 value={profileTypeTrajectoryHeader}
+                placeholder={type == "put" ? profileTypeTrajectoryHeader : "Введите тип профиля траектории"}
                 onChange={(e) => setProfileTypeTrajectoryHeader(e.target.value)}
                 required
               />
@@ -219,6 +224,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="fieldTrajectory"
                 type="text"
                 value={fieldTrajectoryHeader}
+                placeholder={type == "put" ? fieldTrajectoryHeader : "Введите поле траектории"}
                 onChange={(e) => setFieldTrajectoryHeader(e.target.value)}
                 required
               />
@@ -230,6 +236,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="yourRefTrajectory"
                 type="text"
                 value={your_refTrajectoryHeader}
+                placeholder={type == "put" ? your_refTrajectoryHeader : "Введите ваше ссылочное имя"}
                 onChange={(e) => setYour_refTrajectoryHeader(e.target.value)}
                 required
               />
@@ -241,6 +248,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="structureTrajectory"
                 type="text"
                 value={structureTrajectoryHeader}
+                placeholder={type == "put" ? structureTrajectoryHeader : "Введите структуру траектории"}
                 onChange={(e) => setStructureTrajectoryHeader(e.target.value)}
                 required
               />
@@ -252,6 +260,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="jobNumberTrajectory"
                 type="text"
                 value={job_numberTrajectoryHeader}
+                placeholder={type == "put" ? job_numberTrajectoryHeader : "Введите номер работы траектории"}
                 onChange={(e) => setJob_numberTrajectoryHeader(e.target.value)}
                 required
               />
@@ -263,6 +272,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="wellHeadTrajectory"
                 type="text"
                 value={wellHeadTrajectoryHeader}
+                placeholder={type == "put" ? wellHeadTrajectoryHeader : "Введите устье траектории"}
                 onChange={(e) => setWellHeadTrajectoryHeader(e.target.value)}
                 required
               />
@@ -273,7 +283,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="kellyBushingElevation"
                 type="number"
-                value={kelly_bushing_elevTrajectoryHeader}
+                value={kelly_bushing_elevTrajectoryHeader || ''}
+                placeholder={type === "put" && kelly_bushing_elevTrajectoryHeader ? kelly_bushing_elevTrajectoryHeader.toString() : "Введите высоту Kelly Bushing траектории"}
                 onChange={(e) => setKelly_bushing_elevTrajectoryHeader(parseFloat(e.target.value))}
                 required
               />
@@ -285,6 +296,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="profile"
                 type="text"
                 value={profileTrajectoryHeader}
+                placeholder={type === "put" ? profileTrajectoryHeader : "Введите профиль траектории"}
                 onChange={(e) => setProfileTrajectoryHeader(e.target.value)}
                 required
               />
@@ -292,7 +304,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
           </div>
 
           {/* Trajectory Units Group */}
-          <div className="grid-cols-1">
+          <div className="">
             <h3 className="font-medium">Единица траектории</h3>
 
             <div className="input-wrapper">
@@ -300,7 +312,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="mdTrajectory"
                 type="number"
-                value={mdTrajectoryUnit}
+                value={mdTrajectoryUnit || ''}
+                placeholder={type === "put" && mdTrajectoryUnit ? mdTrajectoryUnit.toString() : "Введите единицу траектории"}
                 onChange={(e) => setMdTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -311,7 +324,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="inclTrajectory"
                 type="number"
-                value={inclTrajectoryUnit}
+                value={inclTrajectoryUnit || ''}
+                placeholder={type === "put" && inclTrajectoryUnit ? inclTrajectoryUnit.toString() : "Введите incl траектории"}
                 onChange={(e) => setInclTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -322,7 +336,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="azimTrajectory"
                 type="number"
-                value={azimTrajectoryUnit}
+                value={azimTrajectoryUnit || ''}
+                placeholder={type === "put" && azimTrajectoryUnit ? azimTrajectoryUnit.toString() : "Введите азимут траектории"}
                 onChange={(e) => setAzimTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -333,7 +348,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="subSeaTrajectory"
                 type="number"
-                value={subSeaTrajectoryUnit}
+                value={subSeaTrajectoryUnit || ''}
+                placeholder={type === "put" && subSeaTrajectoryUnit ? subSeaTrajectoryUnit.toString() : "Введите значение глубины траектории относительно уровня моря"}
                 onChange={(e) => setSubSeaTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -344,7 +360,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="tvdTrajectory"
                 type="number"
-                value={tvdTrajectoryUnit}
+                value={tvdTrajectoryUnit || ''}
+                placeholder={type === "put" && tvdTrajectoryUnit ? tvdTrajectoryUnit.toString() : "Введите tvd траектории"}
                 onChange={(e) => setTvdTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -355,7 +372,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="localNCoord"
                 type="number"
-                value={local_n_coord_trajectory_unit}
+                value={local_n_coord_trajectory_unit || ''}
+                placeholder={type === "put" && local_n_coord_trajectory_unit ? local_n_coord_trajectory_unit.toString() : "Введите местные северные координаты траектории"}
                 onChange={(e) => set_local_n_coord_trajectory_unit(parseFloat(e.target.value))}
                 required
               />
@@ -366,7 +384,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="localECoord"
                 type="number"
-                value={local_e_coord_trajectory_unit}
+                value={local_e_coord_trajectory_unit || ''}
+                placeholder={type === "put" && local_e_coord_trajectory_unit ? local_e_coord_trajectory_unit.toString() : "Введите местные восточные координаты траектории"}
                 onChange={(e) => set_local_e_coord_trajectory_unit(parseFloat(e.target.value))}
                 required
               />
@@ -377,7 +396,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="globalNCoord"
                 type="number"
-                value={global_n_coord_trajectory_unit}
+                value={global_n_coord_trajectory_unit || ''}
+                placeholder={type === "put" && global_n_coord_trajectory_unit ? global_n_coord_trajectory_unit.toString() : "Введите глобальные северные координаты траектории"}
                 onChange={(e) => set_global_n_coord_trajectory_unit(parseFloat(e.target.value))}
                 required
               />
@@ -388,7 +408,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="globalECoord"
                 type="number"
-                value={global_e_coord_trajectory_unit}
+                value={global_e_coord_trajectory_unit || ''}
+                placeholder={type === "put" && global_e_coord_trajectory_unit ? global_e_coord_trajectory_unit.toString() : "Введите глобальные восточные координаты траектории"}
                 onChange={(e) => set_global_e_coord_trajectory_unit(parseFloat(e.target.value))}
                 required
               />
@@ -399,7 +420,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="doglegTrajectory"
                 type="number"
-                value={dogleg_trajectory_unit}
+                value={dogleg_trajectory_unit || ''}
+                placeholder={type === "put" && dogleg_trajectory_unit ? dogleg_trajectory_unit.toString() : "Введите dogleg траектории"} 
                 onChange={(e) => setDogleg_trajectory_unit(parseFloat(e.target.value))}
                 required
               />
@@ -410,7 +432,8 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
               <input
                 id="verticalSection"
                 type="number"
-                value={verticalSectionTrajectoryUnit}
+                value={verticalSectionTrajectoryUnit || ''}
+                placeholder={type === "put" && verticalSectionTrajectoryUnit ? verticalSectionTrajectoryUnit.toString() : "Введите вертикальную секцию траектории"} 
                 onChange={(e) => setVerticalSectionTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />
@@ -418,7 +441,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-center justify-between mt-3 mx-6">
+          <div className="flex flex-col col-span-2 items-center justify-between mt-3 mx-6">
             <button
               type="submit"
               className="w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base"

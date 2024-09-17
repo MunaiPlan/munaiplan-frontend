@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import instance from "../api/axios.api";
-import { ICase, ICompany, IDesign, IField, ISite, IWell, IWellBore } from "../types/types";
+import { ICase, ICompany, IDesign, IField, ISite, ITrajectory, IWell, IWellBore } from "../types/types";
 
 export async function returnCompanies(companies: ICompany[]): Promise<ICompany[]> {
     const tempCompanies: ICompany[] = [];
@@ -77,16 +77,31 @@ async function returnDesigns(wellBoreId: string): Promise<IDesign[]> {
     const tempDesigns: IDesign[] = [];
     if (designs) {
         for (const design of designs) {
-            const cases = await returnCases(design.id); // Resolving the promise here
-            tempDesigns.push({ ...design, cases }); // Assigning resolved cases to the design
+            const trajectories = await returnTrajectories(design.id); // Resolving the promise here
+            tempDesigns.push({ ...design, trajectories }); // Assigning resolved cases to the design
         }
         return tempDesigns;
     }
     return []
 }
 
+async function returnTrajectories(designId: string): Promise<ITrajectory[]> {
+    const trajectoriesResponse = await instance.get<ITrajectory[]>(`/api/v1/trajectories/?designId=${designId}`);
+    const trajectories: ITrajectory[] = trajectoriesResponse.data;
+    const tempTrajectories: ITrajectory[] = [];
+    if (trajectories) {
+        for (const trajectory of trajectories) {
+            const cases = await returnCases(trajectory.id); // Resolving the promise here
+            tempTrajectories.push({ ...trajectory, cases }); // Assigning resolved cases to the design
+        }
+        return tempTrajectories;
+    }
+    return []
+}
+
+
 async function returnCases(designId: string): Promise<ICase[]> {
-    const casesResponse = await instance.get<ICase[]>(`/api/v1/trajectories/?designId=${designId}`);
+    const casesResponse = await instance.get<ICase[]>(`/api/v1/cases/?trajectoryId=${designId}`);
     const cases: ICase[] = casesResponse.data;
     return cases; // No further nested levels, so we just return cases
 }

@@ -1,4 +1,4 @@
-import { IField, ISite, IWell, IWellBore, IDesign, ICase } from '../types/types';
+import { IField, ISite, IWell, IWellBore, IDesign, ICase, ITrajectory } from '../types/types';
 import { MenuItem } from '../components/SideBarItem';
 
 // Function to convert fields to MenuItem[]
@@ -42,9 +42,17 @@ const convertDesignsToMenuItems = (designs: IDesign[]): MenuItem[] => {
   return designs.map(design => ({
     id: design.id,
     name: design.plan_name,
-    children: design.cases ? convertCasesToMenuItems(design.cases) : [], // Convert cases to MenuItem[]
+    children: design.trajectories ? convertTrajectoriesToMenuItems(design.trajectories) : [], // Convert cases to MenuItem[]
   }));
 };
+
+const convertTrajectoriesToMenuItems = (trajectories: ITrajectory[]): MenuItem[] => {
+  return trajectories.map(trajectory => ({
+    id: trajectory.designId,
+    name: trajectory.name,
+    children: trajectory.cases ? convertCasesToMenuItems(trajectory.cases) : []
+  }));
+}
 
 // Function to convert cases to MenuItem[]
 const convertCasesToMenuItems = (cases: ICase[]): MenuItem[] => {
