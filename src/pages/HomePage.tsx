@@ -62,7 +62,7 @@ const Home: FC = () => {
       <div>
         Тут ваши компании
         <ul>
-          {initialCompanies.map((company, i) => <li key={ i }>
+          {initialCompanies.map((company, i) => <li key={i}>
             {company.name}
           </li>)}
         </ul>

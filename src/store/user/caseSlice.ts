@@ -12,6 +12,7 @@ interface CaseState {
     pipeSize: number | null,
     createdAt: Date | null,
     isCaseFormOpened: boolean
+    trajectoryId: string, 
 }
 
 // Define the initial state using that type
@@ -22,7 +23,8 @@ const initialState: CaseState = {
     drillDepth: null,
     pipeSize: null,
     createdAt: null,
-    isCaseFormOpened: false
+    isCaseFormOpened: false,
+    trajectoryId: ""
 }
 
 export const CaseSlice = createSlice({
@@ -42,11 +44,14 @@ export const CaseSlice = createSlice({
         state.caseDescription = action.payload.caseDescription
         state.drillDepth = action.payload.drillDepth,
         state.pipeSize = action.payload.pipeSize
+    },
+    setTrajectoryId: (state, action: PayloadAction<string>) => {
+      state.trajectoryId = action.payload
     }
   }
 })
 
-export const { openCaseForm, createCase, closeCaseForm } = CaseSlice.actions
+export const { openCaseForm, createCase, closeCaseForm, setTrajectoryId } = CaseSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectCase = (state: RootState) => state.case

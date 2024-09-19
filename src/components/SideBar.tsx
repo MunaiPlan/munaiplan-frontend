@@ -18,6 +18,7 @@ import { closeDesignForm } from '../store/user/designSlice';
 import { ICompany, IResponseLoader } from '../types/types';
 import { returnCompanies } from '../helpers/dataLoader';
 import { convertFieldsToMenuItems } from '../helpers/menuItemTurner';
+import instance from '../api/axios.api';
 
 const SideBar: FC = () => {
   const isAuth = useAuth()

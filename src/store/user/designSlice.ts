@@ -42,23 +42,13 @@ export const DesignSlice = createSlice({
     closeDesignForm: (state) => {
       state.isDesignFormOpened = false
     },
-    createDesign: (state, action: PayloadAction<IDesign>) => {
-        state.id = action.payload.id
-        state.namePlan = action.payload.plan_name
-        state.stage = action.payload.stage
-        state.version = action.payload.version,
-        state.actualDate = action.payload.actualDate,
-        state.cases = action.payload.cases,
-        state.trajectories = action.payload.trajectories,
-        state.createdAt = action.payload.createdAt
-    },
     setWellboreId: (state, action: PayloadAction<string>) => {
       state.wellboreId = action.payload
     }
   }
 })
 
-export const { setWellboreId, openDesignForm, createDesign, closeDesignForm } = DesignSlice.actions
+export const { setWellboreId, openDesignForm, closeDesignForm } = DesignSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectDesign = (state: RootState) => state.design

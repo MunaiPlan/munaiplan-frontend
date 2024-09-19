@@ -13,6 +13,7 @@ import SiteDetail from "../pages/DetailedPages/SiteDetailPage";
 import WellDetail from "../pages/DetailedPages/WellDetailPage";
 import WellBoreDetail from "../pages/DetailedPages/WellBoreDetailPage";
 import DesignDetail from "../pages/DetailedPages/DesignDetailPage";
+import TrajectoryDetail from "../pages/DetailedPages/TrajectoryDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -108,6 +109,15 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute> 
                         <DesignDetail />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: 'trajectories/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <TrajectoryDetail/>
                     </ProtectedRoute>
                 )
             }

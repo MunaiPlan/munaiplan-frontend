@@ -8,7 +8,7 @@ import { closeSiteForm, openSiteForm, setFieldId } from '../store/user/siteSlice
 import { closeWellForm, openWellForm, setSiteId } from '../store/user/wellSlice';
 import { closeWellBoreForm, openWellBoreForm, setWellId } from '../store/user/wellBoreSlice';
 import { closeDesignForm, openDesignForm, setWellboreId } from '../store/user/designSlice';
-import { closeCaseForm, openCaseForm } from '../store/user/caseSlice';
+import { closeCaseForm, openCaseForm, setTrajectoryId } from '../store/user/caseSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { openTrajectoryForm, setDesignId } from '../store/user/trajectorySlice';
@@ -140,6 +140,10 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       navigate(`/wellbores/${item.id}`);
     } else if (level === 5) {
       navigate(`/designs/${item.id}`);
+    } else if (level === 6) {
+      console.log("Item: ", item)
+      console.log("Trajectory: ", item.id)
+      navigate(`/trajectories/${item.id}`);
     }
   };
 
@@ -147,7 +151,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     <>
       <div className="flex gap-x-1 items-center justify-start mt-2">
         <div className="flex items-center">
-          {item.name && item.name.split(' ')[0] === 'Кейс' ? (
+          {level === 7 ? (
             <FaRegFile className="mr-1" />
           ) : isOpen ? (
             <IoIosArrowDown onClick={handleToggle} className="mr-1" />

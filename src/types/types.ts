@@ -143,7 +143,6 @@ export interface IDesign {
     stage: string
     version: string
     actualDate: Date
-    cases: ICase[]
     trajectories: ITrajectory[]
     createdAt: Date
     wellboreId: string
@@ -159,6 +158,7 @@ export interface ICase{
 }
 
 export interface ITrajectory{
+    id: string
     name: string
     description: string
     designId: string
@@ -177,7 +177,7 @@ export interface ITrajectoryHeader {
     your_ref: string
     structure: string
     job_number: string
-    well_head: string
+    wellhead: string
     kelly_bushing_elev: number
     profile: string
     createdAt: Date
