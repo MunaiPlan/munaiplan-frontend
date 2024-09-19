@@ -177,7 +177,7 @@ export interface ITrajectoryHeader {
     your_ref: string
     structure: string
     job_number: string
-    well_head: string
+    wellhead: string
     kelly_bushing_elev: number
     profile: string
     createdAt: Date

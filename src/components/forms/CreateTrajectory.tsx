@@ -3,6 +3,7 @@ import { Form, useNavigate } from 'react-router-dom';
 import { instance } from '../../api/axios.api';
 import { toast } from 'react-toastify';
 import { store } from '../../store/store';
+import { ITrajectoryHeader, ITrajectoryUnit } from '../../types/types';
 
 interface ITrajcetoryForm {
   type: 'post' | 'put';
@@ -10,27 +11,8 @@ interface ITrajcetoryForm {
   designId: string;
   prevName: string;
   prevDescription: string;
-  prevCustomerTrajectory: string;
-  prevProjectTrajectory: string;
-  prevProfileTypeTrajectory: string;
-  prevFieldTrajectory: string;
-  prevYourRefTrajectory: string;
-  prevStructureTrajectory: string;
-  prevJob_number: string;
-  prevWell_head: string;
-  prevKelly_bushing_elev: number;
-  prevProfile: string;
-  prevMdTrajectory: number;
-  prevInclTrajectory: number;
-  prevAzimTrajectory: number;
-  prevSubSea: number;
-  prevTVD: number;
-  prev_local_n_coord: number;
-  prev_local_e_coord: number;
-  prev_global_n_coord: number;
-  prev_global_e_coord: number;
-  prev_dogleg: number;
-  prev_vertical_section: number;
+  prevHeader?: ITrajectoryHeader;
+  prevUnit?: ITrajectoryUnit;
   setIsEdit?: (edit: boolean) => void;
   onSuccess?: () => void;
 }
@@ -40,53 +22,34 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
   id,
   prevName,
   prevDescription,
-  prevCustomerTrajectory,
-  prevProjectTrajectory,
-  prevProfileTypeTrajectory,
-  prevFieldTrajectory,
-  prevYourRefTrajectory,
-  prevStructureTrajectory,
-  prevJob_number,
-  prevWell_head,
-  prevKelly_bushing_elev,
-  prevProfile,
-  prevMdTrajectory,
-  prevInclTrajectory,
-  prevAzimTrajectory,
-  prevSubSea,
-  prevTVD,
-  prev_local_n_coord,
-  prev_local_e_coord,
-  prev_global_n_coord,
-  prev_global_e_coord,
-  prev_dogleg,
-  prev_vertical_section,
+  prevHeader,
+  prevUnit,
   setIsEdit,
   onSuccess,
 }) => {
   const [name_trajectory, setNameTrajectory] = useState(prevName);
   const [descriptionTrajectory, setDescriptionTrajectory] = useState(prevDescription);
-  const [customerTrajectoryHeader, setCustomerTrajectoryHeader] = useState(prevCustomerTrajectory);
-  const [projectTrajectoryHeader, setProjectTrajectoryHeader] = useState(prevProjectTrajectory);
-  const [profileTypeTrajectoryHeader, setProfileTypeTrajectoryHeader] = useState(prevProfileTypeTrajectory);
-  const [fieldTrajectoryHeader, setFieldTrajectoryHeader] = useState(prevFieldTrajectory);
-  const [your_refTrajectoryHeader, setYour_refTrajectoryHeader] = useState(prevYourRefTrajectory);
-  const [structureTrajectoryHeader, setStructureTrajectoryHeader] = useState(prevStructureTrajectory);
-  const [job_numberTrajectoryHeader, setJob_numberTrajectoryHeader] = useState(prevJob_number);
-  const [wellHeadTrajectoryHeader, setWellHeadTrajectoryHeader] = useState(prevWell_head);
-  const [kelly_bushing_elevTrajectoryHeader, setKelly_bushing_elevTrajectoryHeader] = useState(prevKelly_bushing_elev);
-  const [profileTrajectoryHeader, setProfileTrajectoryHeader] = useState(prevProfile);
-  const [mdTrajectoryUnit, setMdTrajectoryUnit] = useState(prevMdTrajectory);
-  const [inclTrajectoryUnit, setInclTrajectoryUnit] = useState(prevInclTrajectory);
-  const [azimTrajectoryUnit, setAzimTrajectoryUnit] = useState(prevAzimTrajectory);
-  const [subSeaTrajectoryUnit, setSubSeaTrajectoryUnit] = useState(prevSubSea);
-  const [tvdTrajectoryUnit, setTvdTrajectoryUnit] = useState(prevTVD);
-  const [local_n_coord_trajectory_unit, set_local_n_coord_trajectory_unit] = useState(prev_local_n_coord);
-  const [local_e_coord_trajectory_unit, set_local_e_coord_trajectory_unit] = useState(prev_local_e_coord);
-  const [global_n_coord_trajectory_unit, set_global_n_coord_trajectory_unit] = useState(prev_global_n_coord);
-  const [global_e_coord_trajectory_unit, set_global_e_coord_trajectory_unit] = useState(prev_global_e_coord);
-  const [dogleg_trajectory_unit, setDogleg_trajectory_unit] = useState(prev_dogleg);
-  const [verticalSectionTrajectoryUnit, setVerticalSectionTrajectoryUnit] = useState(prev_vertical_section);
+  const [customerTrajectoryHeader, setCustomerTrajectoryHeader] = useState(prevHeader?.customer);
+  const [projectTrajectoryHeader, setProjectTrajectoryHeader] = useState(prevHeader?.project);
+  const [profileTypeTrajectoryHeader, setProfileTypeTrajectoryHeader] = useState(prevHeader?.profile);
+  const [fieldTrajectoryHeader, setFieldTrajectoryHeader] = useState(prevHeader?.field);
+  const [your_refTrajectoryHeader, setYour_refTrajectoryHeader] = useState(prevHeader?.your_ref);
+  const [structureTrajectoryHeader, setStructureTrajectoryHeader] = useState(prevHeader?.structure);
+  const [job_numberTrajectoryHeader, setJob_numberTrajectoryHeader] = useState(prevHeader?.job_number);
+  const [wellHeadTrajectoryHeader, setWellHeadTrajectoryHeader] = useState(prevHeader?.wellhead);
+  const [kelly_bushing_elevTrajectoryHeader, setKelly_bushing_elevTrajectoryHeader] = useState(prevHeader?.kelly_bushing_elev);
+  const [profileTrajectoryHeader, setProfileTrajectoryHeader] = useState(prevHeader?.profile);
+  const [mdTrajectoryUnit, setMdTrajectoryUnit] = useState(prevUnit?.md);
+  const [inclTrajectoryUnit, setInclTrajectoryUnit] = useState(prevUnit?.incl);
+  const [azimTrajectoryUnit, setAzimTrajectoryUnit] = useState(prevUnit?.azim);
+  const [subSeaTrajectoryUnit, setSubSeaTrajectoryUnit] = useState(prevUnit?.sub_sea);
+  const [tvdTrajectoryUnit, setTvdTrajectoryUnit] = useState(prevUnit?.tvd);
+  const [local_n_coord_trajectory_unit, set_local_n_coord_trajectory_unit] = useState(prevUnit?.local_n_coord);
+  const [local_e_coord_trajectory_unit, set_local_e_coord_trajectory_unit] = useState(prevUnit?.local_e_coord);
+  const [global_n_coord_trajectory_unit, set_global_n_coord_trajectory_unit] = useState(prevUnit?.global_n_coord);
+  const [global_e_coord_trajectory_unit, set_global_e_coord_trajectory_unit] = useState(prevUnit?.global_e_coord);
+  const [dogleg_trajectory_unit, setDogleg_trajectory_unit] = useState(prevUnit?.dogleg);
+  const [verticalSectionTrajectoryUnit, setVerticalSectionTrajectoryUnit] = useState(prevUnit?.vertical_section);
 
   const navigate = useNavigate();
 
@@ -101,7 +64,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
     const newTrajectory = {
       name: name_trajectory,
       description: descriptionTrajectory,
-      trajectory_headers: {
+      headers: [{
         customer: customerTrajectoryHeader,
         project: projectTrajectoryHeader,
         profile_type: profileTypeTrajectoryHeader,
@@ -109,11 +72,11 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
         your_ref: your_refTrajectoryHeader,
         structure: structureTrajectoryHeader,
         job_number: job_numberTrajectoryHeader,
-        well_head: wellHeadTrajectoryHeader,
+        wellhead: wellHeadTrajectoryHeader,
         kelly_bushing_elev: kelly_bushing_elevTrajectoryHeader,
         profile: profileTrajectoryHeader,
-      },
-      trajectory_units: {
+      }],
+      units: [{
         md: mdTrajectoryUnit,
         incl: inclTrajectoryUnit,
         azim: azimTrajectoryUnit,
@@ -125,7 +88,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
         global_e_coord: global_e_coord_trajectory_unit,
         dogleg: dogleg_trajectory_unit,
         vertical_section: verticalSectionTrajectoryUnit,
-      },
+      }],
     };
 
     try {
@@ -146,7 +109,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="w-full flex flex-col justify-center items-center overflow-y-auto">
       <div className="w-full max-w-2xl justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto overflow-y-auto">
         <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">
           {type === 'post' ? 'Создать новую траекторию' : 'Обновить эту траекторию'}
@@ -325,7 +288,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
                 id="inclTrajectory"
                 type="number"
                 value={inclTrajectoryUnit || ''}
-                placeholder={type === "put" && inclTrajectoryUnit ? inclTrajectoryUnit.toString() : "Введите incl траектории"}
+                placeholder={type === "put" && inclTrajectoryUnit ? inclTrajectoryUnit.toString() : "Введите угол траектории"}
                 onChange={(e) => setInclTrajectoryUnit(parseFloat(e.target.value))}
                 required
               />

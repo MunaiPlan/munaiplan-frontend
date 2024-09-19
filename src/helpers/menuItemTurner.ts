@@ -48,7 +48,7 @@ const convertDesignsToMenuItems = (designs: IDesign[]): MenuItem[] => {
 
 const convertTrajectoriesToMenuItems = (trajectories: ITrajectory[]): MenuItem[] => {
   return trajectories.map(trajectory => ({
-    id: trajectory.designId,
+    id: trajectory.id,
     name: trajectory.name,
     children: trajectory.cases ? convertCasesToMenuItems(trajectory.cases) : []
   }));
