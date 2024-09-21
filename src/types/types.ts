@@ -150,11 +150,12 @@ export interface IDesign {
 
 export interface ICase{
     id: string
-    caseName: string
-    caseDescription: string
-    drillDepth: number
-    pipeSize: number
+    case_name: string
+    case_description: string
+    drill_depth: number
+    pipe_size: number
     createdAt: Date
+    trajectoryId: string
 }
 
 export interface ITrajectory{

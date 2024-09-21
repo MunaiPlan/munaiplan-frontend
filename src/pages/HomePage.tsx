@@ -55,8 +55,12 @@ const Home: FC = () => {
   } else if (isDesignFormOpened) {
     content = <CreateDesign type={"post"} prevName={""} prevActualDate={new Date()} prevStage={""} prevVersion={""} wellBoreId=''/>
   } else if (isTrajectoryFormOpened) {
-    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} prevAzimTrajectory={0} prevCustomerTrajectory={""} prevFieldTrajectory={''} prevInclTrajectory={0} prevJob_number={''} prevKelly_bushing_elev={0} prevMdTrajectory={0} prevProfile={''} prevProfileTypeTrajectory={''} prevProjectTrajectory={''} prevStructureTrajectory={''} prevSubSea={0} prevTVD={0} prevWell_head={''} prevYourRefTrajectory={''} prev_dogleg={0} prev_global_e_coord={0} prev_global_n_coord={0} prev_local_e_coord={0} prev_local_n_coord={0} prev_vertical_section={0} designId=''/>
-  } else {
+    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} designId=''/>
+  } else if (isCaseFormOpened) {
+    content = <CreateCase type={"post"} prevName={""} prevDescription={""} prevDrillDepth={0} prevPipeSize={0} trajectoryId={""}/>
+  }
+  
+  else {
     content = <div className='w-screen flex flex-col justify-start items-center'>
       {initialCompanies.length > 0 ? 
       <div>
