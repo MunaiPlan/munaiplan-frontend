@@ -1,29 +1,29 @@
-// import { configureStore } from '@reduxjs/toolkit'
-// import userReducer from './user/userSlice'
-// import companyReducer from './user/companySlice'
-// import fieldReducer from './user/fieldSlice'
-// import siteReducer from './user/siteSlice'
-// import wellReducer from './user/wellSlice'
-// import wellBoreReducer from './user/wellBoreSlice'
-// import designReducer from './user/designSlice'
-// import caseReducer from './user/caseSlice'
-// import trajectorySlice from './user/trajectorySlice'
+import { configureStore } from '@reduxjs/toolkit'
+import userReducer from './user/userSlice'
+import companyReducer from './user/companySlice'
+import fieldReducer from './user/fieldSlice'
+import siteReducer from './user/siteSlice'
+import wellReducer from './user/wellSlice'
+import wellBoreReducer from './user/wellBoreSlice'
+import designReducer from './user/designSlice'
+import caseReducer from './user/caseSlice'
+import trajectorySlice from './user/trajectorySlice'
 
-// export const store = configureStore({
-//   reducer: {
-//     user: userReducer,
-//     company: companyReducer,
-//     field: fieldReducer,
-//     site: siteReducer,
-//     well: wellReducer,
-//     wellBore: wellBoreReducer,
-//     design: designReducer,
-//     trajectory: trajectorySlice,
-//     case: caseReducer
-//   },
-// })
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+    company: companyReducer,
+    field: fieldReducer,
+    site: siteReducer,
+    well: wellReducer,
+    wellBore: wellBoreReducer,
+    design: designReducer,
+    trajectory: trajectorySlice,
+    case: caseReducer
+  },
+})
 
-// // Infer the `RootState` and `AppDispatch` types from the store itself
-// export type RootState = ReturnType<typeof store.getState>
-// // Inferred type: {user: UserState, company: CompanyState}
-// export type AppDispatch = typeof store.dispatch
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+// Inferred type: {user: UserState, company: CompanyState}
+export type AppDispatch = typeof store.dispatch

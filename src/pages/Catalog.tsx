@@ -1,11 +1,11 @@
-// import {FC} from 'react'
+import {FC} from 'react'
 
-// const Catalog: FC = () => {
-//   return (
-//     <div>
-//       Catalog
-//     </div>
-//   )
-// }
+const Catalog: FC = () => {
+  return (
+    <div>
+      Catalog
+    </div>
+  )
+}
 
-// export default Catalog
+export default Catalog
