@@ -1,11 +1,11 @@
-import {FC} from 'react'
+// import {FC} from 'react'
 
-const Settings: FC = () => {
-  return (
-    <div>
+// const Settings: FC = () => {
+//   return (
+//     <div>
       
-    </div>
-  )
-}
+//     </div>
+//   )
+// }
 
-export default Settings
+// export default Settings

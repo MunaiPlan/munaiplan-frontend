@@ -1,11 +1,11 @@
-import {FC} from 'react'
+// import {FC} from 'react'
 
-const Account: FC = () => {
-  return (
-    <div>
+// const Account: FC = () => {
+//   return (
+//     <div>
       
-    </div>
-  )
-}
+//     </div>
+//   )
+// }
 
-export default Account
+// export default Account
