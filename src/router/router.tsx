@@ -14,6 +14,7 @@ import WellDetail from "../pages/DetailedPages/WellDetailPage";
 import WellBoreDetail from "../pages/DetailedPages/WellBoreDetailPage";
 import DesignDetail from "../pages/DetailedPages/DesignDetailPage";
 import TrajectoryDetail from "../pages/DetailedPages/TrajectoryDetailPage";
+import CaseDetail from "../pages/DetailedPages/CaseDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -118,6 +119,15 @@ export const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute> 
                         <TrajectoryDetail/>
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: 'cases/:id',
+                loader: companiesLoader,
+                element: (
+                    <ProtectedRoute> 
+                        <CaseDetail/>
                     </ProtectedRoute>
                 )
             }
