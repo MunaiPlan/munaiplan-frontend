@@ -11,7 +11,7 @@ import { closeDesignForm, openDesignForm, setWellboreId } from '../store/user/de
 import { closeCaseForm, openCaseForm, setTrajectoryId } from '../store/user/caseSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { openTrajectoryForm, setDesignId } from '../store/user/trajectorySlice';
+import { closeTrajectoryForm, openTrajectoryForm, setDesignId } from '../store/user/trajectorySlice';
 
 interface MenuItemProps {
   item: MenuItem;
@@ -38,6 +38,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeWellForm());
     dispatch(closeWellBoreForm());
     dispatch(closeDesignForm());
+    dispatch(closeTrajectoryForm());
     dispatch(closeCaseForm());
   };
 
@@ -48,6 +49,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeWellForm());
     dispatch(closeWellBoreForm());
     dispatch(closeDesignForm());
+    dispatch(closeTrajectoryForm());
     dispatch(closeCaseForm());
   };
 
@@ -58,6 +60,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeSiteForm());
     dispatch(closeWellBoreForm());
     dispatch(closeDesignForm());
+    dispatch(closeTrajectoryForm());
     dispatch(closeCaseForm());
   };
 
@@ -68,6 +71,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm());
     dispatch(closeSiteForm());
     dispatch(closeDesignForm());
+    dispatch(closeTrajectoryForm());
     dispatch(closeCaseForm());
   };
 
@@ -78,6 +82,7 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm());
     dispatch(closeSiteForm());
     dispatch(openDesignForm());
+    dispatch(closeTrajectoryForm());
     dispatch(closeCaseForm());
   };
 
@@ -89,6 +94,18 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     dispatch(closeFieldForm());
     dispatch(closeSiteForm());
     dispatch(closeDesignForm());
+    dispatch(closeCaseForm());
+  };
+
+  const caseCreateFormOpenHandler = () => {
+    dispatch(closeTrajectoryForm());
+    dispatch(closeWellBoreForm());
+    dispatch(closeWellForm());
+    dispatch(closeCompanyForm());
+    dispatch(closeFieldForm());
+    dispatch(closeSiteForm());
+    dispatch(closeDesignForm());
+    dispatch(openCaseForm());
   };
 
   const func = () => {
@@ -104,6 +121,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       designCreateFormOpenHandler();
     } else if (level === 5) {
       trajectoryCreateFormOpenHandler();
+    } else if (level === 6) {
+      caseCreateFormOpenHandler();
     }
     navigate('/');
   };
@@ -122,6 +141,8 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
       dispatch(setWellboreId(item.id));
     } else if (level === 5) {
       dispatch(setDesignId(item.id))
+    } else if (level === 6) {
+      dispatch(setTrajectoryId(item.id))
     }
     console.log(item.id);
     console.log(item.children);
@@ -141,9 +162,9 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     } else if (level === 5) {
       navigate(`/designs/${item.id}`);
     } else if (level === 6) {
-      console.log("Item: ", item)
-      console.log("Trajectory: ", item.id)
       navigate(`/trajectories/${item.id}`);
+    } else if (level === 7) {
+      navigate(`/cases/${item.id}`)
     }
   };
 

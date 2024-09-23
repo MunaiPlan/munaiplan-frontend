@@ -3,103 +3,150 @@ import { useAppDispatch } from '../../store/hooks'
 import { createCase, openCaseForm } from '../../store/user/caseSlice'
 import { toast } from 'react-toastify'
 import TextField from '../textField'
+import { store } from '../../store/store'
+import instance from '../../api/axios.api'
+import { Form, useNavigate } from 'react-router-dom'
 
-const CreateCase: FC = () => {
-  const dispatch = useAppDispatch()
 
-  const [nameCase, setNameCase] = useState("")
-  const [descriptionCase, setDescriptionCase] = useState("")
-  const [drillDepthCase, setDrillDepthCase] = useState<number>(0)
-  const [pipeSizeCase, setPipeSizeCase] = useState<number>(0)
-  const [createdAtCase, setCreatedAtCase] = useState<Date>(new Date)
+interface ICaseForm {
+  type: "put" | "post";
+  id?: string;
+  prevName: string;
+  prevDescription: string;
+  prevDrillDepth: number;
+  prevPipeSize: number;
+  trajectoryId: string;
+  setIsEdit?: (edit: boolean) => void;
+  onSuccess?: () => void
+}
+
+const CreateCase: FC<ICaseForm> = ({type, id, prevName, prevDescription, prevDrillDepth, prevPipeSize, trajectoryId, setIsEdit, onSuccess}) => {
+  const navigate = useNavigate()
+
+
+  const [nameCase, setNameCase] = useState(prevName)
+  const [descriptionCase, setDescriptionCase] = useState(prevDescription)
+  const [drillDepthCase, setDrillDepthCase] = useState<number>(prevDrillDepth)
+  const [pipeSizeCase, setPipeSizeCase] = useState<number>(prevPipeSize)
   
 
-  const caseCreateFormOpenHandler = () => {
-    dispatch(openCaseForm())
+  const getTrajectoryIdFromStore = (): string | null => {
+    const state = store.getState();
+    return state.case.trajectoryId; 
   }
 
-  const createCaseHandle = () => {
-    console.log("It works 1")
-    dispatch(createCase({
-      id: "",
-      caseName: nameCase,
-      caseDescription: descriptionCase,
-      drillDepth: drillDepthCase,
-      pipeSize: pipeSizeCase,
-      createdAt: createdAtCase
-    }))
-    toast.success('Case was successfully created')
-    caseCreateFormOpenHandler()
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (type == 'post') {
+      const newCase = {
+        case_name: nameCase,
+        case_description: descriptionCase,
+        drill_depth: drillDepthCase,
+        pipe_size: pipeSizeCase
+      };
+        
+      try {
+        const trajectoryId = getTrajectoryIdFromStore()
+        toast.success("ID: " + trajectoryId)
+        await instance.post(`/api/v1/cases?trajectoryId=${trajectoryId}`, newCase);
+        toast.success("Новый кейс был добавлен");
+        navigate("/");
+      } catch (error) {
+        toast.error("Ошибка при добавлении кейса");
+        console.error(error);
+      }
+    }
+    if (type == 'put' && id) {
+      const updatedCase = {
+        case_name: nameCase,
+        case_description: descriptionCase,
+        drill_depth: drillDepthCase,
+        pipe_size: pipeSizeCase
+      };
+      try {
+        await instance.put(`/api/v1/cases/${id}`, updatedCase);
+        toast.success("Кейс был обновлен");
+        navigate("/");
+      } catch (error) {
+        toast.error("Ошибка при обновлении кейса");
+        console.error(error);
+      }
+
+    }
   }
 
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
-        <div className="w-3/4 max-w-md justify-center items-center overflow-auto p-10">
-          <h2 className="text-3xl font-bold mb-8 justify-center flex font-montserrat">Создать кейс</h2>
-          <form 
-            // onSubmit={createCaseHandler}
-            className="mb-7">
+      <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новый кейс" : "Обновить этот кейс"}</h2>
+          <Form 
+            onSubmit={handleSubmit} 
+          >
 
-            {/* Name of Case */}
-            <TextField
-                labelText="Имя кейса"
-                htmlForText="caseName"
-                idText="caseName"
-                placeholderText="Введите имя кейса"
-                onChangeFunction={(value) => {
-                    if (typeof value === 'string') {
-                        setNameCase(value);
-                    }
-                }}            
-            />
+              {/* Name of сфыу */}
+              <div className="input-wrapper">
+                <label htmlFor="nameCase">
+                  Имя кейса
+                </label>
+                <input
+                  id="nameCase"
+                  type="text"
+                  name='name'
+                  placeholder={type=="put" ? prevName : "Введите имя кейса"} 
+                  value={nameCase}
+                  onChange={(e) => setNameCase(e.target.value)}
+                  required
+                />
+                <input type="hidden" name="id" value={id}/>
+              </div>
 
-            {/* Description of Case */}
-            <TextField
-                labelText="Описание кейса"
-                htmlForText="descriptionName"
-                idText="descriptionName"
-                placeholderText="Введите описание кейса"
-                onChangeFunction={(value) => {
-                    if (typeof value === 'string') {
-                        setDescriptionCase(value);
-                    }
-                }}            
-            />
+              {/* Description */}
+              <div className="input-wrapper col-span-2">
+                <label htmlFor="descriptionCase">Описание</label>
+                <input
+                  id="descriptionCase"
+                  type="text"
+                  value={descriptionCase}
+                  placeholder={type == "put" ? descriptionCase : "Введите описание кейса"}
+                  onChange={(e) => setDescriptionCase(e.target.value)}
+                  required
+                />
+              </div>
 
-            {/* Drill Depth of Case */}
-            <TextField
-                labelText="Глубина сверления кейса"
-                htmlForText="drillDepthCase"
-                idText="drillDepthCase"
-                placeholderText="Введите глубину сверления кейса"
-                onChangeFunction={(value) => {
-                    if (typeof value === 'number') {
-                        setDrillDepthCase(value);
-                    }
-                }}            
-            />
+              <div className="input-wrapper">
+                <label htmlFor="drillDepth">Буровая глубина</label>
+                <input
+                  id="drillDepth"
+                  type="number"
+                  value={drillDepthCase || ''}
+                  placeholder={type === "put" && drillDepthCase ? drillDepthCase.toString() : "Введите буровую глубину кейса"} 
+                  onChange={(e) => setDrillDepthCase(parseFloat(e.target.value))}
+                  required
+                />
+              </div>
 
-            {/* Pipe Size of Case */}
-            <TextField
-                labelText="Размер насоса кейса"
-                htmlForText="pipeSizeCase"
-                idText="pipeSizeCase"
-                placeholderText="Введите размер насоса кейса"
-                onChangeFunction={(value) => {
-                    if (typeof value === 'number') {
-                        setPipeSizeCase(value);
-                        setCreatedAtCase(new Date());
-                    }
-                }}            
-            />
+              <div className="input-wrapper">
+                <label htmlFor="pipeSize">Размер трубы</label>
+                <input
+                  id="pipeSize"
+                  type="number"
+                  value={pipeSizeCase || ''}
+                  placeholder={type === "put" && pipeSizeCase ? pipeSizeCase.toString() : "Введите размер трубы кейса"} 
+                  onChange={(e) => setPipeSizeCase(parseFloat(e.target.value))}
+                  required
+                />
+              </div>
 
-            <div className="flex items-center justify-between">
-              <button
-                onClick={createCaseHandle}
-                className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" // type='submit'
-              >Создать кейс</button>
+              {/* Submit button */}
+              <div className="flex flex-col items-center justify-between mt-3 mx-6">
+                <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+                    {type === 'put' ? 'Обновить' : 'Создать'}
+                </button>
+                { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
+                    if(setIsEdit) {setIsEdit(false);}
+                }}>Закрыть</button>)}
             </div>
-          </form>
+          </Form>
       </div>
     </div>
   )

@@ -40,10 +40,10 @@ export const CaseSlice = createSlice({
     },
     createCase: (state, action: PayloadAction<ICase>) => {
         state.id = action.payload.id
-        state.caseName = action.payload.caseName
-        state.caseDescription = action.payload.caseDescription
-        state.drillDepth = action.payload.drillDepth,
-        state.pipeSize = action.payload.pipeSize
+        state.caseName = action.payload.case_name
+        state.caseDescription = action.payload.case_description
+        state.drillDepth = action.payload.drill_depth,
+        state.pipeSize = action.payload.pipe_size
     },
     setTrajectoryId: (state, action: PayloadAction<string>) => {
       state.trajectoryId = action.payload

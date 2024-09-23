@@ -58,6 +58,6 @@ const convertTrajectoriesToMenuItems = (trajectories: ITrajectory[]): MenuItem[]
 const convertCasesToMenuItems = (cases: ICase[]): MenuItem[] => {
   return cases.map(caseItem => ({
     id: caseItem.id,
-    name: caseItem.caseName,
+    name: caseItem.case_name,
   }));
 };

@@ -27,7 +27,7 @@ const CreateSite: FC<ISiteForm> = ({type="post", id, prevName, prevArea, prevBlo
   const [nameSite, setNameSite] = useState(prevName)
   const [areaSite, setAreaSite] = useState(prevArea)
   const [blockSite, setBlockSite] = useState(prevName)
-  const [azimuthSite, setAzimuthSite] = useState(prevArea)
+  const [azimuthSite, setAzimuthSite] = useState(prevAzimuth)
   const [countrySite, setCountrySite] = useState(prevName)
   const [stateSite, setStateSite] = useState(prevState)
   const [regionSite, setRegionSite] = useState(prevRegion)
