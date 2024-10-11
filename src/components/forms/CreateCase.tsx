@@ -4,7 +4,7 @@ import { createCase, openCaseForm } from '../../store/user/caseSlice'
 import { toast } from 'react-toastify'
 import TextField from '../textField'
 import { store } from '../../store/store'
-import instance from '../../api/axios.api'
+import { instance } from '../../api/axios.api'
 import { Form, useNavigate } from 'react-router-dom'
 
 

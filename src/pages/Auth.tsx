@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { authService } from '../services/auth.service';
+import { saveUserLocally } from '../api/axios.api';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/user/userSlice';
@@ -31,9 +32,10 @@ const Auth: FC = () => {
           email: formData.email,
           password: formData.password,
         },
-        '123e4567-e89b-12d3-a456-426614174000'
       );
+
       if (data) {
+        saveUserLocally(data);
         dispatch(login(data));
         toast.success('Вы успешно вошли в аккаунт');
         navigate('/');
@@ -49,7 +51,7 @@ const Auth: FC = () => {
     try {
       const data = await authService.registration(
         formData,
-        '9aec66f7-4143-47b8-8bd3-cb3a468f23d0'
+        '3d93d668-9c5d-416d-8f49-324dfc38fa48'
       );
       if (data) {
         toast.success('Аккаунт был создан');

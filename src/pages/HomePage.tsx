@@ -17,11 +17,7 @@ import CreateTrajectory from '../components/forms/CreateTrajectory'
 export const companiesLoader = async() => {
   try {
     const companies = await instance.get<ICompany[]>('/api/v1/companies');
-    console.log(companies)
     const data = { companies: companies.data };
-    console.log("START");
-    console.log(data);  // Make sure data is correctly logged
-    console.log("END");
     return data;
   } catch (error) {
     console.error('Failed to load companies:', error);

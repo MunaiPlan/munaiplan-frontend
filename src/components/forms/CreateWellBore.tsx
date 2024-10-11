@@ -3,7 +3,7 @@ import { useAppDispatch } from '../../store/hooks';
 import { toast } from 'react-toastify';
 import { Form, useNavigate } from 'react-router-dom';
 import { IDesign } from '../../types/types';
-import instance from '../../api/axios.api';
+import { instance } from '../../api/axios.api';
 import { store } from '../../store/store';
 
 interface IWellBoreForm {
