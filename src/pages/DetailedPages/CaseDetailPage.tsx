@@ -6,12 +6,103 @@ import { toast } from 'react-toastify';
 import SideBar from '../../components/SideBar';
 import CreateWell from '../../components/forms/CreateWell';
 import CreateCase from '../../components/forms/CreateCase';
+import CreateFluid from '../../components/forms/CaseChildForms/CreateFluid';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [casE, setCase] = useState<ICase | null>(null)
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isSelectedAltitude, setIsSelectedAltitude] = useState(false);
+  const [isSelectedTrajectory, setIsSelectedTrajectory] = useState(false);
+  const [isSelectedHole, setIsSelectedHole] = useState(false);
+  const [isSelectedString, setIsSelectedString] = useState(false);
+  const [isSelectedFluid, setIsSelectedFluid] = useState(false);
+  const [isSelectedEquip, setIsSelectedEquip] = useState(false);
+  const [isComponentsSelected, setComponentsSelected] = useState(true)
+  const [isHydraulicsSelected, setHydraulicsSelected] = useState(false)
+  const [isMomentSelected, setMomentSelected] = useState(false)
+
+
   const navigate = useNavigate();
+
+  const toggleComponent = () => {
+    setComponentsSelected(true);
+    setHydraulicsSelected(false);
+    setMomentSelected(false);
+  }
+
+  const toggleHydraulics = () => {
+    setHydraulicsSelected(true);
+    setMomentSelected(false);
+    setComponentsSelected(false);
+  }
+
+  const toggleMoment = () => {
+    setHydraulicsSelected(false);
+    setMomentSelected(true);
+    setComponentsSelected(false);
+  }
+
+
+  const toggleAltitude = () => {
+    setIsSelectedAltitude(!isSelectedAltitude);
+    setIsSelectedString(false);
+    setIsSelectedEquip(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+  };
+
+  const toggleTrajectory = () => {
+    setIsSelectedTrajectory(!isSelectedTrajectory);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedEquip(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+  };
+
+  const toggleHole = () => {
+    setIsSelectedHole(!isSelectedHole);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedEquip(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+  };
+
+  const toggleString = () => {
+    setIsSelectedString(!isSelectedString);
+    setIsSelectedAltitude(false);
+    setIsSelectedEquip(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+  };
+
+  const toggleFluid = () => {
+    setIsSelectedFluid(!isSelectedFluid);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedEquip(false);
+    setIsSelectedHole(false);
+    setIsSelectedTrajectory(false);
+  };
+
+  const toggleEquip = () => {
+    setIsSelectedEquip(!isSelectedEquip);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+  };
+
+
+  let content;
+  if (isSelectedFluid) {
+    content = <CreateFluid prevName={""} prevDescription={""} prevDensity={0} caseId={casE!.id} type={"post"}/>
+  }
 
   useEffect(() => {
     const fetchCase = async () => {
@@ -40,6 +131,7 @@ const CaseDetail: React.FC = () => {
     setIsEdit(false);
   };
 
+
   if (!casE) {
     return <div>Loading...</div>;
   }
@@ -49,33 +141,82 @@ const CaseDetail: React.FC = () => {
       <div className='w-1/5'>
         <SideBar />
       </div>
-      <div className='flex flex-col h-screen w-4/5 justify-center items-center gap-y-4'>
+      <div className='flex flex-col h-screen w-4/5 gap-y-4'>
         {!isEdit ? (
           <>
-            <div className='flex flex-col justify-center items-center w-full'>
-              <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
-                <h1>О кейсе: <label className='font-bold'>{casE.case_name}</label></h1>
-                <p>Описание: <label className='font-bold'>{casE.case_description}</label></p>
-                <h1>Буровая глубина: <label className='font-bold'>{casE.drill_depth}</label></h1>
-                <p>Размер трубы: <label className='font-bold'>{casE.pipe_size}</label></p>
+            <div className='w-full p-4 border-b-2 flex items-center pt-8'>
+              <div className='flex justify-start items-center w-full pl-8 font-medium font-montserrat'>{casE.case_description + ": " + casE.case_name}</div>
+              <div className='flex justify-end items-center w-full gap-x-7 pr-14 font-semibold text-[#5F5F5F] font-montserrat'>
+                <p className={
+                  `text-center cursor-pointer ${
+                    isComponentsSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                  }`
+                }
+                onClick={toggleComponent}>Компоненты</p>
+                <p className={
+                  `text-center cursor-pointer ${
+                    isHydraulicsSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                  }`
+                }
+                onClick={toggleHydraulics}>Гидравлика</p>
+                <p className={
+                  `text-center w-fill cursor-pointer ${
+                    isMomentSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                  }`
+                }
+                onClick={toggleMoment}>Момент и сопротивление</p>
               </div>
             </div>
-            <div className='flex w-full items-center justify-center gap-x-4'>
-              <button
-                className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
-                onClick={() => {
-                  setIsEdit(true);
-                }}
-              >
-                Изменить
-              </button>
-              <button
-                className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
-                onClick={handleDelete}
-              >
-                Удалить
-              </button>
-            </div>
+            {isComponentsSelected && 
+              <div>
+                <div className='w-full flex justify-evenly font-semibold text-[#5F5F5F] font-montserrat'>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedAltitude ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleAltitude}
+                  >Уровень приведения</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedTrajectory ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleTrajectory}
+                  >Траектория</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedHole ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleHole}
+                  >Ствол</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedString ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleString}
+                  >Колонна</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedFluid ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleFluid}
+                  >Растворы</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isSelectedEquip ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleEquip}
+                  >Внутрискв. оборудование</p>
+                </div>
+                <div className='flex mt-10'>
+                  {content}
+                </div>
+              </div>}
           </>
         ) : (
           casE && (

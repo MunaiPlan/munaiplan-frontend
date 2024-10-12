@@ -83,7 +83,7 @@ const CreateDesign: FC<IDesignForm> = ({type="post", id, prevName, prevStage, pr
   return (
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
-          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новый куст" : "Обновить этот куст"}</h2>
+          <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новый дизайн" : "Обновить этот дизайн"}</h2>
           <Form 
             className='grid gap-2' 
             onSubmit={handleSubmit} 

@@ -2,9 +2,9 @@ import { instance } from "../api/axios.api";
 import { IUserData, RegistrationData, RegistrationResponseData, IUser } from "../types/types";
 
 export const authService = {
-    async login(userData: IUserData, organizationId: string): Promise<IUser | undefined> {
+    async login(userData: IUserData): Promise<IUser | undefined> {
         const { data } = await instance.post<IUser>(
-          `api/v1/users/sign-in?organizationId=${organizationId}`,
+          `api/v1/users/sign-in`,
           userData
         );
         return data;

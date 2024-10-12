@@ -12,6 +12,7 @@ import { closeCaseForm, openCaseForm, setTrajectoryId } from '../store/user/case
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { closeTrajectoryForm, openTrajectoryForm, setDesignId } from '../store/user/trajectorySlice';
+import ContextMenu from './ContextMenu';
 
 interface MenuItemProps {
   item: MenuItem;
@@ -24,108 +25,18 @@ export interface MenuItem {
   children?: MenuItem[];  // Optional
 }
 
+const initialContextMenu = {
+  show: false,
+  x: 0,
+  y: 0
+}
+
 const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const hasChildren = Array.isArray(item.children) && item.children.length > 0;  // Safeguard for undefined children
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const entities = ["месторождение", "куст", "скважину", "ствол скважины", "дизайн", "траекторию", "кейс",];
-
-  const fieldCreateFormOpenHandler = () => {
-    dispatch(closeCompanyForm());
-    dispatch(openFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeWellForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeDesignForm());
-    dispatch(closeTrajectoryForm());
-    dispatch(closeCaseForm());
-  };
-
-  const siteCreateFormOpenHandler = () => {
-    dispatch(openSiteForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeWellForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeDesignForm());
-    dispatch(closeTrajectoryForm());
-    dispatch(closeCaseForm());
-  };
-
-  const wellCreateFormOpenHandler = () => {
-    dispatch(openWellForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeDesignForm());
-    dispatch(closeTrajectoryForm());
-    dispatch(closeCaseForm());
-  };
-
-  const wellBoreCreateFormOpenHandler = () => {
-    dispatch(openWellBoreForm());
-    dispatch(closeWellForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeDesignForm());
-    dispatch(closeTrajectoryForm());
-    dispatch(closeCaseForm());
-  };
-
-  const designCreateFormOpenHandler = () => {
-    dispatch(closeWellBoreForm());
-    dispatch(closeWellForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(openDesignForm());
-    dispatch(closeTrajectoryForm());
-    dispatch(closeCaseForm());
-  };
-
-  const trajectoryCreateFormOpenHandler = () => {
-    dispatch(openTrajectoryForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeWellForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeDesignForm());
-    dispatch(closeCaseForm());
-  };
-
-  const caseCreateFormOpenHandler = () => {
-    dispatch(closeTrajectoryForm());
-    dispatch(closeWellBoreForm());
-    dispatch(closeWellForm());
-    dispatch(closeCompanyForm());
-    dispatch(closeFieldForm());
-    dispatch(closeSiteForm());
-    dispatch(closeDesignForm());
-    dispatch(openCaseForm());
-  };
-
-  const func = () => {
-    if (level === 0) {
-      fieldCreateFormOpenHandler();
-    } else if (level === 1) {
-      siteCreateFormOpenHandler();
-    } else if (level === 2) {
-      wellCreateFormOpenHandler();
-    } else if (level === 3) {
-      wellBoreCreateFormOpenHandler();
-    } else if (level === 4) {
-      designCreateFormOpenHandler();
-    } else if (level === 5) {
-      trajectoryCreateFormOpenHandler();
-    } else if (level === 6) {
-      caseCreateFormOpenHandler();
-    }
-    navigate('/');
-  };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -146,6 +57,17 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
     }
     console.log(item.id);
     console.log(item.children);
+  };
+
+  const handleContextMenu = (e: React.MouseEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+  
+    const { pageX, pageY } = e;
+    setContextMenu({ show: true, x: pageX, y: pageY });
+  };
+  
+  const contextMenuClose = () => {
+    setContextMenu(initialContextMenu);
   };
 
   const goTo = () => {
@@ -170,33 +92,27 @@ const SideBarMenu: React.FC<MenuItemProps> = ({ item, level = 0 }) => {
 
   return (
     <>
+      {contextMenu.show && <ContextMenu x={contextMenu.x} y={contextMenu.y} level={level} closeContextMenu={contextMenuClose}/>}
       <div className="flex gap-x-1 items-center justify-start mt-2">
         <div className="flex items-center">
           {level === 7 ? (
-            <FaRegFile className="mr-1" />
+            <FaRegFile className="mr-1" onClick={handleToggle}/>
           ) : isOpen ? (
             <IoIosArrowDown onClick={handleToggle} className="mr-1" />
           ) : (
             <IoIosArrowForward onClick={handleToggle} className="mr-1" />
           )}
-          <label onClick={goTo}>{item.name ? item.name : '   '}</label>
+          <label onClick={goTo} onContextMenu={handleContextMenu}>{item.name ? item.name : '   '}</label>
         </div>
       </div>
-      {isOpen && hasChildren ? (
+      {isOpen && hasChildren && (
         <div className="ml-2">
           {item.children?.map((child) => (
-            <SideBarMenu key={child.id} item={child} level={level + 1} />
+            <div>
+              <SideBarMenu key={child.id} item={child} level={level + 1}/>
+            </div>
           ))}
-          <button onClick={func} className="text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
-            {`+ Создать ${entities[level]}`}
-          </button>
         </div>
-      ) : (
-        isOpen && (
-          <button onClick={func} className="ml-2 text-gray-200 hover:text-gray-400 text-md mt-2 truncate">
-            {`+ Создать ${entities[level]}`}
-          </button>
-        )
       )}
     </>
   );
