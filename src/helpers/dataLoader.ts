@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import instance from "../api/axios.api";
+import { instance } from "../api/axios.api";
 import { ICase, ICompany, IDesign, IField, ISite, ITrajectory, IWell, IWellBore } from "../types/types";
 
 export async function returnCompanies(companies: ICompany[]): Promise<ICompany[]> {

@@ -4,7 +4,7 @@ import { IUserData, RegistrationData, RegistrationResponseData, IUser } from "..
 export const authService = {
     async login(userData: IUserData): Promise<IUser | undefined> {
         const { data } = await instance.post<IUser>(
-          `api/v1/users/sign-in`,
+          "api/v1/users/sign-in",
           userData
         );
         return data;

@@ -7,6 +7,8 @@ import SideBar from '../../components/SideBar';
 import CreateWell from '../../components/forms/CreateWell';
 import CreateCase from '../../components/forms/CreateCase';
 import CreateFluid from '../../components/forms/CaseChildForms/CreateFluid';
+import CreateHole from '../../components/forms/CaseChildForms/CreateHole';
+import CreateString from '../../components/forms/CaseChildForms/CreateString';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,7 +47,7 @@ const CaseDetail: React.FC = () => {
 
 
   const toggleAltitude = () => {
-    setIsSelectedAltitude(!isSelectedAltitude);
+    setIsSelectedAltitude(true);
     setIsSelectedString(false);
     setIsSelectedEquip(false);
     setIsSelectedHole(false);
@@ -54,7 +56,7 @@ const CaseDetail: React.FC = () => {
   };
 
   const toggleTrajectory = () => {
-    setIsSelectedTrajectory(!isSelectedTrajectory);
+    setIsSelectedTrajectory(true);
     setIsSelectedAltitude(false);
     setIsSelectedString(false);
     setIsSelectedEquip(false);
@@ -63,7 +65,7 @@ const CaseDetail: React.FC = () => {
   };
 
   const toggleHole = () => {
-    setIsSelectedHole(!isSelectedHole);
+    setIsSelectedHole(true);
     setIsSelectedAltitude(false);
     setIsSelectedString(false);
     setIsSelectedEquip(false);
@@ -72,7 +74,7 @@ const CaseDetail: React.FC = () => {
   };
 
   const toggleString = () => {
-    setIsSelectedString(!isSelectedString);
+    setIsSelectedString(true);
     setIsSelectedAltitude(false);
     setIsSelectedEquip(false);
     setIsSelectedHole(false);
@@ -81,7 +83,7 @@ const CaseDetail: React.FC = () => {
   };
 
   const toggleFluid = () => {
-    setIsSelectedFluid(!isSelectedFluid);
+    setIsSelectedFluid(true);
     setIsSelectedAltitude(false);
     setIsSelectedString(false);
     setIsSelectedEquip(false);
@@ -90,7 +92,7 @@ const CaseDetail: React.FC = () => {
   };
 
   const toggleEquip = () => {
-    setIsSelectedEquip(!isSelectedEquip);
+    setIsSelectedEquip(true);
     setIsSelectedAltitude(false);
     setIsSelectedString(false);
     setIsSelectedHole(false);
@@ -101,7 +103,11 @@ const CaseDetail: React.FC = () => {
 
   let content;
   if (isSelectedFluid) {
-    content = <CreateFluid prevName={""} prevDescription={""} prevDensity={0} caseId={casE!.id} type={"post"}/>
+    content = <CreateFluid prev_base_fluid_id={""} prev_fluid_base_type_id={""} prevName={""} prevDescription={""} prevDensity={0} caseId={casE!.id} type={"post"}/>
+  } else if (isSelectedHole) {
+    content = <CreateHole caseId={casE!.id} type={"post"} />
+  } else if (isSelectedString) {
+    content = <CreateString caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
   }
 
   useEffect(() => {
@@ -172,20 +178,6 @@ const CaseDetail: React.FC = () => {
                 <div className='w-full flex justify-evenly font-semibold text-[#5F5F5F] font-montserrat'>
                   <p className={
                     `text-center cursor-pointer ${
-                      isSelectedAltitude ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
-                    }`
-                  }
-                  onClick={toggleAltitude}
-                  >Уровень приведения</p>
-                  <p className={
-                    `text-center cursor-pointer ${
-                      isSelectedTrajectory ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
-                    }`
-                  }
-                  onClick={toggleTrajectory}
-                  >Траектория</p>
-                  <p className={
-                    `text-center cursor-pointer ${
                       isSelectedHole ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
                     }`
                   }
@@ -225,6 +217,7 @@ const CaseDetail: React.FC = () => {
               prevDescription={casE.case_description}
               prevDrillDepth={casE.drill_depth}
               prevPipeSize={casE.pipe_size}
+              prevIsComplete={casE.is_complete}
 
               type='put'
               id={id}

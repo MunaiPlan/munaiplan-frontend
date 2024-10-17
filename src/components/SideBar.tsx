@@ -18,7 +18,7 @@ import { closeDesignForm } from '../store/user/designSlice';
 import { ICompany, IResponseLoader } from '../types/types';
 import { returnCompanies } from '../helpers/dataLoader';
 import { convertFieldsToMenuItems } from '../helpers/menuItemTurner';
-import instance from '../api/axios.api';
+import { removeUserLocally } from '../api/axios.api';
 
 const SideBar: FC = () => {
   const isAuth = useAuth()
@@ -30,6 +30,7 @@ const SideBar: FC = () => {
   console.log("2")
 
   const logoutHandler = () => {
+    removeUserLocally();
     dispatch(logout())
     toast.success('You successfully logged out')
     navigate('/auth')
@@ -65,10 +66,10 @@ const SideBar: FC = () => {
         console.log(companies)
     }, [initialCompanies]);
 
-  return isAuth ? 
+  return isAuth ?
     (<div className='flex flex-col w-1/5 bg-[#16171B] text-white fixed h-screen'>
       <h1 className='flex text-4xl font-semibold font-montserrat mt-12 mb-16 justify-center items-start' onClick={() => {navigate("/")}}>MunaiPlan</h1>
-      <div 
+      <div
         onClick={companyCreateFormOpenHandler}
         className='flex justify-center items-start'>
         <button className='flex text-sm rounded-2xl bg-[#FDFFFF] text-[#16171B] w-52 justify-center items-center h-10 mb-5 hover:bg-gray-300'>+ Создать компанию</button>
@@ -77,7 +78,7 @@ const SideBar: FC = () => {
       <div className='no-scrollbar flex flex-col ml-10 mr-10 mb-6 overflow-y-auto flex-grow'>
         <div className='flex flex-col gap-x-1 items-start justify-center'>
           {companies.map((company) => (
-            <SideBarMenu key={company.id} 
+            <SideBarMenu key={company.id}
               item={{
                 id: company.id,
                 name: company.name,

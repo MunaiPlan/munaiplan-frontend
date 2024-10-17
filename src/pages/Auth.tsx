@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { authService } from '../services/auth.service';
+import { saveUserLocally } from '../api/axios.api';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/user/userSlice';
@@ -90,6 +91,7 @@ const Auth: FC<FormFields> = () => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
+
 
   return (
     <div className='flex h-screen w-full'>

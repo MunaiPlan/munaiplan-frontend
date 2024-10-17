@@ -1,13 +1,34 @@
 import axios from "axios";
 import { store } from "../store/store"; // Import your Redux store
-import { logout } from "../store/user/userSlice"; // Assuming you have a logout action
+import { login, logout } from "../store/user/userSlice"; // Assuming you have a logout action
 import { isTokenExpired } from "../helpers/tokenExpirationChecker";
+import { createLocalStore } from "../helpers/createLocalStore";
 import type { IUser } from "../types/types"; 
 
 // Axios instance configuration
-export const instance = axios.create({
-    baseURL: 'http://localhost:8000',
-});
+const instance = axios.create({});
+
+const userLocalKey = "asldkasjd"; // random string
+const localUserStore = createLocalStore<IUser>(userLocalKey);
+
+const init = () => {
+  const userFromLocalStore = localUserStore.get();
+  if (!userFromLocalStore) return;
+  if (isTokenExpired(userFromLocalStore.tokenExpiresAt)) {
+    localUserStore.remove();
+    return;
+  };
+
+  store.dispatch(login(userFromLocalStore));
+}
+
+const saveUserLocally = (user: IUser) => {
+  localUserStore.set(user);
+}
+
+const removeUserLocally = () => {
+  localUserStore.remove();
+}
 
 // Function to retrieve the user from the Redux store
 const getUserFromStore = (): IUser | null => {
@@ -19,8 +40,6 @@ const getUserFromStore = (): IUser | null => {
 const checkAuth = (dispatch: any, user: IUser) => {
     const { tokenExpiresAt } = user;
 
-
-
     if (isTokenExpired(tokenExpiresAt)) {
         dispatch(logout());
     }
@@ -30,7 +49,6 @@ const checkAuth = (dispatch: any, user: IUser) => {
 instance.interceptors.request.use(
     async (config) => {
         const user: IUser | null = getUserFromStore(); // Retrieve the user from the Redux store
-
         // If the user is logged in, check the authentication status
         if (user) {
             checkAuth(store.dispatch, user); // Pass the store's dispatch function to checkAuth
@@ -44,4 +62,9 @@ instance.interceptors.request.use(
     }
 );
 
-export default instance;
+export {
+  init,
+  instance,
+  saveUserLocally,
+  removeUserLocally,
+};

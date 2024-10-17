@@ -158,7 +158,8 @@ export interface ICase{
     trajectoryId: string
     fluids: IFluid[],
     strings: IString[],
-    holes: IHole[]
+    holes: IHole[],
+    is_complete: boolean
 }
 
 export interface IFluid {
@@ -179,19 +180,6 @@ export interface IString {
     sections: ISection[]
 }
 
-export interface ISection {
-    id: string
-    string_id: string
-    section_type_id: string
-    values: ISectionValue[]
-}
-
-export interface ISectionValue {
-    id: string
-    section_id: string
-    attribute_id: string
-    value: string
-}
 
 export interface IHole {
     id: string
@@ -282,4 +270,24 @@ export interface ITrajectoryUnit {
 
 export interface IResponseLoader {
     companies: ICompany[]
+}
+
+
+export interface ISection {
+    id: string
+    description: string
+    manufacturer: string
+    type: string
+    body_od: number
+    body_id: number
+    avg_joint_length: number
+    stabilizer_length: number
+    stabilizer_od: number
+    stabilizer_id: number
+    weight: number
+    material: string
+    grade: string
+    class: number
+    friction_coefficient: number
+    min_yield_strength: number
 }
