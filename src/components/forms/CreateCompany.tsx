@@ -1,8 +1,10 @@
 import {FC, useState} from 'react'
 import { Form, useNavigate } from 'react-router-dom'
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { IField } from '../../types/types'
 import { instance } from '../../api/axios.api';
 import { toast } from 'react-toastify';
+import { InputString } from '../textField';
 
 interface ICompanyForm {
   type: "post" | "put";
@@ -29,8 +31,13 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
   const [phoneCompany, setPhoneCompany] = useState(prevPhone)
 
   const navigate = useNavigate()
+  const { register, handleSubmit } = useForm<ICompanyForm>();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const onSubmit: SubmitHandler<ICompanyForm> = (data) => {
+    console.log(data)
+  }
+
+  const handleSubmit1  = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
@@ -69,118 +76,41 @@ const CreateCompany: FC<ICompanyForm> = ({type="post", id, prevName, prevDivisio
     <div className='w-screen flex flex-col justify-center items-center'>  
         <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
           <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новую компанию" : "Обновить эту компанию"}</h2>
-          <Form 
-            className='grid gap-2' 
-            onSubmit={handleSubmit} 
-          >
-            {/* Name of company */}
-            <div className="input-wrapper">
-              <label htmlFor="nameCompany">
-                Имя компании
-              </label>
-              <input
-                id="nameCompany"
-                type="text"
-                name='name'
-                placeholder={type=="put" ? prevName : "Введите имя компании"} 
-                value={nameCompany}
-                onChange={(e) => setNameCompany(e.target.value)}
-                required
-              />
-              <input type="hidden" name="id" value={id}/>
-            </div>
+            <form 
+              className='grid gap-2' 
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate 
+            >
+              {/* Name of company */}
+              <InputString {...register("prevName")} label="Имя компании" id="divisionCompany" placeholder="Введите имя компании" value={nameCompany} setValue={setNameCompany}/>
 
-            {/* Division of company */}
-            <div className="input-wrapper">
-              <label htmlFor="divisionCompany">
-                Дивизия компании
-              </label>
-              <input
-                id="divisionCompany"
-                type="text"
-                name='division'
-                placeholder={type=="put" ? prevDivision : "Введите дивизию компании"} 
-                value={divisionCompany}
-                onChange={(e) => setDivisionCompany(e.target.value)}
-                required
-              />
-            </div>
+              {/* Division of company */}
+              <InputString {...register("prevDivision")} label="Дивизия компании" id="divisionCompany" placeholder="Введите дивизию компании" value={divisionCompany} setValue={setDivisionCompany}/>
 
-            {/* Group of company */}
-            <div className="input-wrapper">
-              <label htmlFor="groupCompany">
-                Группа компании
-              </label>
-              <input
-                id="groupCompany"
-                type="text"
-                name='group'
-                placeholder={type=="put" ? prevGroup : "Введите группу компании"} 
-                value={groupCompany}
-                onChange={(e) => setGroupCompany(e.target.value)}
-                required
-              />
-            </div>
+              {/* Group of company */}
+              <InputString {...register("prevGroup")} label="Группа компании" id="groupCompany" placeholder="Введите группу компании" value={groupCompany} setValue={setGroupCompany}/>
 
-            {/* Representative of company */}
-            <div className="input-wrapper">
-              <label htmlFor="representativeCompany">
-                ФИО представителя
-              </label>
-              <input
-                id="representativeCompany"
-                type="text"
-                name='representative'
-                placeholder={type=="put" ? prevRepresentative : "Введите ФИО представителя"} 
-                onChange={(e) => setRepresentativeCompany(e.target.value)}
-                value={representativeCompany}
-                required
-              />
-            </div>
+              {/* Representative of company */}
+              <InputString {...register("prevRepresentative")} label="ФИО представителя" id="representativeCompany" placeholder="Введите ФИО представителя" value={representativeCompany} setValue={setRepresentativeCompany}/>
 
-            {/* Address of company */}
-            <div className="input-wrapper">
-              <label htmlFor="addressCompany">
-                Адрес компании
-              </label>
-              <input
-                id="addressCompany"
-                type="text"
-                name='address'
-                placeholder={type=="put" ? prevAddress : "Введите адрес компании"} 
-                value={addressCompany}
-                onChange={(e) => setAddressCompany(e.target.value)}
-                required
-              />
-            </div>
+              {/* Address of company */}
+              <InputString {...register("prevAddress")} label="Адрес компании" id="addressCompany" placeholder="Введите адрес компании" value={addressCompany} setValue={setAddressCompany}/>
 
-            {/* Phone Number of company */}
-            <div className="input-wrapper">
-              <label htmlFor="phoneNumberCompany">
-                Телефонный номер компании
-              </label>
-              <input
-                id="phoneNumberCompany"
-                type="text"
-                name='phone'
-                placeholder={type=="put" ? prevPhone : "Введите телефонный номер компании"} 
-                value={phoneCompany}
-                onChange={(e) => setPhoneCompany(e.target.value)}
-                required
-              />
-            </div>
-            {/* Submit button */}
-            <div className="flex flex-col items-center justify-between mt-3 mx-6">
-                <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
-                    {type === 'put' ? 'Обновить' : 'Создать'}
-                </button>
-                { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
-                    if(setIsEdit) {setIsEdit(false);}
-                }}>Закрыть</button>)}
-            </div>
-          </Form>
+              {/* Phone Number of company */}
+              <InputString {...register("prevPhone")} label="Телефонный номер компании" id="phoneNumberCompany" placeholder="Введите телефонный номер компании" value={phoneCompany} setValue={setPhoneCompany}/>
+
+              {/* Submit button */}
+                <div className="flex flex-col items-center justify-between mt-3 mx-6">
+                  <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base'>
+                      {type === 'put' ? 'Обновить' : 'Создать'}
+                  </button>
+                  { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
+                      if(setIsEdit) {setIsEdit(false);}
+                  }}>Закрыть</button>)}
+                </div>
+            </form>
       </div>
-    </div>
+      </div>
   )
 }
 

@@ -2,7 +2,6 @@ import {FC, useState} from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { createCase, openCaseForm } from '../../store/user/caseSlice'
 import { toast } from 'react-toastify'
-import TextField from '../textField'
 import { store } from '../../store/store'
 import { instance } from '../../api/axios.api'
 import { Form, useNavigate } from 'react-router-dom'
@@ -15,12 +14,13 @@ interface ICaseForm {
   prevDescription: string;
   prevDrillDepth: number;
   prevPipeSize: number;
+  prevIsComplete: boolean;
   trajectoryId: string;
   setIsEdit?: (edit: boolean) => void;
   onSuccess?: () => void
 }
 
-const CreateCase: FC<ICaseForm> = ({type, id, prevName, prevDescription, prevDrillDepth, prevPipeSize, trajectoryId, setIsEdit, onSuccess}) => {
+const CreateCase: FC<ICaseForm> = ({type, id, prevIsComplete, prevName, prevDescription, prevDrillDepth, prevPipeSize, trajectoryId, setIsEdit, onSuccess}) => {
   const navigate = useNavigate()
 
 
@@ -28,6 +28,7 @@ const CreateCase: FC<ICaseForm> = ({type, id, prevName, prevDescription, prevDri
   const [descriptionCase, setDescriptionCase] = useState(prevDescription)
   const [drillDepthCase, setDrillDepthCase] = useState<number>(prevDrillDepth)
   const [pipeSizeCase, setPipeSizeCase] = useState<number>(prevPipeSize)
+  const [is_completeCase, setIsCompleteCase] = useState(prevIsComplete)
   
 
   const getTrajectoryIdFromStore = (): string | null => {
@@ -42,7 +43,8 @@ const CreateCase: FC<ICaseForm> = ({type, id, prevName, prevDescription, prevDri
         case_name: nameCase,
         case_description: descriptionCase,
         drill_depth: drillDepthCase,
-        pipe_size: pipeSizeCase
+        pipe_size: pipeSizeCase,
+        is_complete: false
       };
         
       try {
@@ -61,7 +63,8 @@ const CreateCase: FC<ICaseForm> = ({type, id, prevName, prevDescription, prevDri
         case_name: nameCase,
         case_description: descriptionCase,
         drill_depth: drillDepthCase,
-        pipe_size: pipeSizeCase
+        pipe_size: pipeSizeCase,
+        is_complete: is_completeCase
       };
       try {
         await instance.put(`/api/v1/cases/${id}`, updatedCase);

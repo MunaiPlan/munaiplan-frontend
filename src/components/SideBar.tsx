@@ -75,7 +75,7 @@ const SideBar: FC = () => {
         <button className='flex text-sm rounded-2xl bg-[#FDFFFF] text-[#16171B] w-52 justify-center items-center h-10 mb-5 hover:bg-gray-300'>+ Создать компанию</button>
       </div>
       {/* Dropdown */}
-      <div className='flex flex-col ml-10 mr-10 mb-6 overflow-y-auto flex-grow'>
+      <div className='no-scrollbar flex flex-col ml-10 mr-10 mb-6 overflow-y-auto flex-grow'>
         <div className='flex flex-col gap-x-1 items-start justify-center'>
           {companies.map((company) => (
             <SideBarMenu key={company.id}

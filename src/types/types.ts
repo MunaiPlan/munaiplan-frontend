@@ -156,6 +156,73 @@ export interface ICase{
     pipe_size: number
     createdAt: Date
     trajectoryId: string
+    fluids: IFluid[],
+    strings: IString[],
+    holes: IHole[],
+    is_complete: boolean
+}
+
+export interface IFluid {
+    id: string
+    caseId: string
+    name: string
+    description: string
+    density: number
+    fluid_base_type_id: string
+    base_fluid_id: string
+}
+
+export interface IString {
+    id: string
+    name: string
+    depth: number
+    caseId: string
+    sections: ISection[]
+}
+
+
+export interface IHole {
+    id: string
+    caseId: string
+    md_top: number
+    md_base: number
+    length: number
+    shoe_md: number
+    od: number
+    caising_internal_diameter: number
+    drift_internal_diameter: number
+    effective_hole_diameter: number
+    weigth: number
+    grade: string
+    min_yield_strength: number
+    burst_rating: number
+    collapse_rating: number
+    friction_factor_casing: number
+    linear_capacity_casing: number
+    description_casing: string
+    manufacturer_casing: string
+    model_casing: string
+    open_hole_md_top: number
+    open_hole_md_base: number
+    open_hole_length: number
+    open_hole_internal_diameter: number
+    effective_diameter: number
+    friction_factor_open_hole: number
+    linear_capacity_open_hole: number
+    volume_excess: number
+    description_open_hole: string
+    tripping_in_casing: number
+    tripping_out_casing: number
+    rotating_on_bottom_casing: number
+    slide_drilling_casing: number
+    back_reaming_casing: number
+    rotating_off_bottom_casing: number
+    tripping_in_open_hole: number
+    tripping_out_open_hole: number
+    rotating_on_bottom_open_hole: number
+    slide_drilling_open_hole: number
+    back_reaming_open_hole: number
+    rotating_off_bottom_open_hole: number
 }
 
 export interface ITrajectory{
@@ -203,4 +270,24 @@ export interface ITrajectoryUnit {
 
 export interface IResponseLoader {
     companies: ICompany[]
+}
+
+
+export interface ISection {
+    id: string
+    description: string
+    manufacturer: string
+    type: string
+    body_od: number
+    body_id: number
+    avg_joint_length: number
+    stabilizer_length: number
+    stabilizer_od: number
+    stabilizer_id: number
+    weight: number
+    material: string
+    grade: string
+    class: number
+    friction_coefficient: number
+    min_yield_strength: number
 }
