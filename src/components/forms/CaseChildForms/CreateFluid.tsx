@@ -1,9 +1,8 @@
-import {FC, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 import { toast } from 'react-toastify'
 import { store } from '../../../store/store'
 import { instance } from '../../../api/axios.api'
 import { Form, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 
 
 interface IFluidForm {
@@ -23,22 +22,27 @@ interface IFluidForm {
 const CreateFluid: FC<IFluidForm> = ({type, id, prevName, prevDescription, prevDensity, prev_base_fluid_id, prev_fluid_base_type_id, setIsEdit, onSuccess, caseId}) => {
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const fetchFluidTypes = async () => {
+      try {
+        const response = await instance.get('/api/v1/fluids/types');
+        setFluidTypes(response.data);
+      } catch (error) {
+        toast.error('Ошибка при получении типов растворов');
+        console.error(error);
+      }
+    };
+
+    fetchFluidTypes();
+  }, []); 
+
 
   const [nameFluid, setNameFluid] = useState(prevName)
   const [descriptionFluid, setDescriptionFluid] = useState(prevDescription)
   const [densityFluid, setDensityFluid] = useState<number>(prevDensity)
   const [baseTypeFluid, setBaseTypeFluid] = useState<string>(prev_fluid_base_type_id)
   const [baseFluid, setBaseFluid] = useState<string>(prev_base_fluid_id)
-
-  // const fluids = instance.get(`/api/v1/fluids?caseId=${caseId}`);
-  const fluids = new Map<string, string>();
-  fluids.set("c06eab84-120d-42ab-842c-a145200f378b", "first")
-  fluids.set("c06eab84-120d-42ab-842c-a145200f378e", "second")
-  fluids.set("c06eab84-120d-42ab-842c-a145200f378f", "third")
-
-  const fluids_ids = ["c06eab84-120d-42ab-842c-a145200f378b", "c06eab84-120d-42ab-842c-a145200f378e", "c06eab84-120d-42ab-842c-a145200f378f"];
-
-  const all_fluid_types = instance.get(`/api/v1/fluids/types`)
+  const [fluidTypes, setFluidTypes] = useState<Array<{ id: string; name: string }>>([]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -140,9 +144,12 @@ const CreateFluid: FC<IFluidForm> = ({type, id, prevName, prevDescription, prevD
                     setBaseTypeFluid(e.target.value)
                   }}
                 >
-                  {fluids_ids.map((element: string) => (
-                    <option key={element} value={element}>
-                      {fluids.get(element)}
+                  <option value="" disabled>
+                    Выберите базовый раствор
+                  </option>
+                  {fluidTypes.map((element) => (
+                    <option key={element.id} value={element.id}>
+                      {element.name}
                     </option>
                   ))}
                 </select>

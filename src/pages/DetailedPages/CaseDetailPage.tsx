@@ -9,6 +9,7 @@ import CreateCase from '../../components/forms/CreateCase';
 import CreateFluid from '../../components/forms/CaseChildForms/CreateFluid';
 import CreateHole from '../../components/forms/CaseChildForms/CreateHole';
 import CreateString from '../../components/forms/CaseChildForms/CreateString';
+import CreateEquipment from '../../components/forms/CaseChildForms/CreateEquipment';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,7 @@ const CaseDetail: React.FC = () => {
   const [isComponentsSelected, setComponentsSelected] = useState(true)
   const [isHydraulicsSelected, setHydraulicsSelected] = useState(false)
   const [isMomentSelected, setMomentSelected] = useState(false)
+  const [isDescriptionSelected, setIsDescriptionSelected] = useState(true);
 
 
   const navigate = useNavigate();
@@ -34,15 +36,19 @@ const CaseDetail: React.FC = () => {
   }
 
   const toggleHydraulics = () => {
-    setHydraulicsSelected(true);
-    setMomentSelected(false);
-    setComponentsSelected(false);
+    if (casE?.is_complete) {
+      setHydraulicsSelected(true);
+      setMomentSelected(false);
+      setComponentsSelected(false);
+    }
   }
 
   const toggleMoment = () => {
+    if (casE?.is_complete) {
     setHydraulicsSelected(false);
     setMomentSelected(true);
     setComponentsSelected(false);
+   }
   }
 
 
@@ -71,6 +77,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedEquip(false);
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(false);
   };
 
   const toggleString = () => {
@@ -80,6 +87,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedHole(false);
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(false);
   };
 
   const toggleFluid = () => {
@@ -89,6 +97,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedEquip(false);
     setIsSelectedHole(false);
     setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(false);
   };
 
   const toggleEquip = () => {
@@ -98,6 +107,17 @@ const CaseDetail: React.FC = () => {
     setIsSelectedHole(false);
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(false);
+  };
+
+  const toggleDescription = () => {
+    setIsSelectedEquip(false);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(true);
   };
 
 
@@ -108,6 +128,21 @@ const CaseDetail: React.FC = () => {
     content = <CreateHole caseId={casE!.id} type={"post"} />
   } else if (isSelectedString) {
     content = <CreateString caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
+  } else if (isSelectedEquip) {
+    content = <CreateEquipment caseId={casE!.id} type={"post"} porePressures={[]} fractureGradients={[]} />
+  } else if (isDescriptionSelected) {
+    content = (
+      <>
+            <div className='flex flex-col justify-center items-center w-full'>
+              <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
+                <h1>Кейс: <label className='font-bold'>{casE?.case_name}</label></h1>
+                <p>Описание: <label className='font-bold'>{casE?.case_description}</label></p>
+                <p>Глубина бурения: <label className='font-bold'>{casE?.drill_depth}</label></p>
+                <p>Размер насоса: <label className='font-bold'>{casE?.pipe_size}</label></p>
+              </div>
+            </div>
+          </>
+    )
   }
 
   useEffect(() => {
@@ -176,6 +211,13 @@ const CaseDetail: React.FC = () => {
             {isComponentsSelected && 
               <div>
                 <div className='w-full flex justify-evenly font-semibold text-[#5F5F5F] font-montserrat'>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isDescriptionSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleDescription}
+                  >Про кейс</p>
                   <p className={
                     `text-center cursor-pointer ${
                       isSelectedHole ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
