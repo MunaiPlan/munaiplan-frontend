@@ -50,7 +50,8 @@ const CreateCase: FC<ICaseForm> = ({type, id, prevIsComplete, prevName, prevDesc
       try {
         const trajectoryId = getTrajectoryIdFromStore()
         toast.success("ID: " + trajectoryId)
-        await instance.post(`/api/v1/cases?trajectoryId=${trajectoryId}`, newCase);
+        const m = await instance.post(`/api/v1/cases?trajectoryId=${trajectoryId}`, newCase);
+        console.log(m)
         toast.success("Новый кейс был добавлен");
         navigate("/");
       } catch (error) {

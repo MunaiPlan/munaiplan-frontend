@@ -47,7 +47,6 @@ const CreateFluid: FC<IFluidForm> = ({type, id, prevName, prevDescription, prevD
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (type == 'post') {
-      toast.success(baseFluid)
       const newFluid = {
         name: nameFluid,
         description: descriptionFluid,

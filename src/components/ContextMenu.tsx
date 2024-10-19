@@ -131,7 +131,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ x, y, level, closeContextMenu }) =>
       className='absolute z-100 bg-white text-black shadow-md p-2 rounded'
       style={{ top: `${y}px`, left: `${x}px` }}
     >
-      + Cоздать {entities[level]}
+      + Cоздать
     </div>
   );
 };

@@ -22,28 +22,38 @@ export interface IFractureGradient {
     prevWellTVD: number;
 }
 
-// Define the Zod schema for a fracture Gradient
 const fractureGradientSchema = z.object({
-  temperature_at_surface: z.number().positive("Температура на поверхности обязателна"),
-  temperature_at_well_tvd: z.number().positive("Температура на истинной вертикальной глубине скважины обязательна"),
-  temperature_at_well_gradient: z.number().positive("Градиент температуры обязателен"),
-  well_tvd: z.number().positive("Истинная вертикальная глубина скважины обязательна")
-});
+    fracture_gradients: z.array(
+      z.object({
+        temperature_at_surface: z.number().positive("Температура на поверхности обязателна"),
+        temperature_at_well_tvd: z.number().positive("Температура на истинной вертикальной глубине скважины обязательна"),
+        temperature_at_well_gradient: z.number().positive("Градиент температуры обязателен"),
+        well_tvd: z.number().positive("Истинная вертикальная глубина скважины обязательна"),
+      })
+    ),
+  });
 
-
-const formSchema = z.object({
-  fracture_gradients: z.array(fractureGradientSchema),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof fractureGradientSchema>;
 
 const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, id, fractureGradients, setIsEdit, onSuccess, caseId }) => {
   const navigate = useNavigate();
 
+  const mappedFractureGradients = fractureGradients.map(gradient => ({
+    temperature_at_surface: gradient.prevTempAtSurface ?? 0,
+    temperature_at_well_tvd: gradient.prevTempAtWellTVD ?? 0,
+    temperature_at_well_gradient: gradient.prevTempGradient ?? 0,
+    well_tvd: gradient.prevWellTVD ?? 0,
+  }));
+
   const { control, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
-    resolver: zodResolver(fractureGradientSchema),
+    resolver: zodResolver(fractureGradientSchema), // Use the correct schema for arrays
     defaultValues: {
-      fracture_gradients: [{ temperature_at_surface: 0, temperature_at_well_gradient: 0, temperature_at_well_tvd: 0, well_tvd: 0 }]
+      fracture_gradients: mappedFractureGradients.length > 0 ? mappedFractureGradients : [{
+        temperature_at_surface: 1,
+        temperature_at_well_tvd: 1,
+        temperature_at_well_gradient: 1,
+        well_tvd: 1
+      }]
     }
   });
 
@@ -65,11 +75,10 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, id, fract
         toast.success('Новое поровое давление была добавлена');
       } else if (type === 'put' && id) {
         await instance.put(`/api/v1/fracture-gradients/${id}`, newFractureGradientForm);
-        toast.success('Поровое давление было обновлено');
+        toast.success('Градиент разрыва пласта была обновлена');
       }
-      navigate('/');
     } catch (error) {
-      toast.error('Ошибка при обработке порового давления');
+      toast.error('Ошибка при обработке градиента разрыва пласта');
     }
   };
 

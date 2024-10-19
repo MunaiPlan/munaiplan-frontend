@@ -22,7 +22,7 @@ interface IEquipmentForm {
 const CreateEquipment: FC<IEquipmentForm> = ({ type, id, porePressures, fractureGradients, setIsEdit, onSuccess, caseId }) => {
   return (
     <div className='flex space-x-8 w-full'>
-        <CreatePorePressureForm type={"post"} caseId={caseId} porePressures={porePressures}/>
+        <CreatePorePressureForm type={"post"} caseId={caseId}/>
         <CreateFractureGradientForm type={"post"} caseId={caseId} fractureGradients={fractureGradients}/>
     </div>
   );

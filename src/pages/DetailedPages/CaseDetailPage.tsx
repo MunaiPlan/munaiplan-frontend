@@ -139,6 +139,7 @@ const CaseDetail: React.FC = () => {
                 <p>Описание: <label className='font-bold'>{casE?.case_description}</label></p>
                 <p>Глубина бурения: <label className='font-bold'>{casE?.drill_depth}</label></p>
                 <p>Размер насоса: <label className='font-bold'>{casE?.pipe_size}</label></p>
+                <p>Заполнен: <label className='font-bold'>{casE?.is_complete ? "Да" : "Нет"}</label></p>
               </div>
             </div>
           </>
@@ -156,7 +157,7 @@ const CaseDetail: React.FC = () => {
     };
 
     fetchCase();
-  }, [id]);
+  }, [id, isDescriptionSelected]);
 
   const handleDelete = async () => {
     try {
