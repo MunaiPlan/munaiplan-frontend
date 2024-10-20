@@ -58,7 +58,7 @@ const CreateFluid: FC<IFluidForm> = ({type, id, prevName, prevDescription, prevD
       try {
         await instance.post(`/api/v1/fluids?caseId=${caseId}`, newFluid);
         toast.success("Новый раствор был добавлен");
-        navigate("/");
+        navigate(`/cases/${caseId}`);
       } catch (error) {
         toast.error("Ошибка при добавлении раствора");
         console.error(error);

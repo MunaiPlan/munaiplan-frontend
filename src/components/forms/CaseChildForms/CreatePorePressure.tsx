@@ -59,7 +59,7 @@ const CreatePorePressureForm: FC<IPorePressureForm> = ({ type, id, porePressures
         toast.success('Поровое давление было обновлено');
       }
       if (onSuccess) onSuccess(); // Trigger success callback
-      navigate('/');
+      navigate(`/cases/${caseId}`);
     } catch (error) {
       console.log(error);
       toast.error('Ошибка при обработке порового давления');

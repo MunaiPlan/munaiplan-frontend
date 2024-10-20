@@ -77,6 +77,7 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, id, fract
         await instance.put(`/api/v1/fracture-gradients/${id}`, newFractureGradientForm);
         toast.success('Градиент разрыва пласта была обновлена');
       }
+      navigate(`/cases/${caseId}`);
     } catch (error) {
       toast.error('Ошибка при обработке градиента разрыва пласта');
     }

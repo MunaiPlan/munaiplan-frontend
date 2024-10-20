@@ -164,7 +164,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
         await instance.put(`/api/v1/holes/${id}`, newHole);
         toast.success('Скважина была обновлена');
       }
-      navigate('/');
+      navigate(`/cases/${caseId}`);
     } catch (error) {
       toast.error('Ошибка при обработке скважины');
     }

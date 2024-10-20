@@ -10,6 +10,7 @@ import CreateFluid from '../../components/forms/CaseChildForms/CreateFluid';
 import CreateHole from '../../components/forms/CaseChildForms/CreateHole';
 import CreateString from '../../components/forms/CaseChildForms/CreateString';
 import CreateEquipment from '../../components/forms/CaseChildForms/CreateEquipment';
+import CreateRig, { IRig } from '../../components/forms/CaseChildForms/CreateRig';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,27 @@ const CaseDetail: React.FC = () => {
   const [isHydraulicsSelected, setHydraulicsSelected] = useState(false)
   const [isMomentSelected, setMomentSelected] = useState(false)
   const [isDescriptionSelected, setIsDescriptionSelected] = useState(true);
+  const [isRigSelected, setIsRigSelected] = useState(false);
+
+  const rigData: IRig = {
+    block_rating: 12,
+    torque_rating: 1000,
+    rated_working_pressure: 5000,
+    bop_pressure_rating: 3000,
+    surface_pressure_loss: 12,
+    standpipe_length: 10,
+    standpipe_internal_diameter: 5,
+    hose_length: 15,
+    hose_internal_diameter: 4,
+    swivel_length: 8,
+    swivel_internal_diameter: 4,
+    kelly_length: 7,
+    kelly_internal_diameter: 3,
+    pump_discharge_line_length: 20,
+    pump_discharge_line_internal_diameter: 6,
+    top_drive_stackup_length: 25,
+    top_drive_stackup_internal_diameter: 7
+  };
 
 
   const navigate = useNavigate();
@@ -59,6 +81,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedHole(false);
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
+    setIsRigSelected(false);
   };
 
   const toggleTrajectory = () => {
@@ -68,6 +91,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedEquip(false);
     setIsSelectedHole(false);
     setIsSelectedFluid(false);
+    setIsRigSelected(false);
   };
 
   const toggleHole = () => {
@@ -78,6 +102,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
     setIsDescriptionSelected(false);
+    setIsRigSelected(false);
   };
 
   const toggleString = () => {
@@ -88,6 +113,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
     setIsDescriptionSelected(false);
+    setIsRigSelected(false);
   };
 
   const toggleFluid = () => {
@@ -98,6 +124,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedHole(false);
     setIsSelectedTrajectory(false);
     setIsDescriptionSelected(false);
+    setIsRigSelected(false);
   };
 
   const toggleEquip = () => {
@@ -108,6 +135,7 @@ const CaseDetail: React.FC = () => {
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
     setIsDescriptionSelected(false);
+    setIsRigSelected(false);
   };
 
   const toggleDescription = () => {
@@ -118,6 +146,18 @@ const CaseDetail: React.FC = () => {
     setIsSelectedFluid(false);
     setIsSelectedTrajectory(false);
     setIsDescriptionSelected(true);
+    setIsRigSelected(false);
+  };
+
+  const toggleRig = () => {
+    setIsSelectedEquip(false);
+    setIsSelectedAltitude(false);
+    setIsSelectedString(false);
+    setIsSelectedHole(false);
+    setIsSelectedFluid(false);
+    setIsSelectedTrajectory(false);
+    setIsDescriptionSelected(false);
+    setIsRigSelected(true);
   };
 
 
@@ -130,6 +170,8 @@ const CaseDetail: React.FC = () => {
     content = <CreateString caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
   } else if (isSelectedEquip) {
     content = <CreateEquipment caseId={casE!.id} type={"post"} porePressures={[]} fractureGradients={[]} />
+  } else if (isRigSelected) {
+    content = <CreateRig caseId={casE!.id} type={"post"} rig={rigData} />
   } else if (isDescriptionSelected) {
     content = (
       <>
@@ -247,6 +289,13 @@ const CaseDetail: React.FC = () => {
                   }
                   onClick={toggleEquip}
                   >Внутрискв. оборудование</p>
+                  <p className={
+                    `text-center cursor-pointer ${
+                      isRigSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                    }`
+                  }
+                  onClick={toggleRig}
+                  >Буровые</p>
                 </div>
                 <div className='flex mt-10'>
                   {content}

@@ -83,7 +83,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
         await instance.put(`/api/v1/strings/${id}`, newString);
         toast.success('Колонна была обновлена');
       }
-      navigate('/');
+      navigate(`/cases/${caseId}`);
     } catch (error) {
       toast.error('Ошибка при обработке колонны');
     }
