@@ -61,7 +61,7 @@ const TrajectoryDetail: React.FC = () => {
                   {trajectory.headers && trajectory.headers.length > 0 ? (
                     trajectory.headers.map((header, index) => (
                       <div key={index} className="mb-4">
-                        <h3 className='font-bold'>Заголовок {index + 1}</h3>
+                        <h3 className='font-bold'>{index + 1}-й заголовок</h3>
                         <p>Клиент: <label className='font-bold'>{header.customer || 'Нет данных'}</label></p>
                         <p>Проект: <label className='font-bold'>{header.project || 'Нет данных'}</label></p>
                         <p>Тип профиля: <label className='font-bold'>{header.profile_type || 'Нет данных'}</label></p>
@@ -84,7 +84,7 @@ const TrajectoryDetail: React.FC = () => {
                   {trajectory.units && trajectory.units.length > 0 ? (
                     trajectory.units.map((unit, index) => (
                       <div key={index} className="mb-4">
-                        <h3 className='font-bold'>Единица {index + 1}</h3>
+                        <h3 className='font-bold'>{index + 1}-я единица</h3>
                         <p>MD: <label className='font-bold'>{unit.md || 'Нет данных'}</label></p>
                         <p>Угол: <label className='font-bold'>{unit.incl || 'Нет данных'}</label></p>
                         <p>Азимут: <label className='font-bold'>{unit.azim || 'Нет данных'}</label></p>

@@ -114,18 +114,17 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
 
       if (type === 'post') {
         await instance.post(`/api/v1/trajectories/?designId=${designId}`, newTrajectory);
-        toast.success('Trajectory was added');
+        toast.success('Траектория была добавлена');
         navigate('/');
       } else if (type === 'put' && id) {
         await instance.put(`/api/v1/trajectories/${id}`, newTrajectory);
-        toast.success('Trajectory was updated');
+        toast.success('Траектория была обновлена');
         navigate('/');
       }
 
       onSuccess && onSuccess();
     } catch (error) {
-      toast.error('Error while processing trajectory');
-      console.error(error);
+      toast.error('Траектория не была создана/обновлена');
     }
   };
 
@@ -133,7 +132,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
     <div className="w-full flex flex-col justify-center items-center overflow-y-auto">
       <div className="w-full max-w-2xl justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto overflow-y-auto">
         <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">
-          {type === 'post' ? 'Create New Trajectory' : 'Update Trajectory'}
+          {type === 'post' ? "Создать новую траекторию" : 'Обновить данную траекторию'}
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-x-2">
@@ -163,7 +162,7 @@ const CreateTrajectory: FC<ITrajcetoryForm> = ({
           {/* Trajectory Headers */}
           {headerFields.map((field, index) => (
             <div key={field.id} className="input-wrapper col-span-2">
-              <h3>Header {index + 1}</h3>
+              <h3>{index + 1}-й заголовок</h3>
               
               <div className="input-wrapper">
                 <label htmlFor={`headers.${index}.customer`}>Клиент</label>
