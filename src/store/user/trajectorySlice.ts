@@ -13,7 +13,7 @@ interface TrajectoryState {
     cases: ICase[] | null,
     createdAt: Date | null,
     isTrajectoryFormOpened: boolean,
-    designId: string | null
+    designId: string
 }
 
 // Define the initial state using that type
@@ -26,7 +26,7 @@ const initialState: TrajectoryState = {
     cases: null,
     createdAt: null,
     isTrajectoryFormOpened: false,
-    designId: null
+    designId: ""
 }
 
 export const TrajectorySlice = createSlice({
