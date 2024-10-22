@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { IpVersion, z } from 'zod';
+import { z } from 'zod';
 import { instance } from '../../../api/axios.api';
 
 export interface IFractureGradientForm {

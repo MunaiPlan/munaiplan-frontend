@@ -11,6 +11,8 @@ import CreateHole from '../../components/forms/CaseChildForms/CreateHole';
 import CreateString from '../../components/forms/CaseChildForms/CreateString';
 import CreateEquipment from '../../components/forms/CaseChildForms/CreateEquipment';
 import CreateRig, { IRig } from '../../components/forms/CaseChildForms/CreateRig';
+import HydraulicsDetailPage from './HydraulicsDetailPage';
+import TorqueAndDragDetailPage from './TorqueAndDrugDetailPage';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -238,20 +240,20 @@ const CaseDetail: React.FC = () => {
                 }
                 onClick={toggleComponent}>Компоненты</p>
                 <p className={
-                  `text-center cursor-pointer ${
-                    isHydraulicsSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
-                  }`
-                }
-                onClick={toggleHydraulics}>Гидравлика</p>
-                <p className={
                   `text-center w-fill cursor-pointer ${
                     isMomentSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
                   }`
                 }
                 onClick={toggleMoment}>Момент и сопротивление</p>
+                <p className={
+                  `text-center cursor-pointer ${
+                    isHydraulicsSelected ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'
+                  }`
+                }
+                onClick={toggleHydraulics}>Гидравлика</p>
               </div>
             </div>
-            {isComponentsSelected && 
+            {isComponentsSelected ?
               <div>
                 <div className='w-full flex justify-evenly font-semibold text-[#5F5F5F] font-montserrat'>
                   <p className={
@@ -300,7 +302,7 @@ const CaseDetail: React.FC = () => {
                 <div className='flex mt-10'>
                   {content}
                 </div>
-              </div>}
+              </div> : (isHydraulicsSelected ? (<HydraulicsDetailPage caseId={casE.id}/>) : (<TorqueAndDragDetailPage caseId={casE.id}/>))}
           </>
         ) : (
           casE && (
