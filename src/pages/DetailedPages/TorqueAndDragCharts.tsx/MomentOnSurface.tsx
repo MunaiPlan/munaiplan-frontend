@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { instance } from '../../../api/axios.api';
 import { toast } from 'react-toastify';
-import SideBar from '../../../components/SideBar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface MomentOnSurfaceData {
-    Depth: number[];
-    RotaryDrilling: number[];
-    PullUp: number[];
-    RunIn: number[];
-    Make_up_Torque: number[];
-    TorqueOnMakeUp: number[];
+interface SurfaceTorqueData {
+  Глубина: number[];
+  'Бурение ротором': number[];
+  'Подъём': number[];
+  'Make-up Torque': number[];
+  'Спуск': number[];
+  'Момент свинчивания': number[];
 }
 
 interface IForm {
   caseId: string;
 }
 
-const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
-  const [momentOnSurfaceData, setMomentOnSurfaceData] = useState<MomentOnSurfaceData | null>(null);
+const SurfaceTorqueGraph: React.FC<IForm> = ({ caseId }) => {
+  const [surfaceTorqueData, setSurfaceTorqueData] = useState<SurfaceTorqueData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchWeightOnBit = async () => {
+    const fetchSurfaceTorque = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
-        setMomentOnSurfaceData(response.data);
+        const response = await instance.post(`/api/v1/torque-and-drag/surface-torque/?caseId=${caseId}`);
+        setSurfaceTorqueData(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Failed to load moment on surface data');
+        toast.error('Failed to load surface torque data');
         setIsLoading(false);
       }
     };
 
     if (caseId) {
-        fetchWeightOnBit();
+      fetchSurfaceTorque();
     }
   }, [caseId]);
 
@@ -45,67 +42,88 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
     return <div>Loading...</div>;
   }
 
-  if (!momentOnSurfaceData) {
-    return <div>Нет информации момента на поверхности</div>;
+  if (!surfaceTorqueData) {
+    return <div>No surface torque data available</div>;
   }
 
-  const chartData = momentOnSurfaceData.Depth.map((depth, index) => ({
+  // Create chart data by mapping depth and other fields
+  const chartData = surfaceTorqueData.Глубина.map((depth, index) => ({
     depth: depth,
-    rotaryDrilling: momentOnSurfaceData.RotaryDrilling[index],
-    pullUp: momentOnSurfaceData.PullUp[index],
-    runIn: momentOnSurfaceData.RunIn[index],
-    MakeUpTorque: momentOnSurfaceData.Make_up_Torque[index],
-    TorqueOnMakeUp: momentOnSurfaceData.TorqueOnMakeUp[index],
+    rotaryDrilling: surfaceTorqueData['Бурение ротором'][index],
+    pullUp: surfaceTorqueData['Подъём'][index],
+    makeUpTorque: surfaceTorqueData['Make-up Torque'][index],
+    runIn: surfaceTorqueData['Спуск'][index],
+    torque: surfaceTorqueData['Момент свинчивания'][index],
   }));
 
   return (
-    <div className="h-screen w-full flex">
-      <div className="w-1/5">
-        <SideBar />
-      </div>
+    <div className="flex w-full h-full justify-evenly">
       <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4">Moment on Surface Graph</h1>
-        <div className="w-full h-96">
+        <div className="w-full h-3/5">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Момент на поверхности (kN-m)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
+              {/* Reversed Y-Axis for depth */}
+              <YAxis
+                dataKey="depth"
+                reversed
+                label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'insideLeft' }}
+              />
+              <XAxis
+                label={{ value: 'Крутящий момент (тонны)', position: 'insideBottomRight', offset: -5 }}
+              />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />
-              <Line type="monotone" dataKey="rotaryDrilling" stroke="#82ca9d" name="Бурение ротором" />
-              <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
-              <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
-              <Line type="monotone" dataKey="MakeUpTorque" stroke="#0000ff" name="Бурение ГЗД" />
+              <Line
+                type="monotone"
+                dataKey="rotaryDrilling"
+                stroke="#8884d8"
+                name="Бурение ротором"
+              />
+              <Line
+                type="monotone"
+                dataKey="pullUp"
+                stroke="#82ca9d"
+                name="Подъём"
+              />
+              <Line
+                type="monotone"
+                dataKey="makeUpTorque"
+                stroke="#ff7300"
+                name="Make-up Torque"
+              />
+              <Line
+                type="monotone"
+                dataKey="runIn"
+                stroke="#ff0000"
+                name="Спуск"
+              />
+              <Line
+                type="monotone"
+                dataKey="torque"
+                stroke="#ff00ff"
+                name="Момент свинчивания"
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
         <div className="flex w-full items-center justify-center gap-x-4 mt-4">
           <button
-            className="border-2 border-black px-2 py-1 rounded-md hover:bg-green-400"
-            onClick={() => {
-              navigate(`/cases/${caseId}`);
-            }}
-          >
-            Назад к делу
-          </button>
-          <button
             className="border-2 border-black px-2 py-1 rounded-md hover:bg-blue-400"
             onClick={() => {
               setIsLoading(true);
-              const fetchMomentOnSurface = async () => {
+              const fetchSurfaceTorque = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
-                  setMomentOnSurfaceData(response.data);
+                  const response = await instance.post(`/api/v1/torque-and-drag/surface-torque/?caseId=${caseId}`);
+                  setSurfaceTorqueData(response.data);
                   setIsLoading(false);
                 } catch (error) {
                   console.error('Error reloading data:', error);
-                  toast.error('Failed to reload moment on surface data');
+                  toast.error('Failed to reload surface torque data');
                   setIsLoading(false);
                 }
               };
-              fetchMomentOnSurface();
+              fetchSurfaceTorque();
             }}
           >
             Перезагрузить график
@@ -116,4 +134,4 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
   );
 };
 
-export default MomentOnSurfacetGraph
+export default SurfaceTorqueGraph;

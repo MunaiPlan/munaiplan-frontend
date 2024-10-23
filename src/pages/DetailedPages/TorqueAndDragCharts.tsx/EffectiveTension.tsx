@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { instance } from '../../../api/axios.api';
 import { toast } from 'react-toastify';
-import SideBar from '../../../components/SideBar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface EffectiveTensionData {
-  depth: number[];
-  towerLoadCapacity: number[];
-  rotaryDrilling: number[];
-  pullUp: number[];
-  runIn: number[];
-  drillingGZD: number[];
-  tensionLimit: number[];
+  Глубина: number[];
+  'Грузоподъёмность вышки': number[];
+  'Бурение ротором': number[];
+  'Спиральный изгиб(без вращения)': number[];
+  'Подъём': number[];
+  'Синусоидальный изгиб(все операции)': number[];
+  'Спуск': number[];
+  'Бурение ГЗД': number[];
+  'Спиральный изгиб(с вращением)': number[];
+  'Предел натяжения': number[];
 }
 
 interface IForm {
   caseId: string;
 }
 
-const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
+const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
   const [effectiveTensionData, setEffectiveTensionData] = useState<EffectiveTensionData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEffectiveTension = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
+        const response = await instance.post(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
         setEffectiveTensionData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -47,32 +47,36 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
   }
 
   if (!effectiveTensionData) {
-    return <div>Нет информации про эффективное напряжение</div>;
+    return <div>No effective tension data available</div>;
   }
 
-  const chartData = effectiveTensionData.depth.map((depth, index) => ({
+  // Create chart data by mapping depth and other fields
+  const chartData = effectiveTensionData.Глубина.map((depth, index) => ({
     depth: depth,
-    towerLoadCapacity: effectiveTensionData.towerLoadCapacity[index],
-    rotaryDrilling: effectiveTensionData.rotaryDrilling[index],
-    pullUp: effectiveTensionData.pullUp[index],
-    runIn: effectiveTensionData.runIn[index],
-    drillingGZD: effectiveTensionData.drillingGZD[index],
-    tensionLimit: effectiveTensionData.tensionLimit[index],
+    towerLoadCapacity: effectiveTensionData['Грузоподъёмность вышки'][index],
+    rotaryDrilling: effectiveTensionData['Бурение ротором'][index],
+    pullUp: effectiveTensionData['Подъём'][index],
+    runIn: effectiveTensionData['Спуск'][index],
+    drillingGZD: effectiveTensionData['Бурение ГЗД'][index],
+    tensionLimit: effectiveTensionData['Предел натяжения'][index],
   }));
 
   return (
-    <div className="h-screen w-full flex">
-      <div className="w-1/5">
-        <SideBar />
-      </div>
+    <div className="flex w-full h-full justify-evenly">
       <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4">Effective Tension Graph</h1>
-        <div className="w-full h-96">
+        <div className="w-full h-3/5">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Эффективное натяжение (tonne)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'insideLeft' }} />
+              {/* Reversed Y-Axis for depth */}
+              <YAxis
+                dataKey="depth"
+                reversed
+                label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'insideLeft' }}
+              />
+              <XAxis
+                label={{ value: 'Эффективное натяжение (tonne)', position: 'insideBottomRight', offset: -5 }}
+              />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />
@@ -86,24 +90,16 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
         </div>
         <div className="flex w-full items-center justify-center gap-x-4 mt-4">
           <button
-            className="border-2 border-black px-2 py-1 rounded-md hover:bg-green-400"
-            onClick={() => {
-              navigate(`/cases/${caseId}`);
-            }}
-          >
-            Назад к делу
-          </button>
-          <button
             className="border-2 border-black px-2 py-1 rounded-md hover:bg-blue-400"
             onClick={() => {
               setIsLoading(true);
               const fetchEffectiveTension = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
+                  const response = await instance.post(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
                   setEffectiveTensionData(response.data);
                   setIsLoading(false);
                 } catch (error) {
-                  console.error('Error reloading data:', error); // Error logging on reload
+                  console.error('Error reloading data:', error);
                   toast.error('Failed to reload effective tension data');
                   setIsLoading(false);
                 }

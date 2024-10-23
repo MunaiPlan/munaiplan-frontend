@@ -1,45 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { instance } from '../../../api/axios.api';
 import { toast } from 'react-toastify';
-import SideBar from '../../../components/SideBar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface HookLoadData {
-  Depth: number[];
-  TowerLoadCapacity: number[];
-  RotaryDrilling: number[];
-  PullUp: number[];
-  RunIn: number[];
-  DrillingGZD: number[];
-  MinWeightForHelicalBucklingRun: number[];
-  MaxWeightBeforeYieldLimitPullUp: number[];
+interface WeightOnBitData {
+  Глубина: number[];
+  'Грузоподъёмность вышки': number[];
+  'Бурение ротором': number[];
+  'Подъём': number[];
+  'Спуск': number[];
+  'Бурение ГЗД': number[];
+  'Мин. вес до спирального изгиба (спуск)': number[];
+  'Макс. вес до предела текучести (подъём)': number[];
 }
 
 interface IForm {
   caseId: string;
 }
 
-const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
-  const [hookLoadData, setHookLoadData] = useState<HookLoadData | null>(null);
+const WeightOnBitGraph: React.FC<IForm> = ({ caseId }) => {
+  const [weightOnBitData, setWeightOnBitData] = useState<WeightOnBitData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchHookLoad = async () => {
+    const fetchWeightOnBit = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
-        setHookLoadData(response.data);
+        const response = await instance.post(`/api/v1/torque-and-drag/weight-on-bit/?caseId=${caseId}`);
+        setWeightOnBitData(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Failed to load hook load data');
+        toast.error('Failed to load weight on bit data');
         setIsLoading(false);
       }
     };
 
     if (caseId) {
-        fetchHookLoad();
+      fetchWeightOnBit();
     }
   }, [caseId]);
 
@@ -47,71 +44,67 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
     return <div>Loading...</div>;
   }
 
-  if (!hookLoadData) {
-    return <div>Нет информации про вес на крюке</div>;
+  if (!weightOnBitData) {
+    return <div>No weight on bit data available</div>;
   }
 
-  const chartData = hookLoadData.Depth.map((depth, index) => ({
+  // Create chart data by mapping depth and other fields
+  const chartData = weightOnBitData.Глубина.map((depth, index) => ({
     depth: depth,
-    towerLoadCapacity: hookLoadData.TowerLoadCapacity[index],
-    rotaryDrilling: hookLoadData.RotaryDrilling[index],
-    pullUp: hookLoadData.PullUp[index],
-    runIn: hookLoadData.RunIn[index],
-    drillingGZD: hookLoadData.DrillingGZD[index],
-    minWeightForHelicalBucklingRun: hookLoadData.MinWeightForHelicalBucklingRun[index],
-    maxWeightBeforeYieldLimitPullUp: hookLoadData.MaxWeightBeforeYieldLimitPullUp[index],
+    towerLoadCapacity: weightOnBitData['Грузоподъёмность вышки'][index],
+    rotaryDrilling: weightOnBitData['Бурение ротором'][index],
+    pullUp: weightOnBitData['Подъём'][index],
+    runIn: weightOnBitData['Спуск'][index],
+    drillingGZD: weightOnBitData['Бурение ГЗД'][index],
+    minWeightHelicalRunIn: weightOnBitData['Мин. вес до спирального изгиба (спуск)'][index],
+    maxWeightYieldLimitPullUp: weightOnBitData['Макс. вес до предела текучести (подъём)'][index],
   }));
 
   return (
-    <div className="h-screen w-full flex">
-      <div className="w-1/5">
-        <SideBar />
-      </div>
+    <div className="flex w-full h-full justify-evenly">
       <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4">Effective Tension Graph</h1>
-        <div className="w-full h-96">
+        <div className="w-full h-3/5">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Вес на крюке на поверхности (tonne)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
+              {/* Reversed Y-Axis for depth */}
+              <YAxis
+                dataKey="depth"
+                reversed
+                label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'insideLeft' }}
+              />
+              <XAxis
+                label={{ value: 'Вес на долоте (тонны)', position: 'insideBottomRight', offset: -5 }}
+              />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />
               <Line type="monotone" dataKey="rotaryDrilling" stroke="#82ca9d" name="Бурение ротором" />
               <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
               <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
-              <Line type="monotone" dataKey="drillingGZD" stroke="#000fff" name="Бурение ГЗД" />
-              <Line type="monotone" dataKey="minWeightForHelicalBucklingRun" stroke="#0000ff" name="Мин. вес до спирального изгиба" />
-              <Line type="monotone" dataKey="maxWeightBeforeYieldLimitPullUp" stroke="#ff00ff" name="Макс. вес до предела текучести" />
+              <Line type="monotone" dataKey="drillingGZD" stroke="#0000ff" name="Бурение ГЗД" />
+              <Line type="monotone" dataKey="minWeightHelicalRunIn" stroke="#ff00ff" name="Мин. вес до спирального изгиба (спуск)" />
+              <Line type="monotone" dataKey="maxWeightYieldLimitPullUp" stroke="#00ff00" name="Макс. вес до предела текучести (подъём)" />
             </LineChart>
           </ResponsiveContainer>
         </div>
         <div className="flex w-full items-center justify-center gap-x-4 mt-4">
           <button
-            className="border-2 border-black px-2 py-1 rounded-md hover:bg-green-400"
-            onClick={() => {
-              navigate(`/cases/${caseId}`);
-            }}
-          >
-            Назад к делу
-          </button>
-          <button
             className="border-2 border-black px-2 py-1 rounded-md hover:bg-blue-400"
             onClick={() => {
               setIsLoading(true);
-              const fetchHookLoad = async () => {
+              const fetchWeightOnBit = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
-                  setHookLoadData(response.data);
+                  const response = await instance.post(`/api/v1/torque-and-drag/weight-on-bit/?caseId=${caseId}`);
+                  setWeightOnBitData(response.data);
                   setIsLoading(false);
                 } catch (error) {
-                  console.error('Error reloading data:', error); 
-                  toast.error('Failed to reload hook load data');
+                  console.error('Error reloading data:', error);
+                  toast.error('Failed to reload weight on bit data');
                   setIsLoading(false);
                 }
               };
-              fetchHookLoad();
+              fetchWeightOnBit();
             }}
           >
             Перезагрузить график
@@ -122,4 +115,4 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
   );
 };
 
-export default HookLoadGraph
+export default WeightOnBitGraph;
