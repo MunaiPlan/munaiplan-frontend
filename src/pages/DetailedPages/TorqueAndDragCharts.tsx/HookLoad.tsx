@@ -57,8 +57,9 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
     rotaryDrilling: hookLoadData.RotaryDrilling[index],
     pullUp: hookLoadData.PullUp[index],
     runIn: hookLoadData.RunIn[index],
-    MinWeightForHelicalBucklingRun: hookLoadData.MinWeightForHelicalBucklingRun[index],
-    MaxWeightBeforeYieldLimitPullUp: hookLoadData.MaxWeightBeforeYieldLimitPullUp[index],
+    drillingGZD: hookLoadData.DrillingGZD[index],
+    minWeightForHelicalBucklingRun: hookLoadData.MinWeightForHelicalBucklingRun[index],
+    maxWeightBeforeYieldLimitPullUp: hookLoadData.MaxWeightBeforeYieldLimitPullUp[index],
   }));
 
   return (
@@ -72,7 +73,7 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Вес на долоте (tonne)', position: 'insideBottomRight', offset: -5 }} />
+              <XAxis dataKey="depth" label={{ value: 'Вес на крюке на поверхности (tonne)', position: 'insideBottomRight', offset: -5 }} />
               <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
@@ -80,8 +81,9 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
               <Line type="monotone" dataKey="rotaryDrilling" stroke="#82ca9d" name="Бурение ротором" />
               <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
               <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
-              <Line type="monotone" dataKey="MinWeightForHelicalBucklingRun" stroke="#0000ff" name="Мин. вес до спирального изгиба" />
-              <Line type="monotone" dataKey="MaxWeightBeforeYieldLimitPullUp" stroke="#ff00ff" name="Макс. вес до предела текучести" />
+              <Line type="monotone" dataKey="drillingGZD" stroke="#000fff" name="Бурение ГЗД" />
+              <Line type="monotone" dataKey="minWeightForHelicalBucklingRun" stroke="#0000ff" name="Мин. вес до спирального изгиба" />
+              <Line type="monotone" dataKey="maxWeightBeforeYieldLimitPullUp" stroke="#ff00ff" name="Макс. вес до предела текучести" />
             </LineChart>
           </ResponsiveContainer>
         </div>

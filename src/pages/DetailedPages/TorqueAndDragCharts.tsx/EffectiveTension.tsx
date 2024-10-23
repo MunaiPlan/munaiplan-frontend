@@ -71,8 +71,8 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Глубина (м)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Эффективное натяжение (тонны)', angle: -90, position: 'insideLeft' }} />
+              <XAxis dataKey="depth" label={{ value: 'Эффективное натяжение (tonne)', position: 'insideBottomRight', offset: -5 }} />
+              <YAxis label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />

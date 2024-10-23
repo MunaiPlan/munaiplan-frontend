@@ -69,7 +69,7 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Вес на долоте (tonne)', position: 'insideBottomRight', offset: -5 }} />
+              <XAxis dataKey="depth" label={{ value: 'Момент на поверхности (kN-m)', position: 'insideBottomRight', offset: -5 }} />
               <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
@@ -78,7 +78,6 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
               <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
               <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
               <Line type="monotone" dataKey="MakeUpTorque" stroke="#0000ff" name="Бурение ГЗД" />
-              <Line type="monotone" dataKey="TorqueOnMakeUp" stroke="#ff00ff" name="Предел натяжения" />
             </LineChart>
           </ResponsiveContainer>
         </div>
