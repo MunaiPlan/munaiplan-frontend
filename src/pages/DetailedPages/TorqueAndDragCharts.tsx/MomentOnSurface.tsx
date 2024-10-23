@@ -5,40 +5,39 @@ import { toast } from 'react-toastify';
 import SideBar from '../../../components/SideBar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface EffectiveTensionData {
-  depth: number[];
-  towerLoadCapacity: number[];
-  rotaryDrilling: number[];
-  pullUp: number[];
-  runIn: number[];
-  drillingGZD: number[];
-  tensionLimit: number[];
+interface MomentOnSurfaceData {
+    Depth: number[];
+    RotaryDrilling: number[];
+    PullUp: number[];
+    RunIn: number[];
+    Make_up_Torque: number[];
+    TorqueOnMakeUp: number[];
 }
 
 interface IForm {
   caseId: string;
 }
 
-const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
-  const [effectiveTensionData, setEffectiveTensionData] = useState<EffectiveTensionData | null>(null);
+const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
+  const [momentOnSurfaceData, setMomentOnSurfaceData] = useState<MomentOnSurfaceData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEffectiveTension = async () => {
+    const fetchWeightOnBit = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-        setEffectiveTensionData(response.data);
+        const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
+        setMomentOnSurfaceData(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Failed to load effective tension data');
+        toast.error('Failed to load moment on surface data');
         setIsLoading(false);
       }
     };
 
     if (caseId) {
-      fetchEffectiveTension();
+        fetchWeightOnBit();
     }
   }, [caseId]);
 
@@ -46,18 +45,17 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
     return <div>Loading...</div>;
   }
 
-  if (!effectiveTensionData) {
-    return <div>Нет информации про эффективное напряжение</div>;
+  if (!momentOnSurfaceData) {
+    return <div>Нет информации момента на поверхности</div>;
   }
 
-  const chartData = effectiveTensionData.depth.map((depth, index) => ({
+  const chartData = momentOnSurfaceData.Depth.map((depth, index) => ({
     depth: depth,
-    towerLoadCapacity: effectiveTensionData.towerLoadCapacity[index],
-    rotaryDrilling: effectiveTensionData.rotaryDrilling[index],
-    pullUp: effectiveTensionData.pullUp[index],
-    runIn: effectiveTensionData.runIn[index],
-    drillingGZD: effectiveTensionData.drillingGZD[index],
-    tensionLimit: effectiveTensionData.tensionLimit[index],
+    rotaryDrilling: momentOnSurfaceData.RotaryDrilling[index],
+    pullUp: momentOnSurfaceData.PullUp[index],
+    runIn: momentOnSurfaceData.RunIn[index],
+    MakeUpTorque: momentOnSurfaceData.Make_up_Torque[index],
+    TorqueOnMakeUp: momentOnSurfaceData.TorqueOnMakeUp[index],
   }));
 
   return (
@@ -66,21 +64,21 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
         <SideBar />
       </div>
       <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4">Effective Tension Graph</h1>
+        <h1 className="text-xl font-bold mb-4">Moment on Surface Graph</h1>
         <div className="w-full h-96">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Глубина (м)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Эффективное натяжение (тонны)', angle: -90, position: 'insideLeft' }} />
+              <XAxis dataKey="depth" label={{ value: 'Вес на долоте (tonne)', position: 'insideBottomRight', offset: -5 }} />
+              <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />
               <Line type="monotone" dataKey="rotaryDrilling" stroke="#82ca9d" name="Бурение ротором" />
               <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
               <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
-              <Line type="monotone" dataKey="drillingGZD" stroke="#0000ff" name="Бурение ГЗД" />
-              <Line type="monotone" dataKey="tensionLimit" stroke="#ff00ff" name="Предел натяжения" />
+              <Line type="monotone" dataKey="MakeUpTorque" stroke="#0000ff" name="Бурение ГЗД" />
+              <Line type="monotone" dataKey="TorqueOnMakeUp" stroke="#ff00ff" name="Предел натяжения" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -97,18 +95,18 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
             className="border-2 border-black px-2 py-1 rounded-md hover:bg-blue-400"
             onClick={() => {
               setIsLoading(true);
-              const fetchEffectiveTension = async () => {
+              const fetchMomentOnSurface = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-                  setEffectiveTensionData(response.data);
+                  const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
+                  setMomentOnSurfaceData(response.data);
                   setIsLoading(false);
                 } catch (error) {
-                  console.error('Error reloading data:', error); // Error logging on reload
-                  toast.error('Failed to reload effective tension data');
+                  console.error('Error reloading data:', error);
+                  toast.error('Failed to reload moment on surface data');
                   setIsLoading(false);
                 }
               };
-              fetchEffectiveTension();
+              fetchMomentOnSurface();
             }}
           >
             Перезагрузить график
@@ -119,4 +117,4 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
   );
 };
 
-export default EffectiveTensionGraph;
+export default MomentOnSurfacetGraph

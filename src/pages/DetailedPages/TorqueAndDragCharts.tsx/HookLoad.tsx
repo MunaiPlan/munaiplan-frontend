@@ -5,40 +5,41 @@ import { toast } from 'react-toastify';
 import SideBar from '../../../components/SideBar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-interface EffectiveTensionData {
-  depth: number[];
-  towerLoadCapacity: number[];
-  rotaryDrilling: number[];
-  pullUp: number[];
-  runIn: number[];
-  drillingGZD: number[];
-  tensionLimit: number[];
+interface HookLoadData {
+  Depth: number[];
+  TowerLoadCapacity: number[];
+  RotaryDrilling: number[];
+  PullUp: number[];
+  RunIn: number[];
+  DrillingGZD: number[];
+  MinWeightForHelicalBucklingRun: number[];
+  MaxWeightBeforeYieldLimitPullUp: number[];
 }
 
 interface IForm {
   caseId: string;
 }
 
-const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
-  const [effectiveTensionData, setEffectiveTensionData] = useState<EffectiveTensionData | null>(null);
+const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
+  const [hookLoadData, setHookLoadData] = useState<HookLoadData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEffectiveTension = async () => {
+    const fetchHookLoad = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-        setEffectiveTensionData(response.data);
+        const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
+        setHookLoadData(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Failed to load effective tension data');
+        toast.error('Failed to load hook load data');
         setIsLoading(false);
       }
     };
 
     if (caseId) {
-      fetchEffectiveTension();
+        fetchHookLoad();
     }
   }, [caseId]);
 
@@ -46,18 +47,18 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
     return <div>Loading...</div>;
   }
 
-  if (!effectiveTensionData) {
-    return <div>Нет информации про эффективное напряжение</div>;
+  if (!hookLoadData) {
+    return <div>Нет информации про вес на крюке</div>;
   }
 
-  const chartData = effectiveTensionData.depth.map((depth, index) => ({
+  const chartData = hookLoadData.Depth.map((depth, index) => ({
     depth: depth,
-    towerLoadCapacity: effectiveTensionData.towerLoadCapacity[index],
-    rotaryDrilling: effectiveTensionData.rotaryDrilling[index],
-    pullUp: effectiveTensionData.pullUp[index],
-    runIn: effectiveTensionData.runIn[index],
-    drillingGZD: effectiveTensionData.drillingGZD[index],
-    tensionLimit: effectiveTensionData.tensionLimit[index],
+    towerLoadCapacity: hookLoadData.TowerLoadCapacity[index],
+    rotaryDrilling: hookLoadData.RotaryDrilling[index],
+    pullUp: hookLoadData.PullUp[index],
+    runIn: hookLoadData.RunIn[index],
+    MinWeightForHelicalBucklingRun: hookLoadData.MinWeightForHelicalBucklingRun[index],
+    MaxWeightBeforeYieldLimitPullUp: hookLoadData.MaxWeightBeforeYieldLimitPullUp[index],
   }));
 
   return (
@@ -71,16 +72,16 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="depth" label={{ value: 'Глубина (м)', position: 'insideBottomRight', offset: -5 }} />
-              <YAxis label={{ value: 'Эффективное натяжение (тонны)', angle: -90, position: 'insideLeft' }} />
+              <XAxis dataKey="depth" label={{ value: 'Вес на долоте (tonne)', position: 'insideBottomRight', offset: -5 }} />
+              <YAxis label={{ value: 'Измеренная глубина рейса (m)', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#8884d8" name="Грузоподъёмность вышки" />
               <Line type="monotone" dataKey="rotaryDrilling" stroke="#82ca9d" name="Бурение ротором" />
               <Line type="monotone" dataKey="pullUp" stroke="#ff7300" name="Подъём" />
               <Line type="monotone" dataKey="runIn" stroke="#ff0000" name="Спуск" />
-              <Line type="monotone" dataKey="drillingGZD" stroke="#0000ff" name="Бурение ГЗД" />
-              <Line type="monotone" dataKey="tensionLimit" stroke="#ff00ff" name="Предел натяжения" />
+              <Line type="monotone" dataKey="MinWeightForHelicalBucklingRun" stroke="#0000ff" name="Мин. вес до спирального изгиба" />
+              <Line type="monotone" dataKey="MaxWeightBeforeYieldLimitPullUp" stroke="#ff00ff" name="Макс. вес до предела текучести" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -97,18 +98,18 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
             className="border-2 border-black px-2 py-1 rounded-md hover:bg-blue-400"
             onClick={() => {
               setIsLoading(true);
-              const fetchEffectiveTension = async () => {
+              const fetchHookLoad = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-                  setEffectiveTensionData(response.data);
+                  const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
+                  setHookLoadData(response.data);
                   setIsLoading(false);
                 } catch (error) {
-                  console.error('Error reloading data:', error); // Error logging on reload
-                  toast.error('Failed to reload effective tension data');
+                  console.error('Error reloading data:', error); 
+                  toast.error('Failed to reload hook load data');
                   setIsLoading(false);
                 }
               };
-              fetchEffectiveTension();
+              fetchHookLoad();
             }}
           >
             Перезагрузить график
@@ -119,4 +120,4 @@ const EffectiveTensionGraph: React.FC<IForm> = ({caseId}) => {
   );
 };
 
-export default EffectiveTensionGraph;
+export default HookLoadGraph

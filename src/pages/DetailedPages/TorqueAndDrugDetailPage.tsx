@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
-import MinDepthChart from './MinDepthChart';
 import EffectiveTensionGraph from './TorqueAndDragCharts.tsx/EffectiveTension';
+import MomentOnSurfacetGraph from './TorqueAndDragCharts.tsx/MomentOnSurface';
+import HookLoadGraph from './TorqueAndDragCharts.tsx/HookLoad';
+import MinWeightOnBitGraph from './TorqueAndDragCharts.tsx/MinWeightOnBit';
 
 interface IT {
   caseId: string;
@@ -42,13 +44,13 @@ const TorqueAndDragDetailPage: FC<IT> = ({caseId}) => {
 
   let content;
   if (hookLoad) {
-    content = <EffectiveTensionGraph />
+    content = <HookLoadGraph caseId={caseId} />
   } else if (surfaceTorque) {
-    content = <></>
+    content = <MomentOnSurfacetGraph caseId={caseId}/>
   } else if (weightOnBit) {
-    content = <></>
+    content = <MinWeightOnBitGraph caseId={caseId} />
   } else if (effectiveTension) {
-    content = <></>
+    content = <EffectiveTensionGraph caseId={caseId} />
   }
 
   return (
