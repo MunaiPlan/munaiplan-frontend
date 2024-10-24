@@ -26,7 +26,7 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
   useEffect(() => {
     const fetchWeightOnBit = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
+        const response = await instance.post(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
         setMomentOnSurfaceData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -96,7 +96,7 @@ const MomentOnSurfacetGraph: React.FC<IForm> = ({caseId}) => {
               setIsLoading(true);
               const fetchMomentOnSurface = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
+                  const response = await instance.post(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
                   setMomentOnSurfaceData(response.data);
                   setIsLoading(false);
                 } catch (error) {

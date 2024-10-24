@@ -22,14 +22,20 @@ export interface IPorePressures {
 }
 
 // Define the Zod schema to match the API structure with an array of pore pressures
+// const porePressureSchema = z.object({
+//   pore_pressures: z.array(
+//     z.object({
+//       tvd: z.number().positive("Вертикальная глубина обязателна"),
+//       pressure: z.number().positive("Давление обязательно"),
+//       emw: z.number().positive("Эквивалентная плотность бурового раствора обязательна"),
+//     })
+//   ),
+// });
+
 const porePressureSchema = z.object({
-  pore_pressures: z.array(
-    z.object({
-      tvd: z.number().positive("Вертикальная глубина обязателна"),
-      pressure: z.number().positive("Давление обязательно"),
-      emw: z.number().positive("Эквивалентная плотность бурового раствора обязательна"),
-    })
-  ),
+  tvd: z.number().positive("Вертикальная глубина обязателна"),
+  pressure: z.number().positive("Давление обязательно"),
+  emw: z.number().positive("Эквивалентная плотность бурового раствора обязательна"),
 });
 
 type FormData = z.infer<typeof porePressureSchema>;
@@ -40,14 +46,14 @@ const CreatePorePressureForm: FC<IPorePressureForm> = ({ type, id, porePressures
   const { register, control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
     resolver: zodResolver(porePressureSchema),
     defaultValues: {
-      pore_pressures: porePressures || [{ tvd: 1, pressure: 1, emw: 1 }],
+      tvd: 1, pressure: 1, emw: 1 ,
     }
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'pore_pressures',
-  });
+  // const { fields, append, remove } = useFieldArray({
+  //   control,
+  //   name: 'pore_pressures',
+  // });
 
   const onSubmit = async (data: FormData) => {
     const newPorePressureForm = {
@@ -80,7 +86,7 @@ const CreatePorePressureForm: FC<IPorePressureForm> = ({ type, id, porePressures
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
-          {/* Render dynamic fields */}
+          {/* Render dynamic fields
           {fields.map((field, index) => (
             <div key={field.id} className="border p-4 mb-4">
               <div className="input-wrapper">
@@ -111,17 +117,39 @@ const CreatePorePressureForm: FC<IPorePressureForm> = ({ type, id, porePressures
                   placeholder="Введите EMW"
                 />
                 {errors.pore_pressures?.[index]?.emw && <p>{errors.pore_pressures[index]?.emw?.message}</p>}
+              </div> */}
+
+            <div className="border p-4 mb-4">
+              <div className="input-wrapper">
+                <label htmlFor={`pore_pressures.tvd`}>Истинная вертикальная глубина</label>
+                <input
+                  {...register(`tvd`, { setValueAs: value => Number(value) })}
+                  type="number"
+                  placeholder="Введите истинную вертикальную глубину"
+                />
+                {errors.tvd && <p>{errors.tvd?.message}</p>}
               </div>
 
-              <button type="button" onClick={() => remove(index)}>
-                Удалить запись
-              </button>
-            </div>
-          ))}
+              <div className="input-wrapper">
+                <label htmlFor={`porePressures.pressure`}>Давление</label>
+                <input
+                  {...register(`pressure`, { setValueAs: value => Number(value) })}
+                  type="number"
+                  placeholder="Введите давление"
+                />
+                {errors.pressure && <p>{errors.pressure?.message}</p>}
+              </div>
 
-          <button type="button" onClick={() => append({ tvd: 1, pressure: 1, emw: 1 })}>
-            Добавить новую запись
-          </button>
+              <div className="input-wrapper">
+                <label htmlFor={`pore_pressures.emw`}>Эквивалентная плотность бурового раствора</label>
+                <input
+                  {...register(`emw`, { setValueAs: value => Number(value) })}
+                  type="number"
+                  placeholder="Введите EMW"
+                />
+                {errors.emw && <p>{errors.emw?.message}</p>}
+              </div>
+            </div>
 
           <div className="flex flex-col items-center justify-between mt-3 mx-6">
             <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg'>

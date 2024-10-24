@@ -51,18 +51,18 @@ const Home: FC = () => {
   } else if (isDesignFormOpened) {
     content = <CreateDesign type={"post"} prevName={""} prevActualDate={new Date()} prevStage={""} prevVersion={""} wellBoreId=''/>
   } else if (isTrajectoryFormOpened) {
-    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} designId=''/>
+    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} designId={""} prevHeader={[]} prevUnit={[]}/>
   } else if (isCaseFormOpened) {
-    content = <CreateCase type={"post"} prevName={""} prevDescription={""} prevDrillDepth={0} prevPipeSize={0} trajectoryId={""}/>
+    content = <CreateCase prevIsComplete={false} type={"post"} prevName={""} prevDescription={""} prevDrillDepth={0} prevPipeSize={0} trajectoryId={""}/>
   }
   
   else {
     content = <div className='w-screen flex flex-col justify-start items-center'>
       {initialCompanies.length > 0 ? 
-      <div>
+      <div className='flex font-medium font-montserrat justify-center'>
         Тут ваши компании
         <ul>
-          {initialCompanies.map((company, i) => <li key={i}>
+          {initialCompanies.map((company, i) => <li className='' key={i}>
             {company.name}
           </li>)}
         </ul>

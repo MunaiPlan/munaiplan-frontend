@@ -28,7 +28,7 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
   useEffect(() => {
     const fetchHookLoad = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
+        const response = await instance.post(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
         setHookLoadData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -48,7 +48,7 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
   }
 
   if (!hookLoadData) {
-    return <div>Нет информации про вес на крюке</div>;
+    return <div className='flex justify-center bg-red-400'>Нет информации про вес на крюке</div>;
   }
 
   const chartData = hookLoadData.Depth.map((depth, index) => ({
@@ -64,11 +64,8 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
 
   return (
     <div className="h-screen w-full flex">
-      <div className="w-1/5">
-        <SideBar />
-      </div>
-      <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4">Effective Tension Graph</h1>
+      <div className="flex flex-col h-screen w-4/5 bg-red-400 justify-center items-center gap-y-4">
+        <h1 className="text-xl font-bold mb-4 items-center">Effective Tension Graph</h1>
         <div className="w-full h-96">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
@@ -102,7 +99,7 @@ const HookLoadGraph: React.FC<IForm> = ({caseId}) => {
               setIsLoading(true);
               const fetchHookLoad = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
+                  const response = await instance.post(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
                   setHookLoadData(response.data);
                   setIsLoading(false);
                 } catch (error) {

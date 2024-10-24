@@ -80,14 +80,14 @@ const CreateCase: FC<ICaseForm> = ({type, id, prevIsComplete, prevName, prevDesc
   }
 
   return (
-    <div className='w-screen flex flex-col justify-center items-center'>  
+    <div className='w-screen flex flex-col justify-center items-center '>  
       <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
           <h2 className="text-xl font-medium mb-4 justify-start flex font-roboto">{type == "post" ? "Создать новый кейс" : "Обновить этот кейс"}</h2>
           <Form 
             onSubmit={handleSubmit} 
           >
 
-              {/* Name of сфыу */}
+              {/* Name of case */}
               <div className="input-wrapper">
                 <label htmlFor="nameCase">
                   Имя кейса

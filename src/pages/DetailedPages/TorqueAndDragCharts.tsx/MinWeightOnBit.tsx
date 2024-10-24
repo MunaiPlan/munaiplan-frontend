@@ -25,7 +25,7 @@ const MinWeightOnBitGraph: React.FC<IForm> = ({caseId}) => {
   useEffect(() => {
     const fetchMinWeightOnBit = async () => {
       try {
-        const response = await instance.get(`/api/v1/torque-and-drag/min-weight/?caseId=${caseId}`);
+        const response = await instance.post(`/api/v1/torque-and-drag/min-weight/?caseId=${caseId}`);
         setMinWeightOnBitData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -113,7 +113,7 @@ const MinWeightOnBitGraph: React.FC<IForm> = ({caseId}) => {
               setIsLoading(true);
               const fetchWeightOnBit = async () => {
                 try {
-                  const response = await instance.get(`/api/v1/torque-and-drag/min-weight/?caseId=${caseId}`);
+                  const response = await instance.post(`/api/v1/torque-and-drag/min-weight/?caseId=${caseId}`);
                   setMinWeightOnBitData(response.data);
                   setIsLoading(false);
                 } catch (error) {

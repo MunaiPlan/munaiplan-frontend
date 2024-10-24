@@ -1,21 +1,21 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { ISection } from '../../../types/types';
+import { ISection, IString } from '../../../types/types';
 import { instance } from '../../../api/axios.api';
 
 interface IStringForm {
   type: "put" | "post";
   id?: string;
   caseId: string;
-  prevName: string;
-  prevDepth: number;
-  prevSections: ISection[];
-  setIsEdit?: (edit: boolean) => void;
+  prevName?: string;
+  prevDepth?: number;
+  prevSections?: ISection[];
   onSuccess?: () => void;
+  setIsEdit?: (edit: boolean) => void;
 }
 
 // Define the Zod schema for each section
@@ -48,7 +48,7 @@ const stringSchema = z.object({
 type FormData = z.infer<typeof stringSchema>; // TypeScript type inference from Zod schema
 
 
-const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSections, setIsEdit, onSuccess, caseId }) => {
+const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSections, onSuccess, caseId, setIsEdit }) => {
   const navigate = useNavigate();
 
   // Initialize the form using useForm with the zodResolver and default values
@@ -60,6 +60,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
       sections: prevSections || []
     }
   });
+
 
   // useFieldArray to dynamically manage the sections
   const { fields, append, remove } = useFieldArray({
@@ -89,8 +90,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
     }
   };
 
-  return (
-    <div className='w-screen flex flex-col justify-center items-center'>
+  return (<div className='w-screen flex flex-col justify-center items-center'>
       <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
         <h2 className="text-xl font-medium mb-4">
           {type === "post" ? "Создать новую колонну" : "Обновить эту колонну"}
@@ -116,6 +116,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                 setValueAs: (value) => Number(value),
               })}
               type="number"
+              step="any"
               placeholder="Введите глубину колонны"
             />
             {errors.depth && <p>{errors.depth.message}</p>}
@@ -161,6 +162,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                     setValueAs: (value) => Number(value),
                   })}
                   type="number"
+                  step="any"
                   placeholder="Введите внешний диаметр секции"
                 />                
               </div>
@@ -172,6 +174,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                     setValueAs: (value) => Number(value),
                   })}
                   type="number"
+                  step="any"
                   placeholder="Введите внутрений диаметр секции"
                 />                
               </div>
@@ -183,6 +186,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                     setValueAs: (value) => Number(value),
                   })}
                   type="number"
+                  step="any"
                   placeholder="Введите внутрений диаметр секции"
                 />                
               </div>
@@ -194,6 +198,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                           setValueAs: (value) => Number(value),
                         })}
                         type="number"
+                        step="any"
                         placeholder="Введите среднюю длину соединения секции"
                     />
                     {errors.sections?.[index]?.avg_joint_length && (
@@ -208,6 +213,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите длину стабилизатора секции"
                 />
                 {errors.sections?.[index]?.stabilizer_length && (
@@ -222,6 +228,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите наружный диаметр стабилизатора секции"
                 />
                 {errors.sections?.[index]?.stabilizer_od && (
@@ -236,6 +243,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите внутренний диаметр стабилизатора секции"
                 />
                 {errors.sections?.[index]?.stabilizer_id && (
@@ -250,6 +258,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите вес секции"
                 />
                 {errors.sections?.[index]?.weight && (
@@ -288,6 +297,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите класс секции"
                 />
                 {errors.sections?.[index]?.class && (
@@ -302,6 +312,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите коэффициент трения секции"
                 />
                 {errors.sections?.[index]?.friction_coefficient && (
@@ -316,6 +327,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       setValueAs: (value) => Number(value),
                     })}
                     type="number"
+                    step="any"
                     placeholder="Введите минимальную прочность на растяжение секции"
                 />
                 {errors.sections?.[index]?.min_yield_strength && (
@@ -354,13 +366,12 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       {type === 'put' ? 'Обновить' : 'Создать'}
                   </button>
                   { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
-                      if(setIsEdit) {setIsEdit(false);}
+                      if(setIsEdit) {setIsEdit(true);}
                   }}>Закрыть</button>)}
                 </div>
         </form>
       </div>
     </div>
-  );
-};
+  )};
 
 export default CreateString;

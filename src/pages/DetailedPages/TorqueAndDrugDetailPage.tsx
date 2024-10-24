@@ -97,7 +97,7 @@ const TorqueAndDragDetailPage: FC<IT> = ({caseId}) => {
           Эффективное натяжение
         </p>
       </div>
-      <div className="flex mt-10">{content}</div>
+      <div className="flex mt-10 w-full">{content}</div>
     </div>
   );
 };

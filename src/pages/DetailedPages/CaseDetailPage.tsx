@@ -13,6 +13,7 @@ import CreateEquipment from '../../components/forms/CaseChildForms/CreateEquipme
 import CreateRig, { IRig } from '../../components/forms/CaseChildForms/CreateRig';
 import HydraulicsDetailPage from './HydraulicsDetailPage';
 import TorqueAndDragDetailPage from './TorqueAndDrugDetailPage';
+import StringDetail from './CaseComponents/StringDetails';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -169,7 +170,7 @@ const CaseDetail: React.FC = () => {
   } else if (isSelectedHole) {
     content = <CreateHole caseId={casE!.id} type={"post"} />
   } else if (isSelectedString) {
-    content = <CreateString caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
+    content = <StringDetail caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
   } else if (isSelectedEquip) {
     content = <CreateEquipment caseId={casE!.id} type={"post"} porePressures={[]} fractureGradients={[]} />
   } else if (isRigSelected) {
@@ -227,7 +228,7 @@ const CaseDetail: React.FC = () => {
       <div className='w-1/5'>
         <SideBar />
       </div>
-      <div className='flex flex-col h-screen w-4/5 gap-y-4'>
+      <div className='flex flex-col items-stretch h-screen w-4/5 gap-y-4'>
         {!isEdit ? (
           <>
             <div className='w-full p-4 border-b-2 flex items-center pt-8'>
@@ -299,26 +300,44 @@ const CaseDetail: React.FC = () => {
                   onClick={toggleRig}
                   >Буровые</p>
                 </div>
-                <div className='flex mt-10'>
+                <div className='flex justify-center mt-10'>
                   {content}
                 </div>
+                {isDescriptionSelected && (<div className='flex w-full items-center justify-center mt-10 gap-x-4'>
+                  <button
+                    className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
+                    onClick={() => {
+                    setIsEdit(true);
+                  }}
+                  >
+                    Изменить
+                  </button>
+                  <button
+                    className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
+                    onClick={handleDelete}
+                  >
+                    Удалить
+                  </button>
+                </div>)}
               </div> : (isHydraulicsSelected ? (<HydraulicsDetailPage caseId={casE.id}/>) : (<TorqueAndDragDetailPage caseId={casE.id}/>))}
           </>
         ) : (
           casE && (
-            <CreateCase
-              prevName={casE.case_name}
-              prevDescription={casE.case_description}
-              prevDrillDepth={casE.drill_depth}
-              prevPipeSize={casE.pipe_size}
-              prevIsComplete={casE.is_complete}
+            <div className='w-full h-screen flex justify-center items-center bg-gray-100'>
+              <CreateCase
+                prevName={casE.case_name}
+                prevDescription={casE.case_description}
+                prevDrillDepth={casE.drill_depth}
+                prevPipeSize={casE.pipe_size}
+                prevIsComplete={casE.is_complete}
 
-              type='put'
-              id={id}
-              setIsEdit={setIsEdit}
-              onSuccess={handleUpdateSuccess}
-              trajectoryId={casE.trajectoryId}
-            />
+                type='put'
+                id={id}
+                setIsEdit={setIsEdit}
+                onSuccess={handleUpdateSuccess}
+                trajectoryId={casE.trajectoryId}
+              />
+            </div>
           )
         )}
       </div>
