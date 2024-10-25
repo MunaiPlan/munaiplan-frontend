@@ -18,8 +18,9 @@ interface IStringForm {
   onSuccess?: () => void;
 }
 
-const StringDetail: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSections, onSuccess, caseId }) => {
+const StringDetail: FC<IStringForm> = ({ caseId }) => {
   const navigate = useNavigate();
+  const [isPost, setIsPost] = useState(true);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [stringData, setStringData] = useState<IString>()
   const [isAlready, setIsAlready] = useState<boolean>(false)
@@ -28,17 +29,18 @@ const StringDetail: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
       try {
         const response = await instance.get(`/api/v1/strings/?caseId=${caseId}`);
         console.log(response.data)
-        if (response.data) {
+        if (response.data != null) {
           setStringData(response.data[0]);
           console.log(response.data[0])
-          setIsAlready(true);
+          setIsEdit(false);
+          setIsPost(false);
         } else {
           console.log("NO")
-          setIsAlready(false);
+          setIsPost(true);
         }
       
       } catch (error) {
-        setIsAlready(false);
+        setIsEdit(true);
       }
     };
     fetchString();
@@ -46,7 +48,7 @@ const StringDetail: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
 
   const handleDelete = async () => {
     try {
-      await instance.delete(`/api/v1/strings/${stringData}`);
+      await instance.delete(`/api/v1/strings/${stringData?.id}`);
       toast.success('Колонна была удалена');
       navigate('/');
     } catch (error) {
@@ -58,7 +60,7 @@ const StringDetail: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
     setIsAlready(false);
   };
 
-  return !isEdit ? (
+  return !isEdit && !isPost ? (
     <div>
       <div className='flex flex-col justify-center items-center w-full'>
         <div className='items-starts rounded-lg px-4 py-2'>
@@ -109,8 +111,10 @@ const StringDetail: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
               </button>
             </div>
     </div>
-  ) : (
-    <CreateString caseId={caseId} type={"put"} prevName={stringData?.name} prevDepth={stringData?.depth} prevSections={stringData?.sections} id={stringData?.id}/>
+  ) : (isEdit ?
+    <CreateString caseId={caseId} type={"put"} prevName={stringData?.name} prevDepth={stringData?.depth} prevSections={stringData?.sections} id={stringData?.id}/> : (
+      <CreateString caseId={caseId} type={"post"} prevDepth={0} prevName={""} prevSections={[]} />
+    )
   );
 }
 export default StringDetail;

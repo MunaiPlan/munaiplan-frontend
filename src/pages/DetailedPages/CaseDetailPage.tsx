@@ -14,6 +14,7 @@ import CreateRig, { IRig } from '../../components/forms/CaseChildForms/CreateRig
 import HydraulicsDetailPage from './HydraulicsDetailPage';
 import TorqueAndDragDetailPage from './TorqueAndDrugDetailPage';
 import StringDetail from './CaseComponents/StringDetails';
+import HoleDetail from './CaseComponents/HoleDetails';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -168,7 +169,7 @@ const CaseDetail: React.FC = () => {
   if (isSelectedFluid) {
     content = <CreateFluid prev_base_fluid_id={""} prev_fluid_base_type_id={""} prevName={""} prevDescription={""} prevDensity={0} caseId={casE!.id} type={"post"}/>
   } else if (isSelectedHole) {
-    content = <CreateHole caseId={casE!.id} type={"post"} />
+    content = <HoleDetail caseId={casE!.id} type={"post"} />
   } else if (isSelectedString) {
     content = <StringDetail caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
   } else if (isSelectedEquip) {

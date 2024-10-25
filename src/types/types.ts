@@ -181,6 +181,7 @@ export interface IString {
 }
 
 
+
 export interface IHole {
     id: string
     caseId: string
@@ -223,7 +224,30 @@ export interface IHole {
     slide_drilling_open_hole: number
     back_reaming_open_hole: number
     rotating_off_bottom_open_hole: number
+    caisings: ICaising[]
 }
+
+export interface ICaising {
+    md_top: number;
+    md_base: number;
+    length: number;
+    shoe_md?: number;
+    od: number;
+    vd: number;
+    drift_id: number;
+    effective_hole_diameter: number;
+    weight: number;
+    grade: string;
+    min_yield_strength: number;
+    burst_rating: number;
+    collapse_rating: number;
+    friction_factor_caising: number;
+    linear_capacity_caising: number;
+    description_caising?: string;
+    manufacturer_caising?: string;
+    model_caising?: string;
+  }
+  
 
 export interface ITrajectory{
     id: string

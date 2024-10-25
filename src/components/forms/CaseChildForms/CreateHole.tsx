@@ -14,7 +14,7 @@ interface IHoleForm {
   setIsEdit?: (edit: boolean) => void;
   onSuccess?: () => void;
 }
-
+ 
 interface HoleData {
   open_hole_md_top: number;  // YES
   open_hole_md_base: number; // YES
@@ -42,7 +42,7 @@ interface HoleData {
   caisings: CaisingData[];
 }
 
-interface CaisingData {
+export interface CaisingData {
   md_top: number;
   md_base: number;
   length: number;
