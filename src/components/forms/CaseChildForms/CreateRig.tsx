@@ -89,6 +89,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
           <div className="input-wrapper">
             <label htmlFor={`block_rating`}>Рейтинг блока</label>
             <input
+                step="any"
                 {...register(`block_rating`, {
                 setValueAs: (value) => Number(value),
               })}
@@ -106,6 +107,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                   {...register(`torque_rating`, {
                     setValueAs: (value) => Number(value),
                   })}
+                  step="any"
                   type="number"
                   placeholder="Введите предельно допустимый крутящий момент"
                 />                
@@ -120,6 +122,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                   {...register(`rated_working_pressure`, {
                     setValueAs: (value) => Number(value),
                   })}
+                  step="any"
                   type="number"
                   placeholder="Введите номинальное рабочее давление"
                 />              
@@ -134,6 +137,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                   {...register(`bop_pressure_rating`, {
                     setValueAs: (value) => Number(value),
                   })}
+                  step="any"
                   type="number"
                   placeholder="Введите давление номинальной пропускной способности превентера"
                 />        
@@ -148,6 +152,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                   {...register(`surface_pressure_loss`, {
                     setValueAs: (value) => Number(value),
                   })}
+                  step="any"
                   type="number"
                   placeholder="Введите потерю давления на поверхности"
                 />                
@@ -162,6 +167,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                   {...register(`standpipe_length`, {
                     setValueAs: (value) => Number(value),
                   })}
+                  step="any"
                   type="number"
                   placeholder="Введите длину стояка"
                 />    
@@ -176,6 +182,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                         {...register(`standpipe_internal_diameter`, {
                           setValueAs: (value) => Number(value),
                         })}
+                        step="any"
                         type="number"
                         placeholder="Введите внутренний диаметр стояка"
                     />
@@ -190,6 +197,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`hose_length`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите длину шланги"
                 />
@@ -204,6 +212,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`hose_internal_diameter`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введитe внутренний диаметр шланги"
                 />
@@ -218,6 +227,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`swivel_length`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите длину вертлюги"
                 />
@@ -232,6 +242,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`swivel_internal_diameter`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите внутренний диаметр вертлюги"
                 />
@@ -246,6 +257,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`kelly_length`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="text"
                     placeholder="Введите длину ведущей трубы"
                 />
@@ -260,6 +272,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`kelly_internal_diameter`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="text"
                     placeholder="Введите внутренний диаметр ведущей трубы"
                 />
@@ -274,6 +287,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`pump_discharge_line_length`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите длину напорной линии насоса"
                 />
@@ -288,6 +302,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`pump_discharge_line_internal_diameter`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите внутренний диаметр напорной линии насоса"
                 />
@@ -302,6 +317,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`top_drive_stackup_length`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите длину компоновки верхнего привода"
                 />
@@ -316,6 +332,7 @@ const CreateRig: FC<IRigForm> = ({ type, rig, setIsEdit, onSuccess, caseId }) =>
                     {...register(`top_drive_stackup_internal_diameter`, {
                       setValueAs: (value) => Number(value),
                     })}
+                    step="any"
                     type="number"
                     placeholder="Введите внутренний диаметр компоновки верхнего привода"
                 />

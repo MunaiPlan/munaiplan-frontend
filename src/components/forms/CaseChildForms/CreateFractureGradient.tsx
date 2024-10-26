@@ -5,27 +5,20 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { instance } from '../../../api/axios.api';
+import { IFractureGradient } from '../../../pages/DetailedPages/CaseComponents/FractureGradientsDetail';
 
 export interface IFractureGradientForm {
   type: "put" | "post";
   caseId: string;
   fractureGradients?: IFractureGradient
   setIsEdit?: (edit: boolean) => void;
-  onSuccess?: () => void;
-}
-
-export interface IFractureGradient {
-    id?: string;
-    prevTempAtSurface: number;
-    prevTempAtWellTVD: number;
-    prevTempGradient: number;
-    prevWellTVD: number;
+  onSuccess?: (updatedFrac?: IFractureGradient) => void;
 }
 
 const fractureGradientSchema = z.object({
     temperature_at_surface: z.number().positive("Температура на поверхности обязателна"),
     temperature_at_well_tvd: z.number().positive("Температура на истинной вертикальной глубине скважины обязательна"),
-    temperature_at_well_gradient: z.number().positive("Градиент температуры обязателен"),
+    temperature_gradient: z.number().positive("Градиент температуры обязателен"),
     well_tvd: z.number().positive("Истинная вертикальная глубина скважины обязательна"),
   })
 
@@ -38,10 +31,10 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
   const { control, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
     resolver: zodResolver(fractureGradientSchema), // Use the correct schema for arrays
     defaultValues: {
-      temperature_at_surface: fractureGradients?.prevTempAtSurface,
-      temperature_at_well_tvd: fractureGradients?.prevTempAtWellTVD,
-      temperature_at_well_gradient: fractureGradients?.prevTempGradient,
-      well_tvd: fractureGradients?.prevWellTVD
+      temperature_at_surface: fractureGradients?.temperature_at_surface ?? 1,
+      temperature_at_well_tvd: fractureGradients?.temperature_at_well_tvd ?? 1,
+      temperature_gradient: fractureGradients?.temperature_gradient ?? 1,
+      well_tvd: fractureGradients?.well_tvd ?? 1
     }
   });
 
@@ -49,7 +42,10 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
   const onSubmit = async (data: FormData) => {
 
     const newFractureGradientForm = {
-      ...data
+      temperature_at_surface: data.temperature_at_surface ?? 1,
+      temperature_at_well_tvd: data.temperature_at_well_tvd ?? 1,
+      temperature_gradient: data.temperature_gradient ?? 1,
+      well_tvd: data.well_tvd ?? 1
     };
     try {
       if (type === 'post') {
@@ -62,17 +58,18 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
         await instance.put(`/api/v1/fracture-gradients/${fractureGradients?.id}`, newFractureGradientForm);
         toast.success('Градиент разрыва пласта была обновлена');
         if (onSuccess) {
-          onSuccess();
+          onSuccess(newFractureGradientForm);
         }
       }
       navigate(`/cases/${caseId}`);
     } catch (error) {
+      console.log(error)
       toast.error('Ошибка при обработке градиента разрыва пласта');
     }
   };
 
   return (
-    <div className='w-screen flex flex-col justify-center items-center'>
+    <div className='w-screen'>
       <div className="w-3/4 max-w-md justify-center items-center rounded-lg p-5 m-5 border-2 font-roboto">
         <h2 className="text-xl font-medium mb-4">
           {type === "post" ? "Создать новый градиент разрыва пласта" : "Обновить этот градиент разрыва пласта"}
@@ -83,7 +80,7 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
               {/* Temperature at surface */}
               <div className="input-wrapper">
                 <label htmlFor={`temperature_at_surface`}>Температура на поверхности</label>
-                <input {...register(`temperature_at_surface`, {
+                <input step="any" {...register(`temperature_at_surface`, {
                   setValueAs: (value) => Number(value),
                 })} type="number" placeholder="Введите температуру на поверхности" />
                 {errors.temperature_at_surface && <p>{errors.temperature_at_surface?.message}</p>}
@@ -92,7 +89,7 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
               {/* Temperature at well tvd */}
               <div className="input-wrapper">
                 <label htmlFor={`temperature_at_well_tvd`}>Температура на истинной вертикальной глубине скважины</label>
-                <input {...register(`temperature_at_well_tvd`, {
+                <input step="any" {...register(`temperature_at_well_tvd`, {
                   setValueAs: (value) => Number(value),
                   })} type="number" placeholder="Введите температуру на истинной вертикальной глубине скважины" />
                 {errors.temperature_at_well_tvd && <p>{errors.temperature_at_well_tvd?.message}</p>}
@@ -101,16 +98,16 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureG
               { /* Temperature at well gradient */ }
               <div className="input-wrapper">
                 <label htmlFor={`temperature_at_well_gradient`}>Градиент температуры</label>
-                <input {...register(`temperature_at_well_gradient`, {
+                <input step="any" {...register(`temperature_gradient`, {
                   setValueAs: (value) => Number(value),
                 })} type="number" placeholder="Введите градиент температуры" />
-                {errors.temperature_at_well_gradient && <p>{errors.temperature_at_well_gradient?.message}</p>}
+                {errors.temperature_gradient && <p>{errors.temperature_gradient?.message}</p>}
               </div>
 
               { /* Well tvd */ }
               <div className="input-wrapper">
                 <label htmlFor={`well_tvd`}>Истинная вертикальная глубина скважины</label>
-                <input {...register(`well_tvd`, {
+                <input step="any" {...register(`well_tvd`, {
                   setValueAs: (value) => Number(value),
                 })} type="number" placeholder="Введите истинную вертикальную глубину скважины" />
                 {errors.well_tvd && <p>{errors.well_tvd?.message}</p>}

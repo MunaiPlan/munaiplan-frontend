@@ -1,20 +1,17 @@
 import { FC, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { IFluid } from '../../../types/types';
 import { instance } from '../../../api/axios.api';
-import CreateFluid from '../../../components/forms/CaseChildForms/CreateFluid';
-import CreatePorePressureForm, { IPorePressures } from '../../../components/forms/CaseChildForms/CreatePorePressure';
 import CreateFractureGradientForm from '../../../components/forms/CaseChildForms/CreateFractureGradient';
 
 interface IFractureGradientDetailForm {
   caseId: string;
   setIsEdit?: (edit: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess?: (updatedFrac?: IFractureGradient) => void;
 }
 
-interface IFractureGradient {
-    id: string;
+export interface IFractureGradient {
+    id?: string;
     temperature_at_surface: number;
     temperature_at_well_tvd: number;
     temperature_gradient: number;
@@ -27,7 +24,10 @@ const FractureGradientsDetail: FC<IFractureGradientDetailForm> = ({ caseId }) =>
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [fractureGradientData, setFractureGradientData] = useState<IFractureGradient>()
 
-  const onSuccess = () => {
+  const onSuccess = (updatedFrac?: IFractureGradient) => {
+    if (updatedFrac) {
+      setFractureGradientData(updatedFrac);
+    }
     setIsEdit(false);
     setIsPost(false);
   };
@@ -67,8 +67,8 @@ const FractureGradientsDetail: FC<IFractureGradientDetailForm> = ({ caseId }) =>
 
   return !isEdit && !isPost ? (
     <div>
-      <div className='flex flex-col justify-center items-center w-full'>
-        <div className='items-starts rounded-lg px-4 py-2'>
+      <div className='w-full'>
+        <div className='rounded-lg px-4 py-2'>
             <div className="mb-4">
                 <p>Температура на поверхности: <label className="font-bold">{fractureGradientData?.temperature_at_surface}</label></p>
                 <p>Температура на истинной вертикальной глубине скважины: <label className="font-bold">{fractureGradientData?.temperature_at_well_tvd}</label></p>
@@ -82,7 +82,6 @@ const FractureGradientsDetail: FC<IFractureGradientDetailForm> = ({ caseId }) =>
             className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
             onClick={() => {
                 setIsEdit(true);
-                toast.success(fractureGradientData?.id)
         }}
         >
             Изменить
@@ -98,10 +97,10 @@ const FractureGradientsDetail: FC<IFractureGradientDetailForm> = ({ caseId }) =>
   ) : (isEdit ?
     (<CreateFractureGradientForm caseId={caseId} type={"put"} fractureGradients={{
         id: fractureGradientData?.id ?? "",
-        prevTempAtSurface: fractureGradientData?.temperature_at_surface ?? 0,
-        prevTempAtWellTVD: fractureGradientData?.temperature_at_well_tvd ?? 0,
-        prevTempGradient: fractureGradientData?.temperature_gradient ?? 0,
-        prevWellTVD: fractureGradientData?.well_tvd ?? 0,
+        temperature_at_surface: fractureGradientData?.temperature_at_surface ?? 0,
+        temperature_at_well_tvd: fractureGradientData?.temperature_at_well_tvd ?? 0,
+        temperature_gradient: fractureGradientData?.temperature_gradient ?? 0,
+        well_tvd: fractureGradientData?.well_tvd ?? 0,
       }} onSuccess={onSuccess}/>) : 
       (isPost && <CreateFractureGradientForm caseId={caseId} type={"post"} onSuccess={onSuccess} />)
   );

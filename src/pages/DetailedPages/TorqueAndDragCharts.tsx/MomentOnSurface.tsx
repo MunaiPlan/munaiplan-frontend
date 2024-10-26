@@ -23,13 +23,8 @@ const SurfaceTorqueGraph: React.FC<IForm> = ({ caseId }) => {
   useEffect(() => {
     const fetchSurfaceTorque = async () => {
       try {
-<<<<<<< HEAD
-        const response = await instance.post(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
-        setMomentOnSurfaceData(response.data);
-=======
         const response = await instance.post(`/api/v1/torque-and-drag/surface-torque/?caseId=${caseId}`);
         setSurfaceTorqueData(response.data);
->>>>>>> refs/remotes/origin/main
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -119,13 +114,8 @@ const SurfaceTorqueGraph: React.FC<IForm> = ({ caseId }) => {
               setIsLoading(true);
               const fetchSurfaceTorque = async () => {
                 try {
-<<<<<<< HEAD
-                  const response = await instance.post(`/api/v1/torque-and-drag/moment-on-surface/?caseId=${caseId}`);
-                  setMomentOnSurfaceData(response.data);
-=======
                   const response = await instance.post(`/api/v1/torque-and-drag/surface-torque/?caseId=${caseId}`);
                   setSurfaceTorqueData(response.data);
->>>>>>> refs/remotes/origin/main
                   setIsLoading(false);
                 } catch (error) {
                   console.error('Error reloading data:', error);

@@ -4,18 +4,6 @@ import { toast } from 'react-toastify';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface EffectiveTensionData {
-<<<<<<< HEAD
-  "Глубина": number[];
-  "Грузоподъёмность вышки": number[];
-  "Бурение ротором": number[];
-  "Подъём": number[];
-  "Спуск": number[];
-  "Бурение ГЗД": number[];
-  "Предел натяжения": number[];
-  "Синусоидальный изгиб(все операции)": number[];
-  "Спиральный изгиб(без вращения)": number[];
-  "Спиральный изгиб(с вращением)": number[];
-=======
   Глубина: number[];
   'Грузоподъёмность вышки': number[];
   'Бурение ротором': number[];
@@ -26,7 +14,6 @@ interface EffectiveTensionData {
   'Бурение ГЗД': number[];
   'Спиральный изгиб(с вращением)': number[];
   'Предел натяжения': number[];
->>>>>>> refs/remotes/origin/main
 }
 
 interface IForm {
@@ -36,28 +23,14 @@ interface IForm {
 const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
   const [effectiveTensionData, setEffectiveTensionData] = useState<EffectiveTensionData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-<<<<<<< HEAD
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-=======
->>>>>>> refs/remotes/origin/main
 
   useEffect(() => {
     const fetchEffectiveTension = async () => {
       try {
         const response = await instance.post(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-<<<<<<< HEAD
-        if (response.data && response.data.Глубина) {
-          setEffectiveTensionData(response.data);
-        } else {
-          setError('Invalid data format from API');
-        }
-=======
         setEffectiveTensionData(response.data);
->>>>>>> refs/remotes/origin/main
         setIsLoading(false);
       } catch (error) {
-        setError('Failed to load effective tension data');
         setIsLoading(false);
       }
     };
@@ -71,22 +44,11 @@ const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
     return <div>Loading...</div>;
   }
 
-<<<<<<< HEAD
-  if (error) {
-    return <div>Error: {error}</div>;  
-  }
-
-  if (!effectiveTensionData || !effectiveTensionData.Глубина) {
-    return <div>No effective tension data available</div>;
-  }
-
-=======
   if (!effectiveTensionData) {
     return <div>No effective tension data available</div>;
   }
 
   // Create chart data by mapping depth and other fields
->>>>>>> refs/remotes/origin/main
   const chartData = effectiveTensionData.Глубина.map((depth, index) => ({
     depth: depth,
     towerLoadCapacity: effectiveTensionData['Грузоподъёмность вышки'][index],
@@ -95,23 +57,6 @@ const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
     runIn: effectiveTensionData['Спуск'][index],
     drillingGZD: effectiveTensionData['Бурение ГЗД'][index],
     tensionLimit: effectiveTensionData['Предел натяжения'][index],
-<<<<<<< HEAD
-    helicalBucklingWithRotation: effectiveTensionData["Спиральный изгиб(с вращением)"][index],
-    helicalBucklingWithoutRotation: effectiveTensionData["Спиральный изгиб(без вращения)"][index],
-    sinusoidalBuckling: effectiveTensionData["Синусоидальный изгиб(все операции)"][index]
-  }));
-
-  return (
-    <div className="h-screen w-full flex">
-      <div className="flex flex-col h-screen ml-auto mr-auto gap-y-10 items-center">
-        <h1 className="text-xl font-bold mb-4">Effective Tension Graph</h1>
-        <div className="w-full h-96">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} width={1100} height={1100}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-              <XAxis orientation='top' dataKey="depth" label={{ value: 'Эффективное натяжение (tonne)', position: 'top', offset: -5 }} />
-              <YAxis reversed label={{ value: 'Глубина по стволу (m)', angle: -90, position: 'left', offset: 15}} />              
-=======
   }));
 
   return (
@@ -130,7 +75,6 @@ const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
               <XAxis
                 label={{ value: 'Эффективное натяжение (tonne)', position: 'insideBottomRight', offset: -5 }}
               />
->>>>>>> refs/remotes/origin/main
               <Tooltip />
               <Line type="monotone" dataKey="towerLoadCapacity" stroke="#6A5ACD" strokeWidth={2} name="Грузоподъёмность вышки" />
               <Line type="monotone" dataKey="rotaryDrilling" stroke="#3CB371" strokeWidth={2} name="Бурение ротором" />
@@ -152,20 +96,10 @@ const EffectiveTensionGraph: React.FC<IForm> = ({ caseId }) => {
               const fetchEffectiveTension = async () => {
                 try {
                   const response = await instance.post(`/api/v1/torque-and-drag/effective-tension/?caseId=${caseId}`);
-<<<<<<< HEAD
-                  if (response.data && response.data.depth) {
-                    setEffectiveTensionData(response.data);
-                  } else {
-                    setError('Invalid data format from API');
-                  }
-                  setIsLoading(false);
-                } catch (error) {
-=======
                   setEffectiveTensionData(response.data);
                   setIsLoading(false);
                 } catch (error) {
                   console.error('Error reloading data:', error);
->>>>>>> refs/remotes/origin/main
                   toast.error('Failed to reload effective tension data');
                   setIsLoading(false);
                 }

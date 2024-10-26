@@ -8,7 +8,7 @@ import CreateFluid from '../../../components/forms/CaseChildForms/CreateFluid';
 interface IFluidForm {
   caseId: string;
   setIsEdit?: (edit: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess?: (updatedFluid?: IFluid) => void;
 }
 
 const FluidDetail: FC<IFluidForm> = ({ caseId }) => {
@@ -17,7 +17,10 @@ const FluidDetail: FC<IFluidForm> = ({ caseId }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [fluidData, setFluidData] = useState<IFluid>()
 
-  const onSuccess = () => {
+  const onSuccess = (updatedFluid?: IFluid) => {
+    if (updatedFluid) {
+      setFluidData(updatedFluid);
+    }
     setIsEdit(false);
     setIsPost(false);
   };
@@ -54,10 +57,6 @@ const FluidDetail: FC<IFluidForm> = ({ caseId }) => {
     }
   };
 
-  const handleUpdateSuccess = () => {
-    setIsEdit(false);
-    setIsPost(false);
-  };
 
   return !isEdit && !isPost ? (
     <div>
@@ -88,7 +87,7 @@ const FluidDetail: FC<IFluidForm> = ({ caseId }) => {
     </div>
   ) : (isEdit ?
     (<CreateFluid caseId={caseId} type={"put"} prevDensity={fluidData?.density} prevDescription={fluidData?.description} prevName={fluidData?.name} prev_base_fluid_id={fluidData?.base_fluid.id} prev_fluid_base_type_id={fluidData?.fluid_base_type.id} id={fluidData?.id} onSuccess={onSuccess}/>) : 
-      (isPost && <CreateFluid caseId={caseId} type={"post"} prevDensity={0} prevName={""} prevDescription={""} prev_base_fluid_id={""} prev_fluid_base_type_id={""} setIsEdit={setIsEdit} onSuccess={onSuccess} />)
+      (isPost && <CreateFluid caseId={caseId} type={"post"} prevDensity={0} prevName={""} prevDescription={""} prev_base_fluid_id={""} prev_fluid_base_type_id={""} onSuccess={onSuccess} />)
   );
 }
 export default FluidDetail;

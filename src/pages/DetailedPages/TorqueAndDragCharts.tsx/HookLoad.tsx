@@ -25,13 +25,8 @@ const WeightOnBitGraph: React.FC<IForm> = ({ caseId }) => {
   useEffect(() => {
     const fetchWeightOnBit = async () => {
       try {
-<<<<<<< HEAD
-        const response = await instance.post(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
-        setHookLoadData(response.data);
-=======
         const response = await instance.post(`/api/v1/torque-and-drag/weight-on-bit/?caseId=${caseId}`);
         setWeightOnBitData(response.data);
->>>>>>> refs/remotes/origin/main
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -49,13 +44,8 @@ const WeightOnBitGraph: React.FC<IForm> = ({ caseId }) => {
     return <div>Loading...</div>;
   }
 
-<<<<<<< HEAD
-  if (!hookLoadData) {
-    return <div className='flex justify-center bg-red-400'>Нет информации про вес на крюке</div>;
-=======
   if (!weightOnBitData) {
     return <div>No weight on bit data available</div>;
->>>>>>> refs/remotes/origin/main
   }
 
   // Create chart data by mapping depth and other fields
@@ -71,16 +61,9 @@ const WeightOnBitGraph: React.FC<IForm> = ({ caseId }) => {
   }));
 
   return (
-<<<<<<< HEAD
-    <div className="h-screen w-full flex">
-      <div className="flex flex-col h-screen w-4/5 bg-red-400 justify-center items-center gap-y-4">
-        <h1 className="text-xl font-bold mb-4 items-center">Effective Tension Graph</h1>
-        <div className="w-full h-96">
-=======
     <div className="flex w-full h-full justify-evenly">
       <div className="flex flex-col h-screen w-4/5 justify-center items-center gap-y-4">
         <div className="w-full h-3/5">
->>>>>>> refs/remotes/origin/main
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -112,13 +95,8 @@ const WeightOnBitGraph: React.FC<IForm> = ({ caseId }) => {
               setIsLoading(true);
               const fetchWeightOnBit = async () => {
                 try {
-<<<<<<< HEAD
-                  const response = await instance.post(`/api/v1/torque-and-drag/hook-load/?caseId=${caseId}`);
-                  setHookLoadData(response.data);
-=======
                   const response = await instance.post(`/api/v1/torque-and-drag/weight-on-bit/?caseId=${caseId}`);
                   setWeightOnBitData(response.data);
->>>>>>> refs/remotes/origin/main
                   setIsLoading(false);
                 } catch (error) {
                   console.error('Error reloading data:', error);

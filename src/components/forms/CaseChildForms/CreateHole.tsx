@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { instance } from '../../../api/axios.api';
+import { HoleData } from '../../../types/types';
 
 interface IHoleForm {
   type: "put" | "post";
@@ -12,56 +13,9 @@ interface IHoleForm {
   caseId: string;
   prevHole?: HoleData;
   setIsEdit?: (edit: boolean) => void;
-  onSuccess?: () => void;
-}
- 
-interface HoleData {
-  open_hole_md_top: number;  // YES
-  open_hole_md_base: number; // YES
-  open_hole_length: number; // YES
-  open_hole_vd: number; // YES
-  effective_diameter: number; // YES
-  friction_factor_open_hole: number; // YES
-  linear_capacity_open_hole: number; // YES
-  volume_excess?: number; // YES
-  description_open_hole?: string; // YES
-
-  tripping_in_caising: number; // YES
-  tripping_out_caising: number; // YES
-  rotating_on_bottom_caising: number; // YES
-  slide_drilling_caising: number; // YES
-  back_reaming_caising: number; // YES
-  rotating_off_bottom_caising: number; // YES
-  tripping_in_open_hole: number; // 
-  tripping_out_open_hole: number; // 
-  rotating_on_bottom_open_hole: number;
-  slide_drilling_open_hole: number;
-  back_reaming_open_hole: number; // YES
-
-  rotating_off_bottom_open_hole: number; // YES
-  caisings: CaisingData[];
+  onSuccess?: (updatedHole?: HoleData) => void;
 }
 
-export interface CaisingData {
-  md_top: number;
-  md_base: number;
-  length: number;
-  shoe_md?: number;
-  od: number;
-  vd: number;
-  drift_id: number;
-  effective_hole_diameter: number;
-  weight: number;
-  grade: string;
-  min_yield_strength: number;
-  burst_rating: number;
-  collapse_rating: number;
-  friction_factor_caising: number;
-  linear_capacity_caising: number;
-  description_caising?: string;
-  manufacturer_caising?: string;
-  model_caising?: string;
-}
 
 // Define the Zod schema for a caising
 const caisingSchema = z.object({
@@ -100,7 +54,7 @@ const holeSchema = z.object({
   tripping_out_caising: z.number().positive("Tripping Out Caising обязателен"),
   rotating_on_bottom_caising: z.number().positive("Rotating On Bottom Caising обязателен"),
   slide_drilling_caising: z.number().positive("Slide Drilling Caising обязателен"),
-  back_reaming_caising: z.number().positive("Back Reaming Caising обязателен"),
+  back_reaming_casing: z.number().positive("Back Reaming Caising обязателен"),
   rotating_off_bottom_caising: z.number().positive("Rotating Off Bottom Caising обязателен"),
   tripping_in_open_hole: z.number().positive("Tripping In Open Hole обязателен"),
   tripping_out_open_hole: z.number().positive("Tripping Out Open Hole обязателен"),
@@ -113,11 +67,11 @@ const holeSchema = z.object({
 
 type FormData = z.infer<typeof holeSchema>;
 
-const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, caseId }) => {
+const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, onSuccess, caseId }) => {
   const navigate = useNavigate();
 
   // Initialize the form
-  const { control, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+  const { control, register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(holeSchema),
     defaultValues: prevHole || {
       open_hole_md_top: 1,
@@ -131,7 +85,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
       tripping_out_caising: 1,
       rotating_on_bottom_caising: 1,
       slide_drilling_caising: 1,
-      back_reaming_caising: 1,
+      back_reaming_casing: 1,
       rotating_off_bottom_caising: 1,
       tripping_in_open_hole: 1,
       tripping_out_open_hole: 1,
@@ -164,6 +118,9 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
         await instance.put(`/api/v1/holes/${id}`, newHole);
         toast.success('Скважина была обновлена');
       }
+      if (onSuccess) {
+        onSuccess(newHole)
+      }
       navigate(`/cases/${caseId}`);
     } catch (error) {
       toast.error('Ошибка при обработке скважины');
@@ -181,7 +138,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
           {/* Hole Fields */}
           <div className="input-wrapper">
             <label htmlFor="open_hole_md_top">MD Top</label>
-            <input {...register('open_hole_md_top', {
+            <input step="any" {...register('open_hole_md_top', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите MD Top" />
             {errors.open_hole_md_top && <p>{errors.open_hole_md_top.message}</p>}
@@ -189,7 +146,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="open_hole_md_base">MD Base</label>
-            <input {...register('open_hole_md_base', {
+            <input step="any" {...register('open_hole_md_base', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите MD Base" />
             {errors.open_hole_md_base && <p>{errors.open_hole_md_base.message}</p>}
@@ -197,7 +154,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="open_hole_length">Hole Length</label>
-            <input {...register('open_hole_length', {
+            <input step="any" {...register('open_hole_length', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите длину скважины" />
             {errors.open_hole_length && <p>{errors.open_hole_length.message}</p>}
@@ -205,7 +162,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="open_hole_vd">Vertical depth</label>
-            <input {...register('open_hole_vd', {
+            <input step="any" {...register('open_hole_vd', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите вертикальную глубину" />
             {errors.open_hole_vd && <p>{errors.open_hole_vd.message}</p>}
@@ -213,7 +170,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="effective_diameter">Effective diameter</label>
-            <input {...register('effective_diameter', {
+            <input step="any" {...register('effective_diameter', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите эффективный диаметр" />
             {errors.effective_diameter && <p>{errors.effective_diameter.message}</p>}
@@ -221,7 +178,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="friction_factor_open_hole">Friction factor open hole</label>
-            <input {...register('friction_factor_open_hole', {
+            <input step="any" {...register('friction_factor_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите коэффициент трения открытого ствола" />
             {errors.friction_factor_open_hole && <p>{errors.friction_factor_open_hole.message}</p>}
@@ -229,7 +186,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="linear_capacity_open_hole">Linear capacity open hole</label>
-            <input {...register('linear_capacity_open_hole', {
+            <input step="any" {...register('linear_capacity_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите линейную емкость открытого ствола" />
             {errors.linear_capacity_open_hole && <p>{errors.linear_capacity_open_hole.message}</p>}
@@ -237,7 +194,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="volume_excess">Volume excess</label>
-            <input {...register('volume_excess', {
+            <input step="any" {...register('volume_excess', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите избыточный обьем" />
             {errors.volume_excess && <p>{errors.volume_excess.message}</p>}
@@ -252,7 +209,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
           {/* Friction Factor Fields - Casing */}
           <div className="input-wrapper">
             <label htmlFor="tripping_in_caising">Tripping In Casing</label>
-            <input {...register('tripping_in_caising', {
+            <input step="any" {...register('tripping_in_caising', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.tripping_in_caising && <p>{errors.tripping_in_caising.message}</p>}
@@ -260,7 +217,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="tripping_out_caising">Tripping Out Casing</label>
-            <input {...register('tripping_out_caising', {
+            <input step="any" {...register('tripping_out_caising', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.tripping_out_caising && <p>{errors.tripping_out_caising.message}</p>}
@@ -268,7 +225,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="rotating_on_bottom_caising">Rotating On Bottom Casing</label>
-            <input {...register('rotating_on_bottom_caising', {
+            <input step="any" {...register('rotating_on_bottom_caising', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.rotating_on_bottom_caising && <p>{errors.rotating_on_bottom_caising.message}</p>}
@@ -276,7 +233,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="slide_drilling_caising">Slide Drilling Casing</label>
-            <input {...register('slide_drilling_caising', {
+            <input step="any" {...register('slide_drilling_caising', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.slide_drilling_caising && <p>{errors.slide_drilling_caising.message}</p>}
@@ -284,15 +241,15 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="back_reaming_caising">Back Reaming Casing</label>
-            <input {...register('back_reaming_caising', {
+            <input step="any" {...register('back_reaming_casing', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
-            {errors.back_reaming_caising && <p>{errors.back_reaming_caising.message}</p>}
+            {errors.back_reaming_casing && <p>{errors.back_reaming_casing.message}</p>}
           </div>
 
           <div className="input-wrapper">
             <label htmlFor="rotating_off_bottom_caising">Rotating Off Bottom Casing</label>
-            <input {...register('rotating_off_bottom_caising', {
+            <input step="any" {...register('rotating_off_bottom_caising', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.rotating_off_bottom_caising && <p>{errors.rotating_off_bottom_caising.message}</p>}
@@ -301,7 +258,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
           {/* Friction Factor Fields - Open Hole */}
           <div className="input-wrapper">
             <label htmlFor="tripping_in_open_hole">Tripping In Open Hole</label>
-            <input {...register('tripping_in_open_hole', {
+            <input step="any" {...register('tripping_in_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.tripping_in_open_hole && <p>{errors.tripping_in_open_hole.message}</p>}
@@ -309,7 +266,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="tripping_out_open_hole">Tripping Out Open Hole</label>
-            <input {...register('tripping_out_open_hole', {
+            <input step="any" {...register('tripping_out_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.tripping_out_open_hole && <p>{errors.tripping_out_open_hole.message}</p>}
@@ -317,7 +274,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="rotating_on_bottom_open_hole">Rotating On Bottom Open Hole</label>
-            <input {...register('rotating_on_bottom_open_hole', {
+            <input step="any" {...register('rotating_on_bottom_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.rotating_on_bottom_open_hole && <p>{errors.rotating_on_bottom_open_hole.message}</p>}
@@ -325,7 +282,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="slide_drilling_open_hole">Slide Drilling Open Hole</label>
-            <input {...register('slide_drilling_open_hole', {
+            <input step="any" {...register('slide_drilling_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.slide_drilling_open_hole && <p>{errors.slide_drilling_open_hole.message}</p>}
@@ -333,7 +290,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="back_reaming_open_hole">Back Reaming Open Hole</label>
-            <input {...register('back_reaming_open_hole', {
+            <input step="any" {...register('back_reaming_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.back_reaming_open_hole && <p>{errors.back_reaming_open_hole.message}</p>}
@@ -341,7 +298,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
           <div className="input-wrapper">
             <label htmlFor="rotating_off_bottom_open_hole">Rotating Off Bottom Open Hole</label>
-            <input {...register('rotating_off_bottom_open_hole', {
+            <input step="any" {...register('rotating_off_bottom_open_hole', {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите значение" />
             {errors.rotating_off_bottom_open_hole && <p>{errors.rotating_off_bottom_open_hole.message}</p>}
@@ -354,125 +311,148 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].md_top`}>MD Top</label>
-                <input {...register(`caisings.${index}.md_top`, {
+                <input step="any" {...register(`caisings.${index}.md_top`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите MD Top" />
               </div>
+              {errors.caisings?.[index]?.md_top && <p>{errors.caisings?.[index]?.md_top?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].md_base`}>MD Base</label>
-                <input {...register(`caisings.${index}.md_base`, {
+                <input step="any" {...register(`caisings.${index}.md_base`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите MD Base" />
               </div>
+              {errors.caisings?.[index]?.md_base && <p>{errors.caisings?.[index]?.md_base?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].length`}>Length</label>
-                <input {...register(`caisings.${index}.length`, {
+                <input step="any" {...register(`caisings.${index}.length`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите длину" />
               </div>
+              {errors.caisings?.[index]?.length && <p>{errors.caisings?.[index]?.length?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].shoe_md`}>Shoe MD</label>
-                <input {...register(`caisings.${index}.shoe_md`, {
+                <input step="any" {...register(`caisings.${index}.shoe_md`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Shoe MD" />
               </div>
+              {errors.caisings?.[index]?.shoe_md && <p>{errors.caisings?.[index]?.shoe_md?.message}</p>}
+
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].od`}>OD</label>
-                <input {...register(`caisings.${index}.od`, {
+                <input step="any" {...register(`caisings.${index}.od`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите OD" />
               </div>
+              {errors.caisings?.[index]?.od && <p>{errors.caisings?.[index]?.od?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].vd`}>VD</label>
-                <input {...register(`caisings.${index}.vd`, {
+                <input step="any" {...register(`caisings.${index}.vd`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите VD" />
               </div>
+              {errors.caisings?.[index]?.vd && <p>{errors.caisings?.[index]?.vd?.message}</p>}
+
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].drift_id`}>Drift ID</label>
-                <input {...register(`caisings.${index}.drift_id`, {
+                <input step="any" {...register(`caisings.${index}.drift_id`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Drift ID" />
               </div>
+              {errors.caisings?.[index]?.drift_id && <p>{errors.caisings?.[index]?.drift_id?.message}</p>}
+
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].effective_hole_diameter`}>Effective Hole Diameter</label>
-                <input {...register(`caisings.${index}.effective_hole_diameter`, {
+                <input step="any" {...register(`caisings.${index}.effective_hole_diameter`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Effective Hole Diameter" />
               </div>
+              {errors.caisings?.[index]?.effective_hole_diameter && <p>{errors.caisings?.[index]?.effective_hole_diameter?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].weight`}>Weight</label>
-                <input {...register(`caisings.${index}.weight`, {
+                <input step="any" {...register(`caisings.${index}.weight`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Weight" />
               </div>
+              {errors.caisings?.[index]?.weight && <p>{errors.caisings?.[index]?.weight?.message}</p>}
+
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].grade`}>Grade</label>
                 <input {...register(`caisings.${index}.grade`)} type="text" placeholder="Введите Grade" />
               </div>
+              {errors.caisings?.[index]?.grade && <p>{errors.caisings?.[index]?.grade?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].min_yield_strength`}>Min Yield Strength</label>
-                <input {...register(`caisings.${index}.min_yield_strength`, {
+                <input step="any" {...register(`caisings.${index}.min_yield_strength`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Min Yield Strength" />
               </div>
+              {errors.caisings?.[index]?.min_yield_strength && <p>{errors.caisings?.[index]?.min_yield_strength?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].burst_rating`}>Burst Rating</label>
-                <input {...register(`caisings.${index}.burst_rating`, {
+                <input step="any" {...register(`caisings.${index}.burst_rating`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Burst Rating" />
               </div>
+              {errors.caisings?.[index]?.burst_rating && <p>{errors.caisings?.[index]?.burst_rating?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].collapse_rating`}>Collapse Rating</label>
-                <input {...register(`caisings.${index}.collapse_rating`, {
+                <input step="any" {...register(`caisings.${index}.collapse_rating`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Collapse Rating" />
               </div>
+              {errors.caisings?.[index]?.collapse_rating && <p>{errors.caisings?.[index]?.collapse_rating?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].friction_factor_caising`}>Friction Factor Casing</label>
-                <input {...register(`caisings.${index}.friction_factor_caising`, {
+                <input step="any" {...register(`caisings.${index}.friction_factor_caising`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Friction Factor" />
               </div>
+              {errors.caisings?.[index]?.friction_factor_caising && <p>{errors.caisings?.[index]?.friction_factor_caising?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].linear_capacity_caising`}>Linear Capacity Casing</label>
-                <input {...register(`caisings.${index}.linear_capacity_caising`, {
+                <input step="any" {...register(`caisings.${index}.linear_capacity_caising`, {
               setValueAs: (value) => Number(value),
             })} type="number" placeholder="Введите Linear Capacity" />
               </div>
+              {errors.caisings?.[index]?.linear_capacity_caising && <p>{errors.caisings?.[index]?.linear_capacity_caising?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].description_caising`}>Description</label>
                 <input {...register(`caisings.${index}.description_caising`)} type="text" placeholder="Введите Description" />
               </div>
+              {errors.caisings?.[index]?.description_caising && <p>{errors.caisings?.[index]?.description_caising?.message}</p>}
+
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].manufacturer_caising`}>Manufacturer</label>
                 <input {...register(`caisings.${index}.manufacturer_caising`)} type="text" placeholder="Введите Manufacturer" />
               </div>
+              {errors.caisings?.[index]?.manufacturer_caising && <p>{errors.caisings?.[index]?.manufacturer_caising?.message}</p>}
 
               <div className="input-wrapper">
                 <label htmlFor={`caisings[${index}].model_caising`}>Model</label>
                 <input {...register(`caisings.${index}.model_caising`)} type="text" placeholder="Введите Model" />
               </div>
+              {errors.caisings?.[index]?.model_caising && <p>{errors.caisings?.[index]?.model_caising?.message}</p>}
+
 
               <button type="button" onClick={() => remove(index)}>Удалить обсадку</button>
-            </div>
-          ))}
+            </div>)) }
 
           <button type="button" onClick={() => append({
             md_top: 10,
@@ -501,7 +481,7 @@ const CreateHole: FC<IHoleForm> = ({ type, id, prevHole, setIsEdit, onSuccess, c
             <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg'>
               {type === 'put' ? 'Обновить' : 'Создать'}
             </button>
-            {type === 'put' && (<button onClick={() => { if(setIsEdit) { setIsEdit(false); } }}>Закрыть</button>)}
+            {type === 'put' && (<button onClick={() => { if(onSuccess) { onSuccess(); } }}>Закрыть</button>)}
           </div>
           {errors.root && <div className='text-red-400'>{errors.root.message}</div>}
         </form>

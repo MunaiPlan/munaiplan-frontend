@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { instance } from '../../../api/axios.api';
 import { Form, useNavigate } from 'react-router-dom';
-import { IFluidType } from '../../../types/types';
+import { IFluid, IFluidType } from '../../../types/types';
 
 interface IFluidForm {
   type: 'put' | 'post';
@@ -13,8 +13,7 @@ interface IFluidForm {
   prev_fluid_base_type_id?: string;
   prev_base_fluid_id?: string;
   caseId: string;
-  setIsEdit?: (edit: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess?: (updatedFluid?: IFluid) => void;
 }
 
 const CreateFluid: FC<IFluidForm> = ({
@@ -23,17 +22,14 @@ const CreateFluid: FC<IFluidForm> = ({
   prevName,
   prevDescription,
   prevDensity,
-  prev_base_fluid_id,
-  prev_fluid_base_type_id,
-  setIsEdit,
   onSuccess,
   caseId,
 }) => {
   const [nameFluid, setNameFluid] = useState(prevName);
   const [descriptionFluid, setDescriptionFluid] = useState(prevDescription);
   const [densityFluid, setDensityFluid] = useState<number>(prevDensity ? prevDensity : 0);
-  const [baseTypeFluid, setBaseTypeFluid] = useState<string>();
-  const [baseFluid, setBaseFluid] = useState<string>();
+  const [baseFluidName, setBaseFluidName] = useState<string>();
+  const [baseFluidID, setBaseFluidID] = useState<string>();
   const [fluidTypes, setFluidTypes] = useState<Array<{ id: string; name: string }>>([]);
   const navigate = useNavigate();
 
@@ -53,47 +49,40 @@ const CreateFluid: FC<IFluidForm> = ({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (type === 'post') {
-      const newFluid = {
-        case_id: caseId,
-        name: nameFluid,
-        description: descriptionFluid,
-        density: densityFluid,
-        fluid_base_type_id: baseTypeFluid,
-        base_fluid_id: baseFluid,
-      };
+    const newFluid = {
+      name: nameFluid,
+      description: descriptionFluid,
+      density: densityFluid,
+      fluid_base_type_id: baseFluidID,
+      base_fluid_id: baseFluidID,
+    }
+    const updatedFluid = {
+      id: id,
+      name: nameFluid,
+      description: descriptionFluid,
+      density: densityFluid,
+      fluid_base_type_id: baseFluidID,
+      base_fluid_id: baseFluidID,
+    }
 
-      try {
+    const fluid = {
+      name: nameFluid || "",
+      description: descriptionFluid || "",
+      density: densityFluid,
+      fluid_base_type: {id: baseFluidID || "", name: baseFluidName || ""},
+      base_fluid: {id: baseFluidID || "", name: baseFluidName || ""},
+    }
+    try {
+      if (type === 'post') {
         await instance.post(`/api/v1/fluids?caseId=${caseId}`, newFluid);
         toast.success('Новый раствор был добавлен');
-        if (onSuccess) {
-          onSuccess();
-        }
-      } catch (error) {
-        toast.error('Ошибка при добавлении раствора');
-        console.error(error);
-      }
-    } else if (type === 'put' && id) {
-      toast.success(id);
-      const updatedFluid = {
-        id: id,
-        name: nameFluid,
-        description: descriptionFluid,
-        density: densityFluid,
-        fluid_base_type_id: baseTypeFluid,
-        base_fluid_id: baseFluid,
-      };
-      try {
-        console.log(updatedFluid);
+      } else if (type === 'put' && id) {
         await instance.put(`/api/v1/fluids/${id}`, updatedFluid);
         toast.success('Раствор был обновлен');
-        if (onSuccess) {
-          onSuccess();
-        }
-      } catch (error) {
-        toast.error('Ошибка при обновлении раствора');
-        console.error(error);
       }
+      if (onSuccess) onSuccess(fluid);
+    } catch (error) {
+      toast.error('Ошибка при обработке буровой');
     }
   };
 
@@ -137,6 +126,7 @@ const CreateFluid: FC<IFluidForm> = ({
             <input
               id="densityFluid"
               type="number"
+              step="any"
               value={densityFluid || ''}
               placeholder={type === 'put' && densityFluid ? densityFluid.toString() : 'Введите плотность раствора'}
               onChange={(e) => setDensityFluid(parseFloat(e.target.value))}
@@ -148,11 +138,12 @@ const CreateFluid: FC<IFluidForm> = ({
             <select
               className="w-full rounded-md"
               name="fluids"
-              value={baseTypeFluid}
+              value={baseFluidID}
               id="fluids"
               onChange={(e) => {
-                setBaseFluid(e.target.value);
-                setBaseTypeFluid(e.target.value);
+                const selectedFluid = fluidTypes.find((fluid) => fluid.id === e.target.value);
+                setBaseFluidID(e.target.value);
+                setBaseFluidName(selectedFluid?.name || ""); 
               }}
             >
               {fluidTypes.map((element) => (

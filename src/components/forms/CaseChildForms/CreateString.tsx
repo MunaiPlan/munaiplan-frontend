@@ -14,7 +14,7 @@ interface IStringForm {
   prevName?: string;
   prevDepth?: number;
   prevSections?: ISection[];
-  onSuccess?: () => void;
+  onSuccess?: (updatedString?: IString) => void;
   setIsEdit?: (edit: boolean) => void;
 }
 
@@ -24,6 +24,8 @@ const sectionSchema = z.object({
     description: z.string().min(1, "Описание обязательно"),
     manufacturer: z.string().min(1, "Производитель обязателен"),
     type: z.string().min(1, "Тип обязателен"),
+    body_md: z.number().positive("Глубина корпуса должна быть положительным"),
+    body_length: z.number().positive("Длина корпуса должна быть положительным"),
     body_od: z.number().positive("Наружный диаметр должен быть положительным"),
     body_id: z.number().positive("Внутренний диаметр должен быть положительным"),
     avg_joint_length: z.number().positive("Средняя длина соединения обязательна"),
@@ -70,7 +72,6 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
 
   const onSubmit = async (data: any) => {
     const newString = {
-      case_id: caseId,
       name: data.name,
       depth: data.depth,
       sections: data.sections
@@ -84,7 +85,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
         await instance.put(`/api/v1/strings/${id}`, newString);
         toast.success('Колонна была обновлена');
       }
-      navigate(`/cases/${caseId}`);
+      if (onSuccess) onSuccess(newString);
     } catch (error) {
       toast.error('Ошибка при обработке колонны');
     }
@@ -152,6 +153,30 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                   {...register(`sections.${index}.type`)}
                   type="text"
                   placeholder="Введите тип секции"
+                />                
+              </div>
+
+              <div className="input-wrapper">
+                <label htmlFor={`sections[${index}].body_md`}>Глубина корпуса</label>
+                <input
+                  {...register(`sections.${index}.body_md`, {
+                    setValueAs: (value) => Number(value),
+                  })}
+                  type="number"
+                  step="any"
+                  placeholder="Введите глубину корпуса"
+                />                
+              </div>
+
+              <div className="input-wrapper">
+                <label htmlFor={`sections[${index}].body_length`}>Длина корпуса</label>
+                <input
+                  {...register(`sections.${index}.body_length`, {
+                    setValueAs: (value) => Number(value),
+                  })}
+                  type="number"
+                  step="any"
+                  placeholder="Введите длину корпуса"
                 />                
               </div>
 
@@ -345,6 +370,8 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
             description: "",
             manufacturer: "",
             type: "",
+            body_md: 0,
+            body_length: 0,
             body_od: 0,
             body_id: 0,
             avg_joint_length: 0,
@@ -366,7 +393,7 @@ const CreateString: FC<IStringForm> = ({ type, id, prevName, prevDepth, prevSect
                       {type === 'put' ? 'Обновить' : 'Создать'}
                   </button>
                   { type === 'put' && (<button className="w-full bg-black text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-11 text-base" onClick={() => {
-                      if(setIsEdit) {setIsEdit(true);}
+                      if(onSuccess) {onSuccess();}
                   }}>Закрыть</button>)}
                 </div>
         </form>

@@ -162,21 +162,21 @@ export interface ICase{
     is_complete: boolean
 }
 export interface IString {
-    id: string
+    id?: string
     name: string
     depth: number
-    caseId: string
+    caseId?: string
     sections: ISection[]
 }
 
 export interface IFluid {
-    id: string;
+    id?: string;
     name: string;
     description: string;
     density: number;
     fluid_base_type: IFluidType;
     base_fluid: IFluidType;
-    caseId: string;
+    caseId?: string;
 }
 
 export interface IFluidType {
@@ -305,6 +305,8 @@ export interface ISection {
     description: string
     manufacturer: string
     type: string
+    body_md: number
+    body_length: number
     body_od: number
     body_id: number
     avg_joint_length: number
@@ -342,3 +344,58 @@ export interface IRig {
     top_drive_stackup_length: number | null;
     top_drive_stackup_internal_diameter: number | null;
 }
+
+export interface HoleData {
+    id?: string;
+    open_hole_md_top: number;
+    open_hole_md_base: number;
+    open_hole_length: number;
+    open_hole_vd: number;
+    effective_diameter: number;
+    friction_factor_open_hole: number;
+    linear_capacity_open_hole: number;
+    volume_excess?: number;
+    description_open_hole?: string;
+    tripping_in_caising: number;
+    tripping_out_caising: number;
+    rotating_on_bottom_caising: number;
+    slide_drilling_caising: number;
+    back_reaming_casing: number;
+    rotating_off_bottom_caising: number;
+    tripping_in_open_hole: number;
+    tripping_out_open_hole: number;
+    rotating_on_bottom_open_hole: number;
+    slide_drilling_open_hole: number;
+    back_reaming_open_hole: number;
+    rotating_off_bottom_open_hole: number;
+    caisings: CaisingData[];
+  }
+  
+  export interface CaisingData {
+    md_top: number;
+    md_base: number;
+    length: number;
+    shoe_md?: number;
+    od: number;
+    vd: number;
+    drift_id: number;
+    effective_hole_diameter: number;
+    weight: number;
+    grade: string;
+    min_yield_strength: number;
+    burst_rating: number;
+    collapse_rating: number;
+    friction_factor_caising: number;
+    linear_capacity_caising: number;
+    description_caising?: string;
+    manufacturer_caising?: string;
+    model_caising?: string;
+  }
+
+
+  export interface IPorePressure {
+    id?: string;
+    tvd: number;
+    pressure: number;
+    emw: number;
+  }
