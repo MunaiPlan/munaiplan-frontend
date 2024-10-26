@@ -153,7 +153,7 @@ const HoleDetail: FC<IHoleForm> = ({ caseId }) => {
     </div>
   ) : (
     isEdit ? (
-      <CreateHole caseId={caseId} type={"put"} prevHole={holeData} onSuccess={onSuccess} />
+      <CreateHole caseId={caseId} type={"put"} prevHole={holeData} id={holeData?.id} onSuccess={onSuccess} />
     ) : (
       <CreateHole caseId={caseId} type={"post"} onSuccess={onSuccess} />
     )
