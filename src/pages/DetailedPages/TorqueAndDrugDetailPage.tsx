@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import EffectiveTensionGraph from './TorqueAndDragCharts.tsx/EffectiveTension';
-import MomentOnSurfacetGraph from './TorqueAndDragCharts.tsx/MomentOnSurface';
-import HookLoadGraph from './TorqueAndDragCharts.tsx/HookLoad';
 import MinWeightOnBitGraph from './TorqueAndDragCharts.tsx/MinWeightOnBit';
+import SurfaceTorqueGraph from './TorqueAndDragCharts.tsx/MomentOnSurface';
+import WeightOnBitGraph from './TorqueAndDragCharts.tsx/HookLoad';
 
 interface IT {
   caseId: string;
@@ -44,9 +44,9 @@ const TorqueAndDragDetailPage: FC<IT> = ({caseId}) => {
 
   let content;
   if (hookLoad) {
-    content = <HookLoadGraph caseId={caseId} />
+    content = <WeightOnBitGraph caseId={caseId} />
   } else if (surfaceTorque) {
-    content = <MomentOnSurfacetGraph caseId={caseId}/>
+    content = <SurfaceTorqueGraph caseId={caseId}/>
   } else if (weightOnBit) {
     content = <MinWeightOnBitGraph caseId={caseId} />
   } else if (effectiveTension) {
@@ -97,7 +97,11 @@ const TorqueAndDragDetailPage: FC<IT> = ({caseId}) => {
           Эффективное натяжение
         </p>
       </div>
+<<<<<<< HEAD
       <div className="flex mt-10 w-full">{content}</div>
+=======
+      <div className="flex w-full h-full justify-evenly">{content}</div>
+>>>>>>> refs/remotes/origin/main
     </div>
   );
 };
