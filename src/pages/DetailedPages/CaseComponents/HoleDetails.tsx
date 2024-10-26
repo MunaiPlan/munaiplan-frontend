@@ -70,7 +70,7 @@ const HoleDetail: FC<IHoleForm> = ({ type, id, prevHole, onSuccess, caseId }) =>
   const handleDelete = async () => {
     try {
       console.log(holeData)
-      toast.success("ID" + holeData?.id)
+      toast.success("ID" + holeData[0]?.id)
       await instance.delete(`/api/v1/strings/${holeData?.id}`);
       toast.success('Скважина была удалена');
       navigate('/');

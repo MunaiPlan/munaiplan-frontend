@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { instance } from '../../api/axios.api';
-import { ICase, IWell } from '../../types/types';
+import { ICase, IRig } from '../../types/types';
 import { toast } from 'react-toastify';
 import SideBar from '../../components/SideBar';
 import CreateWell from '../../components/forms/CreateWell';
@@ -10,11 +10,14 @@ import CreateFluid from '../../components/forms/CaseChildForms/CreateFluid';
 import CreateHole from '../../components/forms/CaseChildForms/CreateHole';
 import CreateString from '../../components/forms/CaseChildForms/CreateString';
 import CreateEquipment from '../../components/forms/CaseChildForms/CreateEquipment';
-import CreateRig, { IRig } from '../../components/forms/CaseChildForms/CreateRig';
+import CreateRig from '../../components/forms/CaseChildForms/CreateRig';
 import HydraulicsDetailPage from './HydraulicsDetailPage';
 import TorqueAndDragDetailPage from './TorqueAndDrugDetailPage';
 import StringDetail from './CaseComponents/StringDetails';
 import HoleDetail from './CaseComponents/HoleDetails';
+import FluidDetail from './CaseComponents/FluidDetails';
+import EquipmentDetail from './CaseComponents/EquipmentDetails';
+import RigDetail from './CaseComponents/RigDetails';
 
 const CaseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -167,15 +170,15 @@ const CaseDetail: React.FC = () => {
 
   let content;
   if (isSelectedFluid) {
-    content = <CreateFluid prev_base_fluid_id={""} prev_fluid_base_type_id={""} prevName={""} prevDescription={""} prevDensity={0} caseId={casE!.id} type={"post"}/>
+    content = <FluidDetail caseId={casE!.id}/>
   } else if (isSelectedHole) {
     content = <HoleDetail caseId={casE!.id} type={"post"} />
   } else if (isSelectedString) {
     content = <StringDetail caseId={casE!.id} type={"post"} prevName={""} prevDepth={0} prevSections={[]}/>
   } else if (isSelectedEquip) {
-    content = <CreateEquipment caseId={casE!.id} type={"post"} porePressures={[]} fractureGradients={[]} />
+    content = <EquipmentDetail caseId={casE!.id} />
   } else if (isRigSelected) {
-    content = <CreateRig caseId={casE!.id} type={"post"} rig={rigData} />
+    content = <RigDetail caseId={casE!.id} />
   } else if (isDescriptionSelected) {
     content = (
       <>

@@ -23,7 +23,6 @@ const StringDetail: FC<IStringForm> = ({ caseId }) => {
   const [isPost, setIsPost] = useState(true);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [stringData, setStringData] = useState<IString>()
-  const [isAlready, setIsAlready] = useState<boolean>(false)
   useEffect(() => {
     const fetchString = async () => {
       try {
@@ -57,7 +56,8 @@ const StringDetail: FC<IStringForm> = ({ caseId }) => {
   };
 
   const handleUpdateSuccess = () => {
-    setIsAlready(false);
+    setIsEdit(false);
+    setIsPost(false);
   };
 
   return !isEdit && !isPost ? (

@@ -16,9 +16,10 @@ export interface IPorePressureForm {
 }
 
 export interface IPorePressures {
-  tvd: number;
-  pressure: number;
-  emw: number;
+  id?: string;
+  tvd?: number;
+  pressure?: number;
+  emw?: number;
 }
 
 // Define the Zod schema to match the API structure with an array of pore pressures
@@ -155,7 +156,9 @@ const CreatePorePressureForm: FC<IPorePressureForm> = ({ type, id, porePressures
             <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg'>
               {type === 'put' ? 'Обновить' : 'Создать'}
             </button>
-            {type === 'put' && (<button onClick={() => { if (setIsEdit) { setIsEdit(false); } }}>Закрыть</button>)}
+            {type === 'put' && (<button onClick={() => { if (onSuccess) {
+          onSuccess();
+        } }}>Закрыть</button>)}
           </div>
           {errors.root && <div className='text-red-400'>{errors.root.message}</div>}
         </form>

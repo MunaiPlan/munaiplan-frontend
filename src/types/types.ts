@@ -161,17 +161,6 @@ export interface ICase{
     holes: IHole[],
     is_complete: boolean
 }
-
-export interface IFluid {
-    id: string
-    caseId: string
-    name: string
-    description: string
-    density: number
-    fluid_base_type_id: string
-    base_fluid_id: string
-}
-
 export interface IString {
     id: string
     name: string
@@ -180,6 +169,20 @@ export interface IString {
     sections: ISection[]
 }
 
+export interface IFluid {
+    id: string;
+    name: string;
+    description: string;
+    density: number;
+    fluid_base_type: IFluidType;
+    base_fluid: IFluidType;
+    caseId: string;
+}
+
+export interface IFluidType {
+    id: string;
+    name: string;
+}
 
 
 export interface IHole {
@@ -224,10 +227,10 @@ export interface IHole {
     slide_drilling_open_hole: number
     back_reaming_open_hole: number
     rotating_off_bottom_open_hole: number
-    caisings: ICaising[]
 }
 
 export interface ICaising {
+    hole_id: string;
     md_top: number;
     md_base: number;
     length: number;
@@ -314,4 +317,28 @@ export interface ISection {
     class: number
     friction_coefficient: number
     min_yield_strength: number
+}
+
+export interface IRig {
+    id?: string;
+    case_id?: string;
+
+    block_rating: number | null;
+    torque_rating: number | null;
+
+    rated_working_pressure: number;
+    bop_pressure_rating: number;
+    surface_pressure_loss: number;
+    standpipe_length: number | null;
+    standpipe_internal_diameter: number | null;
+    hose_length: number | null;
+    hose_internal_diameter: number | null;
+    swivel_length: number | null;
+    swivel_internal_diameter: number | null;
+    kelly_length: number | null;
+    kelly_internal_diameter: number | null;
+    pump_discharge_line_length: number | null;
+    pump_discharge_line_internal_diameter: number | null;
+    top_drive_stackup_length: number | null;
+    top_drive_stackup_internal_diameter: number | null;
 }

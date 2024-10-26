@@ -8,14 +8,14 @@ import { instance } from '../../../api/axios.api';
 
 export interface IFractureGradientForm {
   type: "put" | "post";
-  id?: string;
   caseId: string;
-  fractureGradients: IFractureGradient
+  fractureGradients?: IFractureGradient
   setIsEdit?: (edit: boolean) => void;
   onSuccess?: () => void;
 }
 
 export interface IFractureGradient {
+    id?: string;
     prevTempAtSurface: number;
     prevTempAtWellTVD: number;
     prevTempGradient: number;
@@ -24,48 +24,46 @@ export interface IFractureGradient {
 
 const fractureGradientSchema = z.object({
     temperature_at_surface: z.number().positive("Температура на поверхности обязателна"),
-        temperature_at_well_tvd: z.number().positive("Температура на истинной вертикальной глубине скважины обязательна"),
-        temperature_at_well_gradient: z.number().positive("Градиент температуры обязателен"),
-        well_tvd: z.number().positive("Истинная вертикальная глубина скважины обязательна"),
+    temperature_at_well_tvd: z.number().positive("Температура на истинной вертикальной глубине скважины обязательна"),
+    temperature_at_well_gradient: z.number().positive("Градиент температуры обязателен"),
+    well_tvd: z.number().positive("Истинная вертикальная глубина скважины обязательна"),
   })
 
 type FormData = z.infer<typeof fractureGradientSchema>;
 
-const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, id, fractureGradients, setIsEdit, onSuccess, caseId }) => {
+const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, fractureGradients, setIsEdit, onSuccess, caseId }) => {
   const navigate = useNavigate();
 
-  const mappedFractureGradients = {
-    temperature_at_surface: fractureGradients.prevTempAtSurface ?? 0,
-    temperature_at_well_tvd: fractureGradients.prevTempAtWellTVD ?? 0,
-    temperature_at_well_gradient: fractureGradients.prevTempGradient ?? 0,
-    well_tvd: fractureGradients.prevWellTVD ?? 0,
-  };
 
   const { control, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
     resolver: zodResolver(fractureGradientSchema), // Use the correct schema for arrays
     defaultValues: {
-      temperature_at_surface: 1,
-      temperature_at_well_tvd: 1,
-      temperature_at_well_gradient: 1,
-      well_tvd: 1
+      temperature_at_surface: fractureGradients?.prevTempAtSurface,
+      temperature_at_well_tvd: fractureGradients?.prevTempAtWellTVD,
+      temperature_at_well_gradient: fractureGradients?.prevTempGradient,
+      well_tvd: fractureGradients?.prevWellTVD
     }
   });
 
 
   const onSubmit = async (data: FormData) => {
+
     const newFractureGradientForm = {
-      case_id: caseId,
       ...data
     };
-    console.log(newFractureGradientForm)
-
     try {
       if (type === 'post') {
         await instance.post(`/api/v1/fracture-gradients/?caseId=${caseId}`, newFractureGradientForm);
         toast.success('Новое разрыва пласта была добавлена');
-      } else if (type === 'put' && id) {
-        await instance.put(`/api/v1/fracture-gradients/${id}`, newFractureGradientForm);
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else if (type === 'put' && fractureGradients?.id) {
+        await instance.put(`/api/v1/fracture-gradients/${fractureGradients?.id}`, newFractureGradientForm);
         toast.success('Градиент разрыва пласта была обновлена');
+        if (onSuccess) {
+          onSuccess();
+        }
       }
       navigate(`/cases/${caseId}`);
     } catch (error) {
@@ -124,7 +122,11 @@ const CreateFractureGradientForm: FC<IFractureGradientForm> = ({ type, id, fract
             <button type="submit" className='w-full mb-2 bg-black text-white font-bold py-2 px-4 rounded-lg'>
               {type === 'put' ? 'Обновить' : 'Создать'}
             </button>
-            {type === 'put' && (<button onClick={() => { if(setIsEdit) { setIsEdit(false); } }}>Закрыть</button>)}
+            {type === 'put' && (<button onClick={() => {
+              if (onSuccess) {
+                onSuccess();
+              }
+            }}>Закрыть</button>)}
           </div>
           {errors.root && <div className='text-red-400'>{errors.root.message}</div>}
         </form>
