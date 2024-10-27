@@ -57,49 +57,54 @@ const RigDetail: FC<IRigForm> = ({ caseId }) => {
   };
 
   return !isEdit && !isPost ? (
-    <div>
-      <div className='flex flex-col justify-center items-center w-full'>
-        <div className='items-start rounded-lg px-4 py-2'>
-          <h1 className='font-bold'>О буровом:</h1>
-          <p>Номинальная нагрузка блока: <label className='font-bold'>{rigData?.block_rating}</label></p>
-          <p>Номинальный крутящий момент: <label className='font-bold'>{rigData?.torque_rating}</label></p>
-          <p>Номинальное рабочее давление: <label className='font-bold'>{rigData?.rated_working_pressure}</label></p>
-          <p>Номинальное давление противовыбросового превентора (ПВП): <label className='font-bold'>{rigData?.bop_pressure_rating}</label></p>
-          <p>Потери давления на поверхности: <label className='font-bold'>{rigData?.surface_pressure_loss}</label></p>
-          <p>Длина стояка: <label className='font-bold'>{rigData?.standpipe_length}</label></p>
-          <p>Внутренний диаметр стояка: <label className='font-bold'>{rigData?.standpipe_internal_diameter}</label></p>
-          <p>Длина шланга: <label className='font-bold'>{rigData?.hose_length}</label></p>
-          <p>Внутренний диаметр шланга: <label className='font-bold'>{rigData?.hose_internal_diameter}</label></p>
-          <p>Длина вертлюга: <label className='font-bold'>{rigData?.swivel_length}</label></p>
-          <p>Внутренний диаметр вертлюга: <label className='font-bold'>{rigData?.swivel_internal_diameter}</label></p>
-          <p>Длина ведущей трубы: <label className='font-bold'>{rigData?.kelly_length}</label></p>
-          <p>Внутренний диаметр ведущей трубы: <label className='font-bold'>{rigData?.kelly_internal_diameter}</label></p>
-          <p>Длина нагнетательной линии насоса: <label className='font-bold'>{rigData?.pump_discharge_line_length}</label></p>
-          <p>Внутренний диаметр нагнетательной линии насоса: <label className='font-bold'>{rigData?.pump_discharge_line_internal_diameter}</label></p>
-          <p>Длина сборки верхнего привода: <label className='font-bold'>{rigData?.top_drive_stackup_length}</label></p>
-          <p>Внутренний диаметр сборки верхнего привода: <label className='font-bold'>{rigData?.top_drive_stackup_internal_diameter}</label></p>
+    <div className='flex flex-col p-6 bg-gray-100 rounded-lg shadow-lg'>
+      <div className='flex flex-col w-full'>
+        <div className='bg-white shadow-sm rounded-lg p-5 mb-6'>
+          <h1 className='font-bold text-lg mb-4 text-gray-800'>О буровом:</h1>
+          <div className='grid grid-cols-2 gap-4 text-gray-700'>
+            <p>Номинальная нагрузка блока: <span className='font-semibold'>{rigData?.block_rating}</span></p>
+            <p>Номинальный крутящий момент: <span className='font-semibold'>{rigData?.torque_rating}</span></p>
+            <p>Номинальное рабочее давление: <span className='font-semibold'>{rigData?.rated_working_pressure}</span></p>
+            <p>Номинальное давление противовыбросового превентора (ПВП): <span className='font-semibold'>{rigData?.bop_pressure_rating}</span></p>
+            <p>Потери давления на поверхности: <span className='font-semibold'>{rigData?.surface_pressure_loss}</span></p>
+            <p>Длина стояка: <span className='font-semibold'>{rigData?.standpipe_length}</span></p>
+            <p>Внутренний диаметр стояка: <span className='font-semibold'>{rigData?.standpipe_internal_diameter}</span></p>
+            <p>Длина шланга: <span className='font-semibold'>{rigData?.hose_length}</span></p>
+            <p>Внутренний диаметр шланга: <span className='font-semibold'>{rigData?.hose_internal_diameter}</span></p>
+            <p>Длина вертлюга: <span className='font-semibold'>{rigData?.swivel_length}</span></p>
+            <p>Внутренний диаметр вертлюга: <span className='font-semibold'>{rigData?.swivel_internal_diameter}</span></p>
+            <p>Длина ведущей трубы: <span className='font-semibold'>{rigData?.kelly_length}</span></p>
+            <p>Внутренний диаметр ведущей трубы: <span className='font-semibold'>{rigData?.kelly_internal_diameter}</span></p>
+            <p>Длина нагнетательной линии насоса: <span className='font-semibold'>{rigData?.pump_discharge_line_length}</span></p>
+            <p>Внутренний диаметр нагнетательной линии насоса: <span className='font-semibold'>{rigData?.pump_discharge_line_internal_diameter}</span></p>
+            <p>Длина сборки верхнего привода: <span className='font-semibold'>{rigData?.top_drive_stackup_length}</span></p>
+            <p>Внутренний диаметр сборки верхнего привода: <span className='font-semibold'>{rigData?.top_drive_stackup_internal_diameter}</span></p>
+          </div>
         </div>
       </div>
-      <div className='flex w-full items-center justify-center gap-x-4 mb-10'>
+  
+      <div className='flex w-full items-center justify-center gap-x-4 mt-6'>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
-            onClick={() => setIsEdit(true)}
+          className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200'
+          onClick={() => setIsEdit(true)}
         >
-            Изменить
+          Изменить
         </button>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
-            onClick={handleDelete}
+          className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200'
+          onClick={handleDelete}
         >
-            Удалить
+          Удалить
         </button>
       </div>
     </div>
-  ) : (isEdit ? (
-    <CreateRig caseId={caseId} type={"put"} rig={rigData} onSuccess={onSuccess} />
   ) : (
-    isPost && <CreateRig caseId={caseId} type={"post"} setIsEdit={setIsEdit} onSuccess={onSuccess} />
-  ));
-};
+    isEdit ? (
+      <CreateRig caseId={caseId} type={"put"} rig={rigData} onSuccess={onSuccess} />
+    ) : (
+      isPost && <CreateRig caseId={caseId} type={"post"} setIsEdit={setIsEdit} onSuccess={onSuccess} />
+    )
+  );
+}  
 
 export default RigDetail;

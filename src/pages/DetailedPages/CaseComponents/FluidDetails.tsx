@@ -59,35 +59,60 @@ const FluidDetail: FC<IFluidForm> = ({ caseId }) => {
 
 
   return !isEdit && !isPost ? (
-    <div>
-      <div className='flex flex-col justify-center items-center w-full'>
-        <div className='items-starts rounded-lg px-4 py-2'>
-          <h1>О растворе: <label className='font-bold'>{fluidData?.name}</label></h1>
-          <p>Описание: <label className='font-bold'>{fluidData?.description}</label></p>
-          <p>Плотность: <label className='font-bold'>{fluidData?.density}</label></p>
-          <p>Тип раствора: <label className='font-bold'>{fluidData?.base_fluid.name}</label></p>
+    <div className='flex flex-col p-6 bg-gray-100 rounded-lg shadow-lg'>
+      <div className='flex flex-col w-full'>
+        <div className='bg-white shadow-sm rounded-lg p-5 mb-6'>
+          <h1 className='font-bold text-lg mb-4 text-gray-800'>О растворе: <span className='font-semibold'>{fluidData?.name}</span></h1>
+          <div className='grid grid-cols-2 gap-4 text-gray-700'>
+            <p>Описание: <span className='font-semibold'>{fluidData?.description}</span></p>
+            <p>Плотность: <span className='font-semibold'>{fluidData?.density}</span></p>
+            <p>Тип раствора: <span className='font-semibold'>{fluidData?.base_fluid.name}</span></p>
+          </div>
         </div>
       </div>
-      <div className='flex w-full items-center justify-center gap-x-4 mb-10'>
+  
+      <div className='flex w-full items-center justify-center gap-x-4 mt-6'>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
-            onClick={() => {
-            setIsEdit(true);
-        }}
+          className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200'
+          onClick={() => setIsEdit(true)}
         >
-            Изменить
+          Изменить
         </button>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
-            onClick={handleDelete}
+          className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200'
+          onClick={handleDelete}
         >
-            Удалить
+          Удалить
         </button>
       </div>
     </div>
-  ) : (isEdit ?
-    (<CreateFluid caseId={caseId} type={"put"} prevDensity={fluidData?.density} prevDescription={fluidData?.description} prevName={fluidData?.name} prev_base_fluid_id={fluidData?.base_fluid.id} prev_fluid_base_type_id={fluidData?.fluid_base_type.id} id={fluidData?.id} onSuccess={onSuccess}/>) : 
-      (isPost && <CreateFluid caseId={caseId} type={"post"} prevDensity={0} prevName={""} prevDescription={""} prev_base_fluid_id={""} prev_fluid_base_type_id={""} onSuccess={onSuccess} />)
+  ) : (
+    isEdit ? (
+      <CreateFluid
+        caseId={caseId}
+        type={"put"}
+        prevDensity={fluidData?.density}
+        prevDescription={fluidData?.description}
+        prevName={fluidData?.name}
+        prev_base_fluid_id={fluidData?.base_fluid.id}
+        prev_fluid_base_type_id={fluidData?.fluid_base_type.id}
+        id={fluidData?.id}
+        onSuccess={onSuccess}
+      />
+    ) : (
+      isPost && (
+        <CreateFluid
+          caseId={caseId}
+          type={"post"}
+          prevDensity={0}
+          prevName=""
+          prevDescription=""
+          prev_base_fluid_id=""
+          prev_fluid_base_type_id=""
+          onSuccess={onSuccess}
+        />
+      )
+    )
   );
-}
+}  
 export default FluidDetail;

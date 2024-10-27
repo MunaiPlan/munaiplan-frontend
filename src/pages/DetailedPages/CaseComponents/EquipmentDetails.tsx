@@ -19,10 +19,15 @@ const EquipmentDetail: FC<IEquipmentForm> = ({ caseId }) => {
 
 
   return (
-    <div className='grid grid-cols-2 w-full justify-evenly'>
-        <div className='col-span-1'><PorePressureDetail caseId={caseId}/></div>
-        <div className='col-span-1'><FractureGradientsDetail caseId={caseId} /></div>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-6 rounded-lg'>
+      <div className='bg-white p-5 rounded-lg'>
+        <PorePressureDetail caseId={caseId} />
+      </div>
+      <div className='bg-white p-5 rounded-lg'>
+        <FractureGradientsDetail caseId={caseId} />
+      </div>
     </div>
-  )
+  );
+  
 }
 export default EquipmentDetail;

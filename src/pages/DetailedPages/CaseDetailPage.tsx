@@ -183,14 +183,17 @@ const CaseDetail: React.FC = () => {
     content = (
       <>
             <div className='flex flex-col justify-center items-center w-full'>
-              <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
-                <h1>Кейс: <label className='font-bold'>{casE?.case_name}</label></h1>
-                <p>Описание: <label className='font-bold'>{casE?.case_description}</label></p>
-                <p>Глубина бурения: <label className='font-bold'>{casE?.drill_depth}</label></p>
-                <p>Размер насоса: <label className='font-bold'>{casE?.pipe_size}</label></p>
-                <p>Заполнен: <label className='font-bold'>{casE?.is_complete ? "Да" : "Нет"}</label></p>
+              <div className='bg-white border-2 border-gray-300 rounded-lg px-4 py-4 shadow-sm w-full max-w-md'>
+                <h1 className='text-lg font-bold mb-4'>Кейс: <span className='font-semibold'>{casE?.case_name}</span></h1>
+                <div className='space-y-2 text-gray-700'>
+                  <p>Описание: <span className='font-semibold'>{casE?.case_description}</span></p>
+                  <p>Глубина бурения: <span className='font-semibold'>{casE?.drill_depth}</span></p>
+                  <p>Размер насоса: <span className='font-semibold'>{casE?.pipe_size}</span></p>
+                  <p>Заполнен: <span className='font-semibold'>{casE?.is_complete ? "Да" : "Нет"}</span></p>
+                </div>
               </div>
             </div>
+
           </>
     )
   }
@@ -267,7 +270,7 @@ const CaseDetail: React.FC = () => {
                     }`
                   }
                   onClick={toggleDescription}
-                  >Про кейс</p>
+                  >Описание</p>
                   <p className={
                     `text-center cursor-pointer ${
                       isSelectedHole ? 'text-[#000000] font-montserrat bg-[#F5F5F5] px-2 py-1 rounded-md' : 'text-[#5F5F5F] font-montserrat px-2 py-1 bg-[#FFFFFF]'

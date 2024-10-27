@@ -56,36 +56,43 @@ const PorePressureDetail: FC<IPorePressureDetailForm> = ({ caseId }) => {
   };
 
   return !isEdit && !isPost ? (
-    <div>
+    <div className='flex flex-col p-6 bg-gray-100 rounded-lg shadow-lg'>
       <div className='w-full'>
-        <div className='items-starts rounded-lg px-4 py-2'>
-            <div className="mb-4">
-                    <p>Глубина: <label className="font-bold">{porePressureData?.tvd ?? 'N/A'}</label></p>
-                    <p>Давление: <label className="font-bold">{porePressureData?.pressure ?? 'N/A'}</label></p>
-                    <p>Эквивалентная плотность бурового раствора: <label className="font-bold">{porePressureData?.emw ?? 'N/A'}</label></p>
-              </div>
+        <div className='bg-white shadow-sm rounded-lg p-5 mb-6'>
+          <div className="grid grid-cols-1 gap-3 text-gray-700">
+            <p>Глубина: <span className="font-semibold">{porePressureData?.tvd ?? 'N/A'}</span></p>
+            <p>Давление: <span className="font-semibold">{porePressureData?.pressure ?? 'N/A'}</span></p>
+            <p>Эквивалентная плотность бурового раствора: <span className="font-semibold">{porePressureData?.emw ?? 'N/A'}</span></p>
+          </div>
         </div>
       </div>
-      <div className='flex w-full items-center justify-center gap-x-4 mb-10'>
+  
+      <div className='flex w-full items-center justify-center gap-x-4 mt-6'>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
-            onClick={() => {
-            setIsEdit(true);
-        }}
+          className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md'
+          onClick={() => setIsEdit(true)}
         >
-            Изменить
+          Изменить
         </button>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
-            onClick={handleDelete}
+          className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded shadow-md'
+          onClick={handleDelete}
         >
-            Удалить
+          Удалить
         </button>
       </div>
     </div>
-  ) : (isEdit ?
-    (<CreatePorePressureForm caseId={caseId} type={"put"} porePressures={porePressureData} onSuccess={onSuccess}/>) : 
-      (isPost && <CreatePorePressureForm caseId={caseId} type={"post"} onSuccess={onSuccess} />)
+  ) : (
+    isEdit ? (
+      <CreatePorePressureForm
+        caseId={caseId}
+        type="put"
+        porePressures={porePressureData}
+        onSuccess={onSuccess}
+      />
+    ) : (
+      isPost && <CreatePorePressureForm caseId={caseId} type="post" onSuccess={onSuccess} />
+    )
   );
-}
+}  
 export default PorePressureDetail;

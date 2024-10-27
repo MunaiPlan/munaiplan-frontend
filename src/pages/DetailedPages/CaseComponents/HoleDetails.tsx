@@ -65,86 +65,73 @@ const HoleDetail: FC<IHoleForm> = ({ caseId }) => {
   };
 
   return !isEdit && !isPost ? (
-    <div className='flex flex-col justify-start'>
-      <div className='flex flex-col justify-start items-start w-full'>
-        <div className='items-starts rounded-lg px-4 py-2'>
-          <h1 className='font-bold'>О стволе:</h1>
-          {/* Basic hole information here */}
-          {/* Mapping Caisings */}
-          {holeData?.caisings && (
-            <div className='flex flex-col justify-center items-center w-full'>
-              <div className='items-starts border-2 border-black rounded-lg px-4 py-2'>
-          <p>Обратное развертывание обсадной колонны: <label className='font-bold'>{holeData?.back_reaming_casing}</label></p>
-          <p>Обратное развертывание открытого ствола: <label className='font-bold'>{holeData?.back_reaming_open_hole}</label></p>
-          <p>Описание открытого ствола: <label className='font-bold'>{holeData?.description_open_hole}</label></p>
-          <p>Эффективный диаметр: <label className='font-bold'>{holeData?.effective_diameter}</label></p>
-          <p>Коэффициент трения в открытом стволе: <label className='font-bold'>{holeData?.friction_factor_open_hole}</label></p>
-          <p>Линейная вместимость открытого ствола: <label className='font-bold'>{holeData?.linear_capacity_open_hole}</label></p>
-          <p>Длина открытого ствола: <label className='font-bold'>{holeData?.open_hole_length}</label></p>
-          <p>Истинная глубина основания открытого ствола: <label className='font-bold'>{holeData?.open_hole_md_base}</label></p>
-          <p>Истинная глубина начала открытого ствола: <label className='font-bold'>{holeData?.open_hole_md_top}</label></p>
-          <p>Вертикальная глубина открытого ствола: <label className='font-bold'>{holeData?.open_hole_vd}</label></p>
-          <p>Вращение при выключении на обсадной колонне: <label className='font-bold'>{holeData?.rotating_off_bottom_caising}</label></p>
-          <p>Вращение при выключении в открытом стволе: <label className='font-bold'>{holeData?.rotating_off_bottom_open_hole}</label></p>
-          <p>Вращение при включении на обсадной колонне: <label className='font-bold'>{holeData?.rotating_on_bottom_caising}</label></p>
-          <p>Вращение при включении в открытом стволе: <label className='font-bold'>{holeData?.rotating_on_bottom_open_hole}</label></p>
-          <p>Скользящее бурение на обсадной колонне: <label className='font-bold'>{holeData?.slide_drilling_caising}</label></p>
-          <p>Скользящее бурение в открытом стволе: <label className='font-bold'>{holeData?.slide_drilling_open_hole}</label></p>
-          <p>Спуск обсадной колонны: <label className='font-bold'>{holeData?.tripping_in_caising}</label></p>
-          <p>Спуск в открытый ствол: <label className='font-bold'>{holeData?.tripping_in_open_hole}</label></p>
-          <p>Подъем обсадной колонны: <label className='font-bold'>{holeData?.tripping_out_caising}</label></p>
-          <p>Подъем из открытого ствола: <label className='font-bold'>{holeData?.tripping_out_open_hole}</label></p>
-          <p>Избыточный объем: <label className='font-bold'>{holeData?.volume_excess}</label></p>
-                {holeData?.caisings.map((caising, index) => (
-                  caising ? (
-                    <div key={index} className="flex flex-col my-3">
-                      <div className='flex items-center justify-start' onClick={() => toggleCaising(index)}>
-                        {expandedCaisings[index] ? <IoIosArrowDown/> : <IoIosArrowForward />}
-                        <label
-                          className="font-bold cursor-pointer"
-                        >
-                          {index + 1}-й заголовок
-                        </label>
-                      </div>
-                      {expandedCaisings[index] && (
-                        <div>
-                          <p>Средняя длина стыка: <label className='font-bold'>{caising.burst_rating || 'Нет данных'}</label></p>
-                          <p>Внутренний диаметр корпуса: <label className='font-bold'>{caising.collapse_rating || 'Нет данных'}</label></p>
-                          <p>Внешний диаметр корпуса: <label className='font-bold'>{caising.description_caising || 'Нет данных'}</label></p>
-                          <p>Класс: <label className='font-bold'>{caising.drift_id || 'Нет данных'}</label></p>
-                          <p>Описание: <label className='font-bold'>{caising.effective_hole_diameter || 'Нет данных'}</label></p>
-                          <p>Коэффициент трения: <label className='font-bold'>{caising.friction_factor_caising || 'Нет данных'}</label></p>
-                          <p>Марка стали: <label className='font-bold'>{caising.grade || 'Нет данных'}</label></p>
-                          <p>Производитель: <label className='font-bold'>{caising.length || 'Нет данных'}</label></p>
-                          <p>Материал: <label className='font-bold'>{caising.linear_capacity_caising || 'Нет данных'}</label></p>
-                          <p>Минимальная прочность на растяжение: <label className='font-bold'>{caising.manufacturer_caising || 'Нет данных'}</label></p>
-                          <p>Внутренний диаметр стабилизатора: <label className='font-bold'>{caising.md_base || 'Нет данных'}</label></p>
-                          <p>Длина стабилизатора: <label className='font-bold'>{caising.md_top || 'Нет данных'}</label></p>
-                          <p>Внешний диаметр стабилизатора: <label className='font-bold'>{caising.min_yield_strength || 'Нет данных'}</label></p>
-                          <p>Тип: <label className='font-bold'>{caising.model_caising || 'Нет данных'}</label></p>
-                          <p>Вес: <label className='font-bold'>{caising.od || 'Нет данных'}</label></p>
-                          <p>Внешний диаметр стабилизатора: <label className='font-bold'>{caising.shoe_md || 'Нет данных'}</label></p>
-                          <p>Тип: <label className='font-bold'>{caising.vd || 'Нет данных'}</label></p>
-                          <p>Вес: <label className='font-bold'>{caising.weight || 'Нет данных'}</label></p>
-                        </div>
-                      )}
-                    </div>
-                  ) : null
-                ))}
-              </div>
-            </div>
-          )}
+    <div className='flex flex-col p-6 bg-gray-100 rounded-lg shadow-lg'>
+      <div className='flex flex-col w-full'>
+        <div className='bg-white shadow-sm rounded-lg p-5 mb-6'>
+          <h1 className='font-bold text-lg mb-4'>О стволе:</h1>
+          <div className='grid grid-cols-2 gap-4 text-gray-700'>
+            <p>Обратное развертывание обсадной колонны: <span className='font-semibold'>{holeData?.back_reaming_casing}</span></p>
+            <p>Обратное развертывание открытого ствола: <span className='font-semibold'>{holeData?.back_reaming_open_hole}</span></p>
+            <p>Описание открытого ствола: <span className='font-semibold'>{holeData?.description_open_hole}</span></p>
+            <p>Эффективный диаметр: <span className='font-semibold'>{holeData?.effective_diameter}</span></p>
+            <p>Коэффициент трения в открытом стволе: <span className='font-semibold'>{holeData?.friction_factor_open_hole}</span></p>
+            <p>Линейная вместимость открытого ствола: <span className='font-semibold'>{holeData?.linear_capacity_open_hole}</span></p>
+            <p>Длина открытого ствола: <span className='font-semibold'>{holeData?.open_hole_length}</span></p>
+            <p>Истинная глубина основания открытого ствола: <span className='font-semibold'>{holeData?.open_hole_md_base}</span></p>
+            <p>Истинная глубина начала открытого ствола: <span className='font-semibold'>{holeData?.open_hole_md_top}</span></p>
+            <p>Вертикальная глубина открытого ствола: <span className='font-semibold'>{holeData?.open_hole_vd}</span></p>
+            <p>Избыточный объем: <span className='font-semibold'>{holeData?.volume_excess}</span></p>
+          </div>
         </div>
+  
+        {holeData?.caisings && (
+          <div className='bg-white shadow-sm rounded-lg p-5'>
+            <h2 className='font-bold text-lg mb-4'>Обсадная Колонна</h2>
+            {holeData?.caisings.map((caising, index) => (
+              caising ? (
+                <div key={index} className="flex flex-col my-4 border-t border-gray-300 pt-4">
+                  <div className='flex items-center text-gray-800 cursor-pointer' onClick={() => toggleCaising(index)}>
+                    {expandedCaisings[index] ? <IoIosArrowDown className="mr-2"/> : <IoIosArrowForward className="mr-2"/>}
+                    <span className='font-semibold'>{index + 1}-й Заголовок</span>
+                  </div>
+                  {expandedCaisings[index] && (
+                    <div className='grid grid-cols-2 gap-4 mt-2 text-gray-700'>
+                      <p>Средняя длина стыка: <span className='font-semibold'>{caising.burst_rating || 'Нет данных'}</span></p>
+                      <p>Внутренний диаметр корпуса: <span className='font-semibold'>{caising.collapse_rating || 'Нет данных'}</span></p>
+                      <p>Внешний диаметр корпуса: <span className='font-semibold'>{caising.description_caising || 'Нет данных'}</span></p>
+                      <p>Класс: <span className='font-semibold'>{caising.drift_id || 'Нет данных'}</span></p>
+                      <p>Описание: <span className='font-semibold'>{caising.effective_hole_diameter || 'Нет данных'}</span></p>
+                      <p>Коэффициент трения: <span className='font-semibold'>{caising.friction_factor_caising || 'Нет данных'}</span></p>
+                      <p>Марка стали: <span className='font-semibold'>{caising.grade || 'Нет данных'}</span></p>
+                      <p>Производитель: <span className='font-semibold'>{caising.length || 'Нет данных'}</span></p>
+                      <p>Материал: <span className='font-semibold'>{caising.linear_capacity_caising || 'Нет данных'}</span></p>
+                      <p>Минимальная прочность на растяжение: <span className='font-semibold'>{caising.manufacturer_caising || 'Нет данных'}</span></p>
+                      <p>Внутренний диаметр стабилизатора: <span className='font-semibold'>{caising.md_base || 'Нет данных'}</span></p>
+                      <p>Длина стабилизатора: <span className='font-semibold'>{caising.md_top || 'Нет данных'}</span></p>
+                      <p>Внешний диаметр стабилизатора: <span className='font-semibold'>{caising.min_yield_strength || 'Нет данных'}</span></p>
+                      <p>Тип: <span className='font-semibold'>{caising.model_caising || 'Нет данных'}</span></p>
+                      <p>Вес: <span className='font-semibold'>{caising.od || 'Нет данных'}</span></p>
+                      <p>Внешний диаметр стабилизатора: <span className='font-semibold'>{caising.shoe_md || 'Нет данных'}</span></p>
+                      <p>Тип: <span className='font-semibold'>{caising.vd || 'Нет данных'}</span></p>
+                      <p>Вес: <span className='font-semibold'>{caising.weight || 'Нет данных'}</span></p>
+                    </div>
+                  )}
+                </div>
+              ) : null
+            ))}
+          </div>
+        )}
       </div>
-      <div className='flex w-full items-center justify-center gap-x-4 mb-10'>
+  
+      <div className='flex w-full items-center justify-center gap-x-4 mt-6'>
         <button
-          className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
+          className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md'
           onClick={() => setIsEdit(true)}
         >
           Изменить
         </button>
         <button
-          className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
+          className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded shadow-md'
           onClick={handleDelete}
         >
           Удалить
@@ -158,6 +145,6 @@ const HoleDetail: FC<IHoleForm> = ({ caseId }) => {
       <CreateHole caseId={caseId} type={"post"} onSuccess={onSuccess} />
     )
   );
-};
+}  
 
 export default HoleDetail;

@@ -66,43 +66,50 @@ const FractureGradientsDetail: FC<IFractureGradientDetailForm> = ({ caseId }) =>
   };
 
   return !isEdit && !isPost ? (
-    <div>
+    <div className='flex flex-col p-6 bg-gray-100 rounded-lg shadow-lg'>
       <div className='w-full'>
-        <div className='rounded-lg px-4 py-2'>
-            <div className="mb-4">
-                <p>Температура на поверхности: <label className="font-bold">{fractureGradientData?.temperature_at_surface}</label></p>
-                <p>Температура на истинной вертикальной глубине скважины: <label className="font-bold">{fractureGradientData?.temperature_at_well_tvd}</label></p>
-                <p>Градиент температуры: <label className="font-bold">{fractureGradientData?.temperature_gradient}</label></p>
-                <p>Истинная вертикальная глубина скважины: <label className="font-bold">{fractureGradientData?.well_tvd}</label></p>
-            </div>
+        <div className='bg-white shadow-sm rounded-lg p-5 mb-6'>
+          <div className="grid grid-cols-2 gap-4 text-gray-700">
+            <p>Температура на поверхности: <span className="font-semibold">{fractureGradientData?.temperature_at_surface}</span></p>
+            <p>Температура на истинной вертикальной глубине скважины: <span className="font-semibold">{fractureGradientData?.temperature_at_well_tvd}</span></p>
+            <p>Градиент температуры: <span className="font-semibold">{fractureGradientData?.temperature_gradient}</span></p>
+            <p>Истинная вертикальная глубина скважины: <span className="font-semibold">{fractureGradientData?.well_tvd}</span></p>
+          </div>
         </div>
       </div>
-      <div className='flex w-full items-center justify-center gap-x-4 mb-10'>
+  
+      <div className='flex w-full items-center justify-center gap-x-4 mt-6'>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-green-400'
-            onClick={() => {
-                setIsEdit(true);
-        }}
+          className='bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow-md'
+          onClick={() => setIsEdit(true)}
         >
-            Изменить
+          Изменить
         </button>
         <button
-            className='border-2 border-black px-2 py-1 rounded-md hover:bg-red-400'
-            onClick={handleDelete}
+          className='bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded shadow-md'
+          onClick={handleDelete}
         >
-            Удалить
+          Удалить
         </button>
       </div>
     </div>
-  ) : (isEdit ?
-    (<CreateFractureGradientForm caseId={caseId} type={"put"} fractureGradients={{
-        id: fractureGradientData?.id ?? "",
-        temperature_at_surface: fractureGradientData?.temperature_at_surface ?? 0,
-        temperature_at_well_tvd: fractureGradientData?.temperature_at_well_tvd ?? 0,
-        temperature_gradient: fractureGradientData?.temperature_gradient ?? 0,
-        well_tvd: fractureGradientData?.well_tvd ?? 0,
-      }} onSuccess={onSuccess}/>) : 
-      (isPost && <CreateFractureGradientForm caseId={caseId} type={"post"} onSuccess={onSuccess} />)
+  ) : (
+    isEdit ? (
+      <CreateFractureGradientForm
+        caseId={caseId}
+        type="put"
+        fractureGradients={{
+          id: fractureGradientData?.id ?? "",
+          temperature_at_surface: fractureGradientData?.temperature_at_surface ?? 0,
+          temperature_at_well_tvd: fractureGradientData?.temperature_at_well_tvd ?? 0,
+          temperature_gradient: fractureGradientData?.temperature_gradient ?? 0,
+          well_tvd: fractureGradientData?.well_tvd ?? 0,
+        }}
+        onSuccess={onSuccess}
+      />
+    ) : (
+      isPost && <CreateFractureGradientForm caseId={caseId} type="post" onSuccess={onSuccess} />
+    )
   );
-}
+}  
 export default FractureGradientsDetail;
