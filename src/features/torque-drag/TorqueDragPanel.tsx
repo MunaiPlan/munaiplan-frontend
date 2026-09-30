@@ -4,7 +4,7 @@ import { DepthChart } from './DepthChart';
 import { families } from './families';
 import WellPlanComparison from './WellPlanComparison';
 
-const views = [...families.map((f) => ({ key: f.endpoint as string, label: f.title })), { key: 'wellplan', label: 'Сравнение с WellPlan' }];
+const views = [...families.map((f) => ({ key: f.endpoint as string, label: f.title })), { key: 'wellplan', label: 'Сравнение с отчётом' }];
 
 /** Torque & Drag: one tab per model family plus the WellPlan comparison. */
 const TorqueDragPanel: FC<{ caseId: string }> = ({ caseId }) => {

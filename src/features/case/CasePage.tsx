@@ -68,7 +68,7 @@ const CasePage = () => {
         <PageHeader eyebrow="Кейс" title={record.case_name || 'Без названия'}
           meta={<span className="flex items-center gap-2">
             {record.drill_depth ? <span className="num font-mono">{record.drill_depth.toLocaleString('ru-RU')} м</span> : null}
-            {report && <Badge tone="outline">WellPlan</Badge>}
+            {report && <Badge tone="outline">Импорт</Badge>}
           </span>}
           actions={<>
             <Button size="sm" icon={<FiEdit2 />} onClick={() => { setTab('overview'); setEditing(true); }}>Изменить</Button>

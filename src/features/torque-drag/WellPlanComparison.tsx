@@ -62,21 +62,21 @@ const WellPlanComparison: FC<{ caseId: string }> = ({ caseId }) => {
   useEffect(() => { load(); }, [load]);
 
   if (state.loading) return <Loading label="Расчёт и сравнение… (до минуты)" />;
-  if (state.missing) return <EmptyState title="Нет данных WellPlan" description="Сравнение доступно для кейсов, импортированных из отчёта WellPlan." />;
+  if (state.missing) return <EmptyState title="Нет эталонных данных" description="Сравнение доступно для импортированных кейсов: эталоном служат результаты из исходного отчёта." />;
   if (!state.data) return <PredictionStatus error={state.error} onRetry={load} />;
 
   const rows = state.data.rows.filter((r) => r.wellplan !== null && !(r.metric === 'surface_torque' && r.wellplan === 0));
   const columns: Column<ComparisonRow>[] = [
     { key: 'op', header: 'Операция', render: (r) => operationLabels[r.operation] ?? r.operation },
     { key: 'metric', header: 'Показатель', render: (r) => <>{metricLabels[r.metric]} <span className="text-ink-500">{metricUnits[r.metric]}</span></> },
-    { key: 'wp', header: 'WellPlan', numeric: true, render: (r) => fmt(r.wellplan) },
+    { key: 'wp', header: 'Отчёт', numeric: true, render: (r) => fmt(r.wellplan) },
     { key: 'model', header: 'Модель', numeric: true, render: (r) => fmt(r.model) },
     { key: 'dev', header: 'Отклонение', numeric: true, render: (r) => <Deviation rel={r.relative_difference} /> },
   ];
   return (
     <div className="space-y-4">
-      <Panel title="Модель и WellPlan" description={`Глубина долота ${fmt(state.data.bit_depth)} м`} bodyClassName="p-0">
-        <DataTable columns={columns} rows={rows} rowKey={(r) => `${r.operation}-${r.metric}`} caption="Сравнение с WellPlan" />
+      <Panel title="Модель и эталон из отчёта" description={`Глубина долота ${fmt(state.data.bit_depth)} м`} bodyClassName="p-0">
+        <DataTable columns={columns} rows={rows} rowKey={(r) => `${r.operation}-${r.metric}`} caption="Сравнение с отчётом" />
       </Panel>
       <Alert tone="info" title="Как читать">
         <ul className="list-disc space-y-1 pl-4">

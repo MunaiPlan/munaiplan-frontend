@@ -62,12 +62,12 @@ export const records: Record<string, Record<string, unknown>> = {
   [ids.design]: { id: ids.design, plan_name: 'План #1', stage: 'Проект', version: '1', actual_date: '2026-09-30T00:00:00Z' },
   [ids.trajectory]: { id: ids.trajectory, name: 'Проект 2400 м', description: 'J-образный профиль, набор 3°/30 м', headers: [
     { id: id(90), customer: 'Демо Бурение', project: 'Северное', profile_type: 'J', field: 'Северное', your_ref: '', structure: 'Куст 12', job_number: '', wellhead: 'Скв. 12-1', kelly_bushing_elev: -19, profile: 'Проект' }], units: survey },
-  [ids.caseImported]: { id: ids.caseImported, case_name: 'Секция 215,9 мм', case_description: 'Imported from WellPlan', drill_depth: 2400, pipe_size: 127, is_complete: true },
+  [ids.caseImported]: { id: ids.caseImported, case_name: 'Секция 215,9 мм', case_description: 'Импортировано из отчёта', drill_depth: 2400, pipe_size: 127, is_complete: true },
   [ids.caseManual]: { id: ids.caseManual, case_name: 'Секция 152,4 мм (черновик)', case_description: 'Заполняется вручную', drill_depth: 0, pipe_size: 0, is_complete: false },
 };
 
 export const reference = {
-  sources: [{ name: 'WellPlan_Report_demo.docx', kind: 'report', bytes: 1_650_000 }],
+  sources: [{ name: 'report_demo.docx', kind: 'report', bytes: 1_650_000 }],
   language: 'ru',
   case: { company: 'Демо Бурение', field: 'Северное', site: 'Куст 12', well: 'Скв. 12-1', wellbore: 'Основной ствол', design: 'План #1', case: 'Секция 215,9 мм', md: 2400, tvd: 1928 },
   survey, hole_sections: [{ type: 'Casing', depth: 1000, inner_diameter: 226.7, friction_factor: 0.25 }, { type: 'Open Hole', depth: 2400, inner_diameter: 215.9, friction_factor: 0.3 }],
@@ -114,7 +114,7 @@ export const organizations = [
 
 /** Case inputs of the imported demo case, in the shapes of /strings, /holes and /fluids. */
 export const caseChildren: Record<string, unknown[]> = {
-  strings: [{ id: id(800), name: 'WellPlan work string', depth: 2400, sections: [
+  strings: [{ id: id(800), name: 'Рабочая колонна (импорт)', depth: 2400, sections: [
     { id: id(801), type: 'Drill Pipe', body_md: 2190, body_length: 2190, body_od: 127, body_id: 108.61, avg_joint_length: 9.14, stabilizer_length: 0.433, stabilizer_od: 152.4, stabilizer_id: 82.55, weight: 32.62, grade: 'X', min_yield_strength: 105000 },
     { id: id(802), type: 'Heavy Weight', body_md: 2370, body_length: 180, body_od: 127, body_id: 76.2, avg_joint_length: 9.14, stabilizer_length: 1.219, stabilizer_od: 165.1, stabilizer_id: 76.2, weight: 73.13, grade: '1340 MOD', min_yield_strength: 55000 },
     { id: id(803), type: 'Mud Motor', body_md: 2400, body_length: 30, body_od: 171.45, body_id: 76.2, avg_joint_length: 9.71, weight: 103.53, grade: '4145H MOD', min_yield_strength: 110000 },

@@ -59,7 +59,7 @@ const Auth: FC = () => {
         </svg>
         <div className="relative max-w-sm">
           <p className="text-3xl font-semibold leading-tight tracking-tight">Планирование бурения: Torque &amp; Drag и гидравлика.</p>
-          <p className="mt-3 text-sm text-paper/60">Импорт кейсов WellPlan, расчёт нагрузок и сравнение с эталоном — в одном рабочем пространстве.</p>
+          <p className="mt-3 text-sm text-paper/60">Импорт инженерных отчётов, расчёт нагрузок и сравнение с эталоном — в одном рабочем пространстве.</p>
         </div>
         <p className="relative text-2xs text-paper/40">Прогнозы ML-модели не валидированы для инженерных решений.</p>
       </aside>

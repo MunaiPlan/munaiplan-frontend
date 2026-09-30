@@ -112,7 +112,7 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
           <TextAreaField label="Описание" containerClassName="md:col-span-2" value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <details className="mt-4">
-          <summary className="cursor-pointer text-xs font-medium text-ink-700">Заголовок WellPlan (необязательно)</summary>
+          <summary className="cursor-pointer text-xs font-medium text-ink-700">Заголовок отчёта (необязательно)</summary>
           <div className="mt-3 grid grid-cols-1 gap-4 md:grid-cols-3">
             {headerFields.map(([k, label]) => (
               <TextField key={k} label={label} value={header[k]} onChange={(e) => setHeader({ ...header, [k]: e.target.value })} />
@@ -121,7 +121,7 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
         </details>
       </Panel>
 
-      <Panel title="Инклинометрия" description="Вставьте строки из WellPlan или Excel (Ctrl+V в любую ячейку MD) — столбцы в порядке таблицы. На узком экране таблица прокручивается вбок."
+      <Panel title="Инклинометрия" description="Вставьте строки из отчёта или Excel (Ctrl+V в любую ячейку MD) — столбцы в порядке таблицы. На узком экране таблица прокручивается вбок."
         actions={<Button size="sm" icon={<FiPlus />} onClick={() => setRows((rs) => [...rs, emptyRow()])}>Строка</Button>} bodyClassName="p-0">
         <div className="thin-scrollbar max-h-[28rem] overflow-auto">
           <table className="w-full border-collapse text-xs">

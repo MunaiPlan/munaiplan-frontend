@@ -105,7 +105,7 @@ export const StringForm = ({ caseId, initial, onSaved, onCancel }: {
           <TextField label="Глубина (по сумме длин)" unit="м" value={(bottoms.at(-1) ?? 0).toLocaleString('ru-RU')} readOnly className="num text-right font-mono" />
         </div>
       </Panel>
-      <Panel title="Элементы (сверху вниз)" description="Можно вставить строки таблицы колонны из отчёта WellPlan (Ctrl+V в ячейку «Элемент»). Низ элемента вычисляется автоматически."
+      <Panel title="Элементы (сверху вниз)" description="Можно вставить строки таблицы колонны из отчёта (Ctrl+V в ячейку «Элемент»). Низ элемента вычисляется автоматически."
         actions={<Button size="sm" icon={<FiPlus />} onClick={() => setRows((rs) => [...rs, blank()])}>Элемент</Button>} bodyClassName="p-0">
         <div className="thin-scrollbar overflow-x-auto">
           <table className="w-full border-collapse text-xs">

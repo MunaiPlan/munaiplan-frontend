@@ -65,8 +65,8 @@ const PreviewSummary: FC<{ preview: ImportPreview }> = ({ preview }) => {
         </Panel>
       )}
       {loads.length > 0 && (
-        <Panel title="Результаты WellPlan (эталон)" description="Сохраняются вместе с кейсом для сравнения с прогнозом MunaiPlan." bodyClassName="p-0">
-          <DataTable columns={loadColumns} rows={loads} rowKey={(l) => l.operation} caption="Результаты WellPlan" />
+        <Panel title="Эталонные результаты из отчёта" description="Сохраняются вместе с кейсом для сравнения с прогнозом MunaiPlan." bodyClassName="p-0">
+          <DataTable columns={loadColumns} rows={loads} rowKey={(l) => l.operation} caption="Эталонные результаты" />
         </Panel>
       )}
       {report.warnings.length > 0 && (
@@ -114,13 +114,13 @@ const ImportPage: FC = () => {
   const hasFiles = Boolean(files.report || files.survey);
   return (
     <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
-      <PageHeader eyebrow="Данные" title="Импорт из WellPlan"
-        meta="Отчёт WellPlan (.docx, рус./англ.) и/или экспорт инклинометрии (.txt). Значения сохраняются в единицах WellPlan: м, мм, кг/м, °, psi." />
+      <PageHeader eyebrow="Данные" title="Импорт отчёта"
+        meta="Отчёт в формате WellPlan™ (.docx, рус./англ.) и/или экспорт инклинометрии (.txt). Значения сохраняются в метрических единицах: м, мм, кг/м, °, psi." />
       <Panel>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <FileDrop label="Отчёт WellPlan" accept=".docx" file={files.report} onChange={choose('report')}
+          <FileDrop label="Отчёт (.docx)" accept=".docx" file={files.report} onChange={choose('report')}
             hint="Колонна, ствол, раствор, траектория и результаты Torque & Drag." />
-          <FileDrop label="Инклинометрия WellPlan" accept=".txt" file={files.survey} onChange={choose('survey')}
+          <FileDrop label="Инклинометрия (.txt)" accept=".txt" file={files.survey} onChange={choose('survey')}
             hint="Нужна, если в отчёте нет траектории. Добавляет абс. отметки и координаты." />
         </div>
         {error && <Alert className="mt-4" tone="error">{error}</Alert>}
@@ -135,6 +135,10 @@ const ImportPage: FC = () => {
         </div>
       </Panel>
       {preview && <PreviewSummary preview={preview} />}
+      <p className="text-xs text-ink-500">
+        WellPlan — товарный знак соответствующего правообладателя. MunaiPlan не связан с ним и не одобрен им;
+        формат поддерживается только для переноса ваших собственных данных.
+      </p>
     </div>
   );
 };

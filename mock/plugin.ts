@@ -28,7 +28,7 @@ const route = (req: IncomingMessage, res: ServerResponse): void => {
     return json(res, 200, predictions[td[1]] ?? {});
   }
   const ref = path.match(/^\/imports\/cases\/([^/]+)\/reference$/);
-  if (ref) return ref[1] === ids.caseImported ? json(res, 200, reference) : json(res, 404, { message: 'no imported WellPlan data' });
+  if (ref) return ref[1] === ids.caseImported ? json(res, 200, reference) : json(res, 404, { message: 'no imported report data for this case' });
   if (path.startsWith('/imports')) return json(res, 400, { message: 'Импорт недоступен в режиме предпросмотра' });
   const item = path.match(/^\/[a-z-]+\/([0-9a-f-]{36})$/);
   if (item) {

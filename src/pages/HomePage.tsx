@@ -31,7 +31,7 @@ const Home: FC = () => {
     <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-6">
       <PageHeader eyebrow="Рабочая область" title="Обзор"
         actions={<>
-          <Button size="sm" icon={<FiUploadCloud />} onClick={() => navigate('/import')}>Импорт из WellPlan</Button>
+          <Button size="sm" icon={<FiUploadCloud />} onClick={() => navigate('/import')}>Импорт отчёта</Button>
           <Button size="sm" variant="primary" icon={<FiPlus />} onClick={() => navigate('/new/company')}>Новая компания</Button>
         </>} />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -43,7 +43,7 @@ const Home: FC = () => {
         ))}
       </div>
       {tree.length === 0 ? (
-        <EmptyState title="Рабочая область пуста" description="Создайте компанию вручную или импортируйте кейс из отчёта WellPlan — иерархия будет создана автоматически."
+        <EmptyState title="Рабочая область пуста" description="Создайте компанию вручную или импортируйте кейс из отчёта — иерархия будет создана автоматически."
           action={<div className="flex flex-wrap justify-center gap-2"><Button icon={<FiUploadCloud />} onClick={() => navigate('/import')}>Импорт</Button>
             <Button variant="primary" icon={<FiPlus />} onClick={() => navigate('/new/company')}>Новая компания</Button></div>} />
       ) : (

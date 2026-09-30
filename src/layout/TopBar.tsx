@@ -30,7 +30,7 @@ const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
 
 const staticTitles: Record<string, string> = {
   "/": "Обзор",
-  "/import": "Импорт из WellPlan",
+  "/import": "Импорт отчёта",
   "/admin": "Администрирование",
 };
 
@@ -188,7 +188,7 @@ export const TopBar = ({
           icon={<FiUploadCloud />}
           onClick={() => navigate("/import")}
           aria-label="Импорт"
-          title="Импорт из WellPlan"
+          title="Импорт отчёта"
         >
           <span className="hidden lg:inline">Импорт</span>
         </Button>

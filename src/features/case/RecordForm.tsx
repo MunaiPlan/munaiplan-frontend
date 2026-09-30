@@ -79,7 +79,7 @@ export const RecordForm = ({ spec, caseId, initial, onSaved, onCancel }: {
               const list = options[f.name];
               return (
                 <SelectField key={f.name} label={f.label} error={errors[f.name]?.message}
-                  hint={list && list.length === 0 ? 'Справочник пуст: он заполняется при импорте из WellPlan.' : undefined} {...register(f.name, rules)}>
+                  hint={list && list.length === 0 ? 'Справочник пуст: он заполняется при импорте отчёта.' : undefined} {...register(f.name, rules)}>
                   <option value="">— выберите —</option>
                   {(list ?? []).map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
                 </SelectField>

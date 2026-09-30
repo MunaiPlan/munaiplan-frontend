@@ -94,7 +94,7 @@ export const EntityPage = ({ kind }: { kind: Kind }) => {
           bodyClassName="p-0">
           {children.length === 0 ? (
             <div className="p-4"><EmptyState title={`Пока нет: ${kinds[childKind].plural.toLowerCase()}`}
-              description={parentKind(childKind) === kind ? 'Создайте первый элемент или импортируйте кейс из WellPlan.' : undefined} /></div>
+              description={parentKind(childKind) === kind ? 'Создайте первый элемент или импортируйте кейс из отчёта.' : undefined} /></div>
           ) : (
             <ul className="divide-y divide-ink-100">
               {children.map((c) => (

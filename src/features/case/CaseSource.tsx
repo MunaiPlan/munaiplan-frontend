@@ -5,7 +5,7 @@ const kb = (bytes: number) => `${Math.max(1, Math.round(bytes / 1024))} КБ`;
 
 /** Provenance of an imported case: source files and what the importer had to derive or assume. */
 export const CaseSource = ({ report }: { report: WellPlanReport }) => (
-  <Panel title="Источник: WellPlan" description="Кейс создан импортом; эталонные результаты WellPlan сохранены для сравнения.">
+  <Panel title="Источник: импортированный отчёт" description="Кейс создан импортом; эталонные результаты из отчёта сохранены для сравнения.">
     <ul className="mb-4 space-y-1 text-sm">
       {report.sources.map((s) => (
         <li key={s.name} className="flex items-center gap-2">

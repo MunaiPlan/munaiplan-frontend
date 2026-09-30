@@ -10,14 +10,14 @@ export const HydraulicsPanel = ({ caseId }: { caseId: string }) => {
   return (
     <div className="space-y-5">
       <Alert tone="info" title="Модуль гидравлики MunaiPlan в разработке">
-        Расчёт гидравлики пока не реализован. Для кейсов, импортированных из WellPlan, ниже показаны результаты самого WellPlan — только для справки.
+        Расчёт гидравлики пока не реализован. Для импортированных кейсов ниже показаны результаты из исходного отчёта — только для справки.
       </Alert>
       {entries.length === 0 && !fluid ? (
-        <EmptyState title="Нет данных гидравлики" description="Импортируйте отчёт WellPlan с разделом «Гидравлика», чтобы увидеть эталонные значения." />
+        <EmptyState title="Нет данных гидравлики" description="Импортируйте отчёт с разделом «Гидравлика», чтобы увидеть эталонные значения." />
       ) : (
         <>
           {fluid && (
-            <Panel title="Буровой раствор (WellPlan)">
+            <Panel title="Буровой раствор (из отчёта)">
               <KeyValue columns={3} items={[
                 { label: 'Раствор', value: fluid.name },
                 { label: 'Плотность', value: fluid.density, unit: 'кг/м³' },
@@ -27,7 +27,7 @@ export const HydraulicsPanel = ({ caseId }: { caseId: string }) => {
             </Panel>
           )}
           {entries.length > 0 && (
-            <Panel title="Параметры долота и насоса (WellPlan)">
+            <Panel title="Параметры долота и насоса (из отчёта)">
               <KeyValue items={entries.map(([label, value]) => ({ label, value }))} />
             </Panel>
           )}

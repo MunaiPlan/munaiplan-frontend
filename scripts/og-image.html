@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- Source of public/og-image.png (1200×630). Regenerate with:
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+       --window-size=1200,630 --screenshot=public/og-image.png scripts/og-image.html -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #fff; color: #0a0a0a; }
+  body { position: relative; font-family: Inter, sans-serif; }
+  .brand { position: absolute; left: 80px; top: 72px; display: flex; align-items: center; gap: 18px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .mark { width: 48px; height: 48px; border-radius: 8px; background: #0a0a0a; color: #fff; display: grid; place-items: center; font: 700 22px 'JetBrains Mono', monospace; }
+  .eyebrow { position: absolute; left: 80px; top: 196px; font: 500 21px 'JetBrains Mono', monospace; color: #737373; }
+  h1 { position: absolute; left: 80px; top: 236px; margin: 0; width: 600px; font-size: 62px; line-height: 1.08; font-weight: 600; letter-spacing: -0.03em; }
+  .url { position: absolute; left: 80px; top: 540px; font: 500 21px 'JetBrains Mono', monospace; color: #737373; }
+  svg { position: absolute; left: 770px; top: 90px; }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 18px; background: #0a0a0a; }
+</style>
+</head>
+<body>
+  <div class="brand"><div class="mark">M</div>MunaiPlan</div>
+  <div class="eyebrow">Torque &amp; Drag · Гидравлика · Импорт отчётов</div>
+  <h1>Планирование бурения в одном рабочем пространстве</h1>
+  <div class="url">munaiplan.com</div>
+  <svg width="320" height="420" viewBox="0 0 320 420" fill="none">
+    <path d="M0 0H318" stroke="#bdbdbd" stroke-width="1.5"/>
+    <path d="M0 0V420" stroke="#bdbdbd" stroke-width="1.5"/>
+    <path id="well" d="M47 0V152C47 215 78 290 160 332C212 358 262 382 306 408" stroke="#0a0a0a" stroke-width="3"/>
+    <path d="M47 152H82" stroke="#737373" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <g id="stations" fill="#0a0a0a"></g>
+  </svg>
+  <div class="bar"></div>
+  <script>
+    // Survey stations: evenly spaced along the drawn trajectory.
+    const well = document.getElementById('well'), g = document.getElementById('stations');
+    const total = well.getTotalLength();
+    for (let i = 1; i <= 8; i++) {
+      const pt = well.getPointAtLength((total * i) / 8.6);
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.setAttribute('r', 4.5);
+      g.appendChild(c);
+    }
+  </script>
+</body>
+</html>

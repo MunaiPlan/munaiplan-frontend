@@ -118,7 +118,7 @@ export const TrajectoryPage = () => {
       </Panel>
 
       {header && (
-        <Panel title="Заголовок WellPlan">
+        <Panel title="Заголовок отчёта">
           <KeyValue columns={3} items={[
             { label: 'Заказчик', value: header.customer as string }, { label: 'Проект', value: header.project as string },
             { label: 'Месторождение', value: header.field as string }, { label: 'Структура', value: header.structure as string },

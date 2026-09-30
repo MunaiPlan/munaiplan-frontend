@@ -116,7 +116,7 @@ export const Explorer = () => {
         <span className="text-2xs font-semibold uppercase tracking-wider text-ink-500">Проводник</span>
         <div className="flex items-center gap-0.5 text-ink-500">
           <IconButton label="Новая компания" onClick={() => navigate('/new/company')}><FiPlus /></IconButton>
-          <IconButton label="Импорт из WellPlan" onClick={() => navigate('/import')}><FiUploadCloud /></IconButton>
+          <IconButton label="Импорт отчёта" onClick={() => navigate('/import')}><FiUploadCloud /></IconButton>
           <IconButton label="Свернуть всё" onClick={() => setExpanded(new Set())}><FiMinusSquare /></IconButton>
           <IconButton label="Обновить" onClick={refresh}><FiRefreshCw /></IconButton>
         </div>
