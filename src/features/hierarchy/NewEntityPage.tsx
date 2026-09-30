@@ -1,5 +1,6 @@
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { HelpLink } from '../../components/HelpLink';
 import { PageHeader, Panel } from '../../ui';
 import { TrajectoryForm } from '../trajectory/TrajectoryForm';
 import { EntityForm } from './EntityForm';
@@ -25,7 +26,10 @@ export const NewEntityPage = () => {
 
   return (
     <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
-      <PageHeader eyebrow="Создание" title={`Новая запись: ${kinds[k].label.toLowerCase()}`} meta={meta} />
+      <PageHeader eyebrow="Создание" title={`Новая запись: ${kinds[k].label.toLowerCase()}`} meta={meta}
+        actions={k === 'trajectory'
+          ? <HelpLink to="trajectory" anchor="edit" topic="ввод и вставка инклинометрии" />
+          : <HelpLink to="hierarchy" anchor={k} topic={`уровень «${kinds[k].label}»`} />} />
       {k === 'trajectory'
         ? <TrajectoryForm designId={parentId} onSaved={saved} onCancel={back} />
         : <Panel><EntityForm kind={k} parentId={parentId} onSaved={saved} onCancel={back} /></Panel>}

@@ -89,8 +89,12 @@ const LandingPage = () => (
           <a href="#features" className="hover:text-ink">Возможности</a>
           <a href="#audience" className="hover:text-ink">Для кого</a>
           <a href="#access" className="hover:text-ink">Доступ</a>
+          <Link to="/docs" className="hover:text-ink">Справка</Link>
         </nav>
-        <Link to="/auth" className={`${primaryCta} h-9 px-4 touch:h-11`}>Войти</Link>
+        <div className="flex items-center gap-1">
+          <Link to="/docs" className="flex h-11 items-center px-3 text-sm text-ink-500 hover:text-ink md:hidden">Справка</Link>
+          <Link to="/auth" className={`${primaryCta} h-9 px-4 touch:h-11`}>Войти</Link>
+        </div>
       </div>
     </header>
 
@@ -218,6 +222,7 @@ const LandingPage = () => (
         <p>Прогнозы ML-моделей не валидированы для инженерных решений.</p>
         <nav aria-label="Ссылки" className="flex gap-4">
           <Link to="/auth" className="hover:text-ink touch:py-3">Войти</Link>
+          <Link to="/docs" className="hover:text-ink touch:py-3">Справка</Link>
           <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-ink touch:py-3">{CONTACT_EMAIL}</a>
         </nav>
       </div>

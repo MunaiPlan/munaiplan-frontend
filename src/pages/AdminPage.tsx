@@ -7,6 +7,7 @@ import {
   adminService, apiErrorMessage,
   type Account, type AccountInput, type OrganizationInput, type OrganizationSummary,
 } from '../services/admin.service';
+import { HelpLink } from '../components/HelpLink';
 import { Alert, Badge, Button, cn, EmptyState, Loading, PageHeader, Panel, SelectField, TextField } from '../ui';
 
 const MIN_PASSWORD = 12;
@@ -120,7 +121,8 @@ const AdminPage: FC = () => {
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
-      <PageHeader eyebrow="Система" title="Администрирование" meta="Организации и учётные записи. Пользователи видят только данные своей организации." />
+      <PageHeader eyebrow="Система" title="Администрирование" meta="Организации и учётные записи. Пользователи видят только данные своей организации."
+        actions={<HelpLink to="admin" topic="организации и пользователи" />} />
       <CreateOrganizationForm onCreated={load} />
       <Panel title="Организации" description={organizations ? `${organizations.length} шт.` : undefined} bodyClassName="p-0">
         {organizations === null ? <Loading /> : organizations.length === 0 ? <div className="p-4"><EmptyState title="Организаций пока нет" /></div> : (

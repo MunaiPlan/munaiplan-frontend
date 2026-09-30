@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { instance } from '../api/axios.api';
 import type { CurrentUser } from '../services/admin.service';
+import { docsHref } from '../features/docs/slugs';
 import { cn } from '../ui';
 
 type Health = 'ok' | 'down' | 'unknown';
@@ -37,7 +38,8 @@ export const StatusBar = ({ user }: { user: CurrentUser | null }) => {
         <Dot health={model} label={model === 'ok' ? 'Модель готова' : model === 'down' ? 'Модель недоступна' : 'Модель'}
           detail="Сервис прогнозов Torque & Drag" />
         {/* Always visible, phones included: model output is not a validated calculation. */}
-        <span className="truncate" title="Прогнозы ML-моделей не подтверждены сравнением с эталонными расчётами">Прогнозы не валидированы</span>
+        <a href={docsHref('torque-drag', 'not-validated')} target="_blank" rel="noopener" className="truncate hover:text-paper hover:underline"
+          title="Прогнозы ML-моделей не подтверждены сравнением с эталонными расчётами. Подробнее в справке">Прогнозы не валидированы</a>
       </div>
       {/* Phones show the account in the top bar menu instead. */}
       <div className="hidden min-w-0 items-center gap-3 md:flex">

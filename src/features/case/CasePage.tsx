@@ -14,6 +14,8 @@ import { useCaseReference } from './useCaseReference';
 import type { ICase } from '../../types/types';
 import TorqueDragPanel from '../torque-drag/TorqueDragPanel';
 import { FluidView, HoleView, PressureView, RigView, StringView } from './CaseData';
+import { HelpLink } from '../../components/HelpLink';
+import type { DocSlug } from '../docs/slugs';
 
 const tabs = [
   { key: 'overview', label: 'Обзор' },
@@ -26,6 +28,18 @@ const tabs = [
   { key: 'hydraulics', label: 'Гидравлика' },
 ] as const;
 type TabKey = (typeof tabs)[number]['key'];
+
+/** The manual section behind the «?» link, per tab. */
+const help: Record<TabKey, { to: DocSlug; anchor?: string; topic: string }> = {
+  overview: { to: 'case', anchor: 'properties', topic: 'кейс и его свойства' },
+  hole: { to: 'hole-and-string', anchor: 'hole', topic: 'вкладка «Ствол»' },
+  string: { to: 'hole-and-string', anchor: 'string', topic: 'вкладка «Колонна»' },
+  fluid: { to: 'fluid-and-rig', anchor: 'fluid', topic: 'вкладка «Раствор»' },
+  pressure: { to: 'fluid-and-rig', anchor: 'pressure', topic: 'давления и температура' },
+  rig: { to: 'fluid-and-rig', anchor: 'rig', topic: 'вкладка «Буровая»' },
+  td: { to: 'torque-drag', topic: 'Torque & Drag' },
+  hydraulics: { to: 'hydraulics', topic: 'гидравлика' },
+};
 
 /** A case: its inputs (hole, string, fluid, pressures, rig) and analyses, one tab each. */
 const CasePage = () => {
@@ -73,6 +87,7 @@ const CasePage = () => {
           actions={<>
             <Button size="sm" icon={<FiEdit2 />} onClick={() => { setTab('overview'); setEditing(true); }}>Изменить</Button>
             <Button size="sm" variant="danger" icon={<FiTrash2 />} onClick={() => setConfirming(true)}>Удалить</Button>
+            <HelpLink {...help[tab]} />
           </>} />
         <Tabs items={tabs} value={tab} onChange={setTab} label="Разделы кейса" className="-mx-4 border-b-0 px-2 md:mx-0 md:px-0" />
       </div>

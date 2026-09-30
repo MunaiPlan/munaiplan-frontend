@@ -8,6 +8,7 @@ import { hierarchyApi } from './api';
 import { EntityForm } from './EntityForm';
 import { displayName, kinds, parentKind, type Kind } from './hierarchy';
 import { KindIcon } from './icons';
+import { HelpLink } from '../../components/HelpLink';
 import { useTree } from './treeState';
 
 type Record_ = Record<string, unknown>;
@@ -73,6 +74,7 @@ export const EntityPage = ({ kind }: { kind: Kind }) => {
         actions={!editing && <>
           <Button size="sm" icon={<FiEdit2 />} onClick={() => setEditing(true)}>Изменить</Button>
           <Button size="sm" variant="danger" icon={<FiTrash2 />} onClick={() => setConfirming(true)}>Удалить</Button>
+          <HelpLink to="hierarchy" anchor={kind} topic={`уровень «${spec.label}»`} />
         </>} />
 
       {editing ? (

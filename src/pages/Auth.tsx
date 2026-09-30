@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/user/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -78,6 +78,11 @@ const Auth: FC = () => {
             <Button type="submit" variant="primary" loading={isSubmitting} className="w-full">Войти</Button>
           </form>
           <p className="mt-6 text-xs text-ink-500">Регистрация недоступна. Для доступа обратитесь к администратору вашей организации.</p>
+          <p className="mt-3 text-xs text-ink-500">
+            <Link to="/docs/start#access" className="underline decoration-ink-300 underline-offset-2 hover:text-ink">Как получить доступ</Link>
+            {' · '}
+            <Link to="/docs" className="underline decoration-ink-300 underline-offset-2 hover:text-ink">Справка</Link>
+          </p>
         </div>
       </main>
     </div>

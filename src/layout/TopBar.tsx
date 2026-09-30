@@ -13,6 +13,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import {
+  FiHelpCircle,
   FiLogOut,
   FiMoreVertical,
   FiSettings,
@@ -24,6 +25,7 @@ import { removeUserLocally } from "../api/axios.api";
 import { kinds } from "../features/hierarchy/hierarchy";
 import { useTree } from "../features/hierarchy/treeState";
 import type { CurrentUser } from "../services/admin.service";
+import { docsHref } from "../features/docs/slugs";
 import { Button, cn } from "../ui";
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
@@ -182,6 +184,18 @@ export const TopBar = ({
 
       {/* Tablets and desktops: the actions stay in the bar (icons only below 1024px). */}
       <div className="hidden shrink-0 items-center gap-1.5 md:flex">
+        {/* The manual opens in a new tab so unsaved input on this screen is kept. */}
+        <a
+          href={docsHref()}
+          target="_blank"
+          rel="noopener"
+          aria-label="Справка (откроется в новой вкладке)"
+          title="Справка"
+          className="inline-flex h-7 shrink-0 items-center justify-center gap-1.5 rounded-md px-2.5 text-xs font-medium text-ink-700 transition-colors hover:bg-ink-100 hover:text-ink touch:h-11 touch:px-3.5 touch:text-sm"
+        >
+          <FiHelpCircle aria-hidden="true" />
+          <span className="hidden lg:inline">Справка</span>
+        </a>
         <Button
           size="sm"
           variant="ghost"
@@ -227,6 +241,12 @@ export const TopBar = ({
             {user.role === "admin" && <p>администратор</p>}
           </div>
         )}
+        <MenuItem
+          icon={<FiHelpCircle />}
+          onSelect={() => window.open(docsHref(), "_blank", "noopener")}
+        >
+          Справка
+        </MenuItem>
         <MenuItem icon={<FiUploadCloud />} onSelect={() => navigate("/import")}>
           Импорт
         </MenuItem>

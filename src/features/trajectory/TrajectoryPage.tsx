@@ -9,6 +9,7 @@ import { hierarchyApi } from '../hierarchy/api';
 import { kinds } from '../hierarchy/hierarchy';
 import { KindIcon } from '../hierarchy/icons';
 import { useTree } from '../hierarchy/treeState';
+import { HelpLink } from '../../components/HelpLink';
 import { TrajectoryForm, type TrajectoryData } from './TrajectoryForm';
 import { surveyColumns, type SurveyUnit } from './survey';
 
@@ -77,7 +78,7 @@ export const TrajectoryPage = () => {
   if (editing) {
     return (
       <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
-        <PageHeader eyebrow="Траектория" title={`Изменить: ${data.name}`} />
+        <PageHeader eyebrow="Траектория" title={`Изменить: ${data.name}`} actions={<HelpLink to="trajectory" anchor="edit" topic="ввод и вставка инклинометрии" />} />
         <TrajectoryForm initial={data} onCancel={() => setEditing(false)}
           onSaved={() => { toast.success('Траектория сохранена'); setEditing(false); load(); }} />
       </div>
@@ -90,6 +91,7 @@ export const TrajectoryPage = () => {
         actions={<>
           <Button size="sm" icon={<FiEdit2 />} onClick={() => setEditing(true)}>Изменить</Button>
           <Button size="sm" variant="danger" icon={<FiTrash2 />} onClick={() => setConfirming(true)}>Удалить</Button>
+          <HelpLink to="trajectory" topic="траектория и инклинометрия" />
         </>} />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { apiErrorMessage } from '../services/admin.service';
 import { importService, operationLabels, type ImportPreview, type WellPlanFiles } from '../services/import.service';
 import { treeChanged } from '../features/hierarchy/treeEvents';
+import { HelpLink } from '../components/HelpLink';
 import { Alert, Button, DataTable, FileDrop, KeyValue, PageHeader, Panel, type Column } from '../ui';
 
 const fmt = (value: number | null | undefined, digits = 2) =>
@@ -114,7 +115,7 @@ const ImportPage: FC = () => {
   const hasFiles = Boolean(files.report || files.survey);
   return (
     <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
-      <PageHeader eyebrow="Данные" title="Импорт отчёта"
+      <PageHeader eyebrow="Данные" title="Импорт отчёта" actions={<HelpLink to="import" topic="импорт отчётов" />}
         meta="Отчёт в формате WellPlan™ (.docx, рус./англ.) и/или экспорт инклинометрии (.txt). Значения сохраняются в метрических единицах: м, мм, кг/м, °, psi." />
       <Panel>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
