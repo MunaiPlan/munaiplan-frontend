@@ -19,6 +19,11 @@ const entityRoutes: [string, Kind][] = [
 ];
 
 export const createAppRouter = () => createBrowserRouter([
+    // The public user manual: its own layout and a separate lazily loaded chunk, signed in or out.
+    { path: '/docs/:slug?', errorElement: <ErrorPage />, lazy: async () => {
+        const { DocsApp } = await import("../features/docs/DocsApp");
+        return { element: <DocsApp /> };
+    } },
     {
         path: '/',
         element: <Layout />,
