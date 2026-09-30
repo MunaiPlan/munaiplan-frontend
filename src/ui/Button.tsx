@@ -12,7 +12,11 @@ const variants: Record<Variant, string> = {
   // Destructive actions stay monochrome but read as serious: solid outline, underline on hover.
   danger: 'border border-ink bg-paper text-ink hover:bg-ink hover:text-paper disabled:border-ink-300 disabled:text-ink-300',
 };
-const sizes: Record<Size, string> = { sm: 'h-7 px-2.5 text-xs gap-1.5', md: 'h-9 px-3.5 text-sm gap-2' };
+// On touch screens every size is at least 44px tall.
+const sizes: Record<Size, string> = {
+  sm: 'h-7 px-2.5 text-xs gap-1.5 touch:h-11 touch:px-3.5 touch:text-sm',
+  md: 'h-9 px-3.5 text-sm gap-2 touch:h-11',
+};
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;

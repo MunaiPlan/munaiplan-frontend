@@ -30,7 +30,7 @@ export const FileDrop = ({ label, hint, accept, file, onChange }: {
             <p className="text-xs text-ink-500">{Math.max(1, Math.round(file.size / 1024))} КБ</p>
           </div>
           <button type="button" aria-label="Убрать файл" onClick={() => { onChange(null); if (input.current) input.current.value = ''; }}
-            className="rounded p-1.5 text-ink-500 hover:bg-ink-100 hover:text-ink"><FiX /></button>
+            className="rounded p-1.5 text-ink-500 hover:bg-ink-100 hover:text-ink touch:p-3"><FiX /></button>
         </div>
       ) : (
         <div onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)} onDrop={onDrop}

@@ -36,7 +36,7 @@ export const TextField = forwardRef<HTMLInputElement, Common & InputHTMLAttribut
     return (
       <FieldFrame label={label} unit={unit} hint={hint} error={error} id={fieldId} className={containerClassName}>
         <input ref={ref} id={fieldId} aria-invalid={Boolean(error) || undefined} aria-describedby={error || hint ? `${fieldId}-msg` : undefined}
-          className={cn(control, 'h-9', rest.type === 'number' && 'num text-right font-mono', error ? 'border-ink' : 'border-ink-300', className)} {...rest} />
+          className={cn(control, 'h-9 touch:h-11', rest.type === 'number' && 'num text-right font-mono', error ? 'border-ink' : 'border-ink-300', className)} {...rest} />
       </FieldFrame>
     );
   });
@@ -49,7 +49,7 @@ export const SelectField = forwardRef<HTMLSelectElement, Common & SelectHTMLAttr
     return (
       <FieldFrame label={label} unit={unit} hint={hint} error={error} id={fieldId} className={containerClassName}>
         <select ref={ref} id={fieldId} aria-invalid={Boolean(error) || undefined}
-          className={cn(control, 'h-9 pr-8', error ? 'border-ink' : 'border-ink-300', className)} {...rest}>{children}</select>
+          className={cn(control, 'h-9 pr-8 touch:h-11', error ? 'border-ink' : 'border-ink-300', className)} {...rest}>{children}</select>
       </FieldFrame>
     );
   });

@@ -39,6 +39,27 @@
   }
 }
 
+/* Phones and tablets: 16px text in form controls stops iOS from zooming in on focus. */
+@media (pointer: coarse), (max-width: 767.98px) {
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Legacy floating-label inputs, kept until every form uses ui/Field. */
 .input-wrapper {
   position: relative;
@@ -71,4 +92,26 @@
 }
 .Toastify__progress-bar {
   @apply bg-ink;
+}
+
+/* Landing page line art: animate only for visitors who have not asked for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .sketch-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: sketch-draw 1.6s ease-out 0.2s forwards;
+  }
+  .sketch-fade {
+    opacity: 0;
+    animation: sketch-fade 0.8s ease-out 1s forwards;
+  }
+  .sketch-late {
+    animation-delay: 1.3s;
+  }
+}
+@keyframes sketch-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes sketch-fade {
+  to { opacity: 1; }
 }

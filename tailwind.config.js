@@ -8,6 +8,10 @@ export default {
       center: true,
     },
     extend: {
+      screens: {
+        // Touch sizing: phones by width, plus any coarse pointer (tablets). Use as `touch:h-11`.
+        touch: { raw: '(pointer: coarse), (max-width: 767.98px)' },
+      },
       colors: {
         ink: { DEFAULT: '#0A0A0A', 700: '#3F3F46', 500: '#71717A', 300: '#D4D4D8', 200: '#E4E4E7', 100: '#F4F4F5', 50: '#FAFAFA' },
         paper: '#FFFFFF',

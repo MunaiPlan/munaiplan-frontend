@@ -15,7 +15,7 @@ export const KeyValue = ({ items, columns = 2, className }: { items: KeyValueIte
     {items.map((item, i) => (
       <div key={i} className="flex items-baseline justify-between gap-4 border-b border-ink-100 pb-2">
         <dt className="text-xs text-ink-500">{item.label}</dt>
-        <dd className={cn('text-right text-sm text-ink', typeof item.value === 'number' && 'num font-mono')}>
+        <dd className={cn('break-words text-right text-sm text-ink', typeof item.value === 'number' && 'num font-mono')}>
           {isBlank(item.value) ? <span className="text-ink-300">—</span> : item.value}
           {item.unit && !isBlank(item.value) && <span className="ml-1 font-mono text-2xs text-ink-500">{item.unit}</span>}
         </dd>
