@@ -1,4 +1,5 @@
-FROM node:22.23.0-bookworm-slim AS build
+# Static build output is platform independent, so build on the host architecture.
+FROM --platform=$BUILDPLATFORM node:22.23.0-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
