@@ -44,7 +44,7 @@ const PreviewSummary: FC<{ preview: ImportPreview }> = ({ preview }) => {
       <Panel title="Будет создано" description="Существующие уровни с тем же названием будут использованы повторно; траектория и кейс создаются всегда.">
         <ol className="flex flex-wrap items-center gap-1.5 text-sm">
           {[c.company, c.field, c.site, c.well, c.wellbore, c.design, c.case].map((name, i) => (
-            <li key={i} className="flex items-center gap-1.5">
+            <li key={i} className="flex min-w-0 items-center gap-1.5 break-words">
               {i > 0 && <span className="text-ink-300" aria-hidden="true">/</span>}
               <span className={i === 6 ? 'font-semibold' : ''}>{name || '—'}</span>
             </li>
@@ -113,7 +113,7 @@ const ImportPage: FC = () => {
 
   const hasFiles = Boolean(files.report || files.survey);
   return (
-    <div className="mx-auto max-w-5xl space-y-5 p-6">
+    <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
       <PageHeader eyebrow="Данные" title="Импорт из WellPlan"
         meta="Отчёт WellPlan (.docx, рус./англ.) и/или экспорт инклинометрии (.txt). Значения сохраняются в единицах WellPlan: м, мм, кг/м, °, psi." />
       <Panel>
@@ -124,11 +124,11 @@ const ImportPage: FC = () => {
             hint="Нужна, если в отчёте нет траектории. Добавляет абс. отметки и координаты." />
         </div>
         {error && <Alert className="mt-4" tone="error">{error}</Alert>}
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-ink-200 pt-4">
+        <div className="mt-5 flex flex-col gap-3 border-t border-ink-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-xs text-ink-500">
             {preview ? <><FiCheck aria-hidden="true" /> Проверено — просмотрите данные ниже</> : '1. Проверьте файлы  →  2. Импортируйте'}
           </p>
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex">
             <Button disabled={!hasFiles} loading={busy === 'check'} onClick={check}>Проверить</Button>
             <Button variant="primary" disabled={!preview || Boolean(preview.duplicate)} loading={busy === 'commit'} onClick={commit}>Импортировать</Button>
           </div>

@@ -24,7 +24,7 @@ export const NewEntityPage = () => {
   const meta = parent ? `в ${kinds[parent.kind].label.toLowerCase()} «${parent.name}»` : undefined;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-5 p-6">
+    <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
       <PageHeader eyebrow="Создание" title={`Новая запись: ${kinds[k].label.toLowerCase()}`} meta={meta} />
       {k === 'trajectory'
         ? <TrajectoryForm designId={parentId} onSaved={saved} onCancel={back} />

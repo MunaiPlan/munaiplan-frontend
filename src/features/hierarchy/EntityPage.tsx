@@ -44,7 +44,7 @@ export const EntityPage = ({ kind }: { kind: Kind }) => {
 
   useEffect(() => { setRecord(null); setEditing(false); load(); }, [load]);
 
-  if (loadError) return <div className="p-6"><Alert tone="error" title="Ошибка загрузки" action={<Button size="sm" onClick={load}>Повторить</Button>}>{loadError}</Alert></div>;
+  if (loadError) return <div className="p-4 md:p-6"><Alert tone="error" title="Ошибка загрузки" action={<Button size="sm" onClick={load}>Повторить</Button>}>{loadError}</Alert></div>;
   if (!record || !id) return <Loading />;
 
   const node = find(id);
@@ -67,7 +67,7 @@ export const EntityPage = ({ kind }: { kind: Kind }) => {
   };
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 p-6">
+    <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
       <PageHeader eyebrow={spec.label} title={displayName(kind, record)}
         meta={parent && <>в {kinds[parent.kind].label.toLowerCase()} <Link className="underline decoration-ink-300 hover:decoration-ink" to={kinds[parent.kind].route(parent.id)}>{parent.name}</Link></>}
         actions={!editing && <>

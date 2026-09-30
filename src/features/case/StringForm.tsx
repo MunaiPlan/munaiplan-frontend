@@ -96,7 +96,7 @@ export const StringForm = ({ caseId, initial, onSaved, onCancel }: {
     }
   };
 
-  const cell = 'h-7 w-full min-w-[4.5rem] border-0 bg-transparent px-2 text-xs focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
+  const cell = 'h-7 touch:h-11 w-full min-w-[4.5rem] border-0 bg-transparent px-2 text-xs focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
   return (
     <div className="space-y-4">
       <Panel title={initial?.id ? 'Изменить колонну' : 'Новая колонна'}>
@@ -134,9 +134,9 @@ export const StringForm = ({ caseId, initial, onSaved, onCancel }: {
                   ))}
                   <td className="num border-l border-ink-100 px-2 text-right font-mono text-ink-500">{bottoms[i].toLocaleString('ru-RU', { maximumFractionDigits: 2 })}</td>
                   <td className="whitespace-nowrap border-l border-ink-100 px-1 text-right">
-                    <button type="button" aria-label="Выше" disabled={i === 0} onClick={() => move(i, -1)} className="rounded p-1 text-ink-500 hover:bg-ink-100 disabled:opacity-30"><FiArrowUp className="h-3.5 w-3.5" /></button>
-                    <button type="button" aria-label="Ниже" disabled={i === rows.length - 1} onClick={() => move(i, 1)} className="rounded p-1 text-ink-500 hover:bg-ink-100 disabled:opacity-30"><FiArrowDown className="h-3.5 w-3.5" /></button>
-                    <button type="button" aria-label={`Удалить строку ${i + 1}`} onClick={() => setRows((rs) => rs.filter((_, j) => j !== i))} className="rounded p-1 text-ink-500 hover:bg-ink-100"><FiTrash2 className="h-3.5 w-3.5" /></button>
+                    <button type="button" aria-label="Выше" disabled={i === 0} onClick={() => move(i, -1)} className="rounded p-1 text-ink-500 hover:bg-ink-100 disabled:opacity-30 touch:p-[15px]"><FiArrowUp className="h-3.5 w-3.5" /></button>
+                    <button type="button" aria-label="Ниже" disabled={i === rows.length - 1} onClick={() => move(i, 1)} className="rounded p-1 text-ink-500 hover:bg-ink-100 disabled:opacity-30 touch:p-[15px]"><FiArrowDown className="h-3.5 w-3.5" /></button>
+                    <button type="button" aria-label={`Удалить строку ${i + 1}`} onClick={() => setRows((rs) => rs.filter((_, j) => j !== i))} className="rounded p-1 text-ink-500 hover:bg-ink-100 touch:p-[15px]"><FiTrash2 className="h-3.5 w-3.5" /></button>
                   </td>
                 </tr>
               ))}
@@ -146,7 +146,7 @@ export const StringForm = ({ caseId, initial, onSaved, onCancel }: {
       </Panel>
       {problems.length > 0 && <Alert tone="warning" title="Проверьте данные"><ul className="list-disc pl-4">{problems.map((p) => <li key={p}>{p}</li>)}</ul></Alert>}
       {error && <Alert tone="error">{error}</Alert>}
-      <div className="flex justify-end gap-2">
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button onClick={onCancel}>Отмена</Button>
         <Button variant="primary" loading={saving} onClick={submit}>Сохранить колонну</Button>
       </div>

@@ -57,12 +57,12 @@ export const EntityForm = ({ kind, parentId, id, initial, onSaved, onCancel }: {
           const common = { label: f.label, unit: f.unit, error: errors[f.name]?.message, ...register(f.name, rules) };
           return f.type === 'textarea'
             ? <TextAreaField key={f.name} containerClassName="md:col-span-2" {...common} />
-            : <TextField key={f.name} type={f.type === 'number' ? 'text' : f.type ?? 'text'} inputMode={f.type === 'number' ? 'decimal' : undefined}
+            : <TextField key={f.name} type={f.type === 'number' ? 'text' : f.type ?? 'text'} inputMode={f.type === 'number' ? 'decimal' : f.type === 'tel' ? 'tel' : undefined}
                 className={f.type === 'number' ? 'num text-right font-mono' : undefined} {...common} />;
         })}
       </div>
       {error && <Alert tone="error">{error}</Alert>}
-      <div className="flex justify-end gap-2 border-t border-ink-200 pt-4">
+      <div className="flex flex-col-reverse gap-2 border-t border-ink-200 pt-4 sm:flex-row sm:justify-end">
         <Button onClick={onCancel}>Отмена</Button>
         <Button type="submit" variant="primary" loading={isSubmitting}>{id ? 'Сохранить' : `Создать`}</Button>
       </div>

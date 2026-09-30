@@ -22,7 +22,7 @@ const ProfileChart = ({ data, x, y, xLabel, yLabel, reversedY }: {
   data: Unit[]; x: keyof Unit; y: keyof Unit; xLabel: string; yLabel: string; reversedY?: boolean;
 }) => (
   <ResponsiveContainer width="100%" height={260}>
-    <LineChart data={data} margin={{ top: 8, right: 16, bottom: 20, left: 8 }}>
+    <LineChart data={data} margin={{ top: 8, right: 12, bottom: 20, left: 0 }}>
       <CartesianGrid stroke="#E4E4E7" strokeDasharray="2 4" />
       <XAxis type="number" dataKey={x} {...axis} domain={['auto', 'auto']} label={{ value: xLabel, position: 'insideBottom', offset: -10, fontSize: 11, fill: '#71717A' }} />
       <YAxis type="number" dataKey={y} {...axis} reversed={reversedY} domain={reversedY ? [0, 'dataMax'] : ['auto', 'auto']} width={56}
@@ -55,7 +55,7 @@ export const TrajectoryPage = () => {
     key: c.key, header: c.label, unit: c.unit, numeric: true, render: (u: Unit) => fmt(u[c.key], c.key.startsWith('global') ? 1 : 2),
   })), []);
 
-  if (error) return <div className="p-6"><Alert tone="error" title="Ошибка загрузки">{error}</Alert></div>;
+  if (error) return <div className="p-4 md:p-6"><Alert tone="error" title="Ошибка загрузки">{error}</Alert></div>;
   if (!data || !id) return <Loading />;
 
   const units = data.units;
@@ -76,7 +76,7 @@ export const TrajectoryPage = () => {
 
   if (editing) {
     return (
-      <div className="mx-auto max-w-6xl space-y-5 p-6">
+      <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
         <PageHeader eyebrow="Траектория" title={`Изменить: ${data.name}`} />
         <TrajectoryForm initial={data} onCancel={() => setEditing(false)}
           onSaved={() => { toast.success('Траектория сохранена'); setEditing(false); load(); }} />
@@ -85,7 +85,7 @@ export const TrajectoryPage = () => {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-5 p-6">
+    <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
       <PageHeader eyebrow="Траектория" title={data.name || 'Без названия'} meta={data.description}
         actions={<>
           <Button size="sm" icon={<FiEdit2 />} onClick={() => setEditing(true)}>Изменить</Button>

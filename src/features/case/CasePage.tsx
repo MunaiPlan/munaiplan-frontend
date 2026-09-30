@@ -48,7 +48,7 @@ const CasePage = () => {
   }, [id]);
   useEffect(() => { setRecord(null); setEditing(false); load(); }, [load]);
 
-  if (error) return <div className="p-6"><Alert tone="error" title="Ошибка загрузки">{error}</Alert></div>;
+  if (error) return <div className="p-4 md:p-6"><Alert tone="error" title="Ошибка загрузки">{error}</Alert></div>;
   if (!record || !id) return <Loading />;
   const parent = pathTo(id).at(-2);
 
@@ -64,7 +64,7 @@ const CasePage = () => {
 
   return (
     <div className="flex min-h-full flex-col">
-      <div className="border-b border-ink-200 px-6 pt-5">
+      <div className="border-b border-ink-200 px-4 pt-4 md:px-6 md:pt-5">
         <PageHeader eyebrow="Кейс" title={record.case_name || 'Без названия'}
           meta={<span className="flex items-center gap-2">
             {record.drill_depth ? <span className="num font-mono">{record.drill_depth.toLocaleString('ru-RU')} м</span> : null}
@@ -74,10 +74,10 @@ const CasePage = () => {
             <Button size="sm" icon={<FiEdit2 />} onClick={() => { setTab('overview'); setEditing(true); }}>Изменить</Button>
             <Button size="sm" variant="danger" icon={<FiTrash2 />} onClick={() => setConfirming(true)}>Удалить</Button>
           </>} />
-        <Tabs items={tabs} value={tab} onChange={setTab} label="Разделы кейса" className="border-b-0" />
+        <Tabs items={tabs} value={tab} onChange={setTab} label="Разделы кейса" className="-mx-4 border-b-0 px-2 md:mx-0 md:px-0" />
       </div>
 
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-4 md:p-6">
         {tab === 'overview' && (
           <div className="mx-auto max-w-5xl space-y-5">
             {editing ? (

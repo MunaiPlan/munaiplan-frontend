@@ -7,7 +7,7 @@ export type Kind = 'company' | 'field' | 'site' | 'well' | 'wellbore' | 'design'
 export interface FieldSpec {
   name: string;
   label: string;
-  type?: 'text' | 'number' | 'date' | 'textarea';
+  type?: 'text' | 'number' | 'date' | 'textarea' | 'tel';
   unit?: string;
   required?: boolean;
   /** Shown in the detail panel but not in the form. */
@@ -38,7 +38,7 @@ export const kinds: Record<Kind, KindSpec> = {
       { name: 'group', label: 'Группа' },
       { name: 'representative', label: 'Представитель' },
       { name: 'address', label: 'Адрес' },
-      { name: 'phone', label: 'Телефон' },
+      { name: 'phone', label: 'Телефон', type: 'tel' },
     ],
   },
   field: {

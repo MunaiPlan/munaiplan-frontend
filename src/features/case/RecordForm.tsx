@@ -92,7 +92,7 @@ export const RecordForm = ({ spec, caseId, initial, onSaved, onCancel }: {
           })}
         </div>
         {error && <Alert tone="error">{error}</Alert>}
-        <div className="flex justify-end gap-2 border-t border-ink-200 pt-4">
+        <div className="flex flex-col-reverse gap-2 border-t border-ink-200 pt-4 sm:flex-row sm:justify-end">
           <Button onClick={onCancel}>Отмена</Button>
           <Button type="submit" variant="primary" loading={isSubmitting}>Сохранить</Button>
         </div>

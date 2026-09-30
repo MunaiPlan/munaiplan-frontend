@@ -36,7 +36,7 @@ const CreateOrganizationForm: FC<{ onCreated: () => void }> = ({ onCreated }) =>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <TextField label="Название" error={errors.organization?.name?.message} {...register('organization.name', { required })} />
           <TextField label="Email организации" type="email" error={errors.organization?.email?.message} {...register('organization.email', emailRules)} />
-          <TextField label="Телефон" {...register('organization.phone')} />
+          <TextField label="Телефон" type="tel" inputMode="tel" autoComplete="tel" {...register('organization.phone')} />
           <TextField label="Адрес" {...register('organization.address')} />
         </div>
         <p className="border-t border-ink-200 pt-4 text-2xs font-medium uppercase tracking-wider text-ink-500">Первый пользователь</p>
@@ -47,7 +47,7 @@ const CreateOrganizationForm: FC<{ onCreated: () => void }> = ({ onCreated }) =>
           <TextField label="Пароль" type="password" autoComplete="new-password" hint={`Не короче ${MIN_PASSWORD} символов`}
             error={errors.user?.password?.message} {...register('user.password', passwordRules)} />
         </div>
-        <div className="flex justify-end"><Button type="submit" variant="primary" loading={isSubmitting}>Создать организацию</Button></div>
+        <div className="flex justify-end"><Button type="submit" variant="primary" loading={isSubmitting} className="w-full sm:w-auto">Создать организацию</Button></div>
       </form>
     </Panel>
   );
@@ -81,13 +81,13 @@ const OrganizationUsers: FC<{ organization: OrganizationSummary; onChanged: () =
         <ul className="divide-y divide-ink-200 rounded-md border border-ink-200 bg-paper">
           {users.map((u) => (
             <li key={u.id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
-              <span className="truncate">{u.name} {u.surname} <span className="text-ink-500">{u.email}</span></span>
+              <span className="min-w-0 break-words">{u.name} {u.surname} <span className="text-ink-500">{u.email}</span></span>
               <Badge tone={u.role === 'admin' ? 'solid' : 'default'}>{u.role === 'admin' ? 'Администратор' : 'Пользователь'}</Badge>
             </li>
           ))}
         </ul>
       )}
-      <form onSubmit={handleSubmit(submit)} noValidate className="grid grid-cols-1 items-start gap-3 md:grid-cols-[1fr_1fr_1.3fr_1fr_0.9fr_auto]">
+      <form onSubmit={handleSubmit(submit)} noValidate className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.3fr_1fr_0.9fr_auto]">
         <TextField label="Имя" error={errors.name?.message} {...register('name', { required })} />
         <TextField label="Фамилия" error={errors.surname?.message} {...register('surname', { required })} />
         <TextField label="Email" type="email" autoComplete="off" error={errors.email?.message} {...register('email', emailRules)} />
@@ -96,7 +96,7 @@ const OrganizationUsers: FC<{ organization: OrganizationSummary; onChanged: () =
           <option value="user">Пользователь</option>
           <option value="admin">Администратор</option>
         </SelectField>
-        <Button type="submit" variant="primary" loading={isSubmitting} icon={<FiUserPlus />} className="md:mt-5">Добавить</Button>
+        <Button type="submit" variant="primary" loading={isSubmitting} icon={<FiUserPlus />} className="sm:col-span-2 xl:col-span-1 xl:mt-5">Добавить</Button>
       </form>
     </div>
   );
@@ -116,10 +116,10 @@ const AdminPage: FC = () => {
   useEffect(() => { if (isAdmin) load(); }, [isAdmin, load]);
 
   if (loading) return <Loading />;
-  if (!isAdmin) return <div className="p-6"><Alert tone="warning" title="Доступ только для администраторов" /></div>;
+  if (!isAdmin) return <div className="p-4 md:p-6"><Alert tone="warning" title="Доступ только для администраторов" /></div>;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-5 p-6">
+    <div className="mx-auto max-w-5xl space-y-5 p-4 md:p-6">
       <PageHeader eyebrow="Система" title="Администрирование" meta="Организации и учётные записи. Пользователи видят только данные своей организации." />
       <CreateOrganizationForm onCreated={load} />
       <Panel title="Организации" description={organizations ? `${organizations.length} шт.` : undefined} bodyClassName="p-0">
@@ -130,10 +130,10 @@ const AdminPage: FC = () => {
               return (
                 <li key={org.id}>
                   <button type="button" aria-expanded={open} onClick={() => setExpanded(open ? null : org.id)}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-ink-50">
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-ink-50 touch:py-3.5">
                     <FiChevronRight aria-hidden="true" className={cn('h-4 w-4 text-ink-500 transition-transform', open && 'rotate-90')} />
-                    <span className="flex-1 truncate"><span className="font-medium">{org.name}</span> <span className="text-sm text-ink-500">{org.email}</span></span>
-                    <span className="text-xs text-ink-500">{org.user_count} польз.</span>
+                    <span className="min-w-0 flex-1 truncate"><span className="font-medium">{org.name}</span> <span className="text-sm text-ink-500">{org.email}</span></span>
+                    <span className="shrink-0 text-xs text-ink-500">{org.user_count} польз.</span>
                   </button>
                   {open && <OrganizationUsers organization={org} onChanged={load} />}
                 </li>

@@ -96,7 +96,7 @@ export const HoleForm = ({ caseId, initial, onSaved, onCancel }: {
     }
   };
 
-  const cell = 'h-7 w-full min-w-[4.5rem] border-0 bg-transparent px-2 text-xs focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
+  const cell = 'h-7 touch:h-11 w-full min-w-[4.5rem] border-0 bg-transparent px-2 text-xs focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
   return (
     <div className="space-y-4">
       <Panel title="Обсадные колонны" actions={<Button size="sm" icon={<FiPlus />} onClick={addCasing}>Колонна</Button>} bodyClassName="p-0">
@@ -119,7 +119,7 @@ export const HoleForm = ({ caseId, initial, onSaved, onCancel }: {
                     ))}
                     <td className="border-l border-ink-100 text-center">
                       <button type="button" aria-label={`Удалить колонну ${i + 1}`} onClick={() => setCasings((cs) => cs.filter((_, j) => j !== i))}
-                        className="rounded p-1 text-ink-500 hover:bg-ink-100"><FiTrash2 className="h-3.5 w-3.5" /></button>
+                        className="rounded p-1 text-ink-500 hover:bg-ink-100 touch:p-[15px]"><FiTrash2 className="h-3.5 w-3.5" /></button>
                     </td>
                   </tr>
                 ))}
@@ -138,7 +138,7 @@ export const HoleForm = ({ caseId, initial, onSaved, onCancel }: {
       </Panel>
       {problems.length > 0 && <Alert tone="warning" title="Проверьте данные"><ul className="list-disc pl-4">{problems.map((p) => <li key={p}>{p}</li>)}</ul></Alert>}
       {error && <Alert tone="error">{error}</Alert>}
-      <div className="flex justify-end gap-2">
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button onClick={onCancel}>Отмена</Button>
         <Button variant="primary" loading={saving} onClick={submit}>Сохранить ствол</Button>
       </div>

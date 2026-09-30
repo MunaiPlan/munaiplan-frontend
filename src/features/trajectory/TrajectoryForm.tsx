@@ -100,7 +100,7 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
     }
   };
 
-  const cell = 'h-7 w-full min-w-[5.5rem] border-0 bg-transparent px-2 text-right font-mono text-xs num focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
+  const cell = 'h-7 touch:h-11 w-full min-w-[5.5rem] border-0 bg-transparent px-2 text-right font-mono text-xs num focus:bg-paper focus:outline-none focus:ring-1 focus:ring-inset focus:ring-ink';
 
   return (
     <div className="space-y-5">
@@ -121,7 +121,7 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
         </details>
       </Panel>
 
-      <Panel title="Инклинометрия" description="Вставьте строки из WellPlan или Excel (Ctrl+V в любую ячейку MD) — столбцы в порядке таблицы."
+      <Panel title="Инклинометрия" description="Вставьте строки из WellPlan или Excel (Ctrl+V в любую ячейку MD) — столбцы в порядке таблицы. На узком экране таблица прокручивается вбок."
         actions={<Button size="sm" icon={<FiPlus />} onClick={() => setRows((rs) => [...rs, emptyRow()])}>Строка</Button>} bodyClassName="p-0">
         <div className="thin-scrollbar max-h-[28rem] overflow-auto">
           <table className="w-full border-collapse text-xs">
@@ -142,13 +142,13 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
                   <td className="px-2 text-ink-500">{i + 1}</td>
                   {surveyColumns.map((c) => (
                     <td key={c.key} className="border-l border-ink-100 p-0">
-                      <input aria-label={`${c.label}, строка ${i + 1}`} className={cell} inputMode="decimal" value={r[c.key]}
+                      <input aria-label={`${c.label}, строка ${i + 1}`} className={cell} inputMode={'signed' in c ? 'text' : 'decimal'} value={r[c.key]}
                         onChange={(e) => setCell(i, c.key, e.target.value)} onPaste={c.key === 'md' ? (e) => onPaste(e, i) : undefined} />
                     </td>
                   ))}
                   <td className="border-l border-ink-100 text-center">
                     <button type="button" aria-label={`Удалить строку ${i + 1}`} onClick={() => setRows((rs) => rs.filter((_, j) => j !== i))}
-                      className="rounded p-1 text-ink-500 hover:bg-ink-100 hover:text-ink"><FiTrash2 className="h-3.5 w-3.5" /></button>
+                      className="rounded p-1 text-ink-500 hover:bg-ink-100 hover:text-ink touch:p-[15px]"><FiTrash2 className="h-3.5 w-3.5" /></button>
                   </td>
                 </tr>
               ))}
@@ -159,7 +159,7 @@ export const TrajectoryForm = ({ designId, initial, onSaved, onCancel }: {
 
       {problems.length > 0 && <Alert tone="warning" title="Проверьте данные"><ul className="list-disc pl-4">{problems.map((p) => <li key={p}>{p}</li>)}</ul></Alert>}
       {error && <Alert tone="error">{error}</Alert>}
-      <div className="flex justify-end gap-2">
+      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button onClick={onCancel}>Отмена</Button>
         <Button variant="primary" loading={saving} onClick={submit}>{initial?.id ? 'Сохранить' : 'Создать траекторию'}</Button>
       </div>

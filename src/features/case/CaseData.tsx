@@ -69,7 +69,7 @@ function CaseRecord<T extends { id?: string }>({ resource, caseId, title, emptyT
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-2xs font-medium uppercase tracking-wider text-ink-500">
           {title}{items.length > 1 ? ` · записей: ${items.length}, показана первая` : ''}
         </p>
