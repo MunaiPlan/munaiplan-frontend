@@ -123,7 +123,7 @@ export const Explorer = () => {
       </div>
       <div className="px-3 pb-2">
         <input type="search" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Поиск…" aria-label="Поиск в проводнике"
-          className="h-7 w-full rounded border border-ink-200 bg-paper px-2 text-xs focus:border-ink focus:outline-none focus:ring-0" />
+          className="h-7 w-full rounded border border-ink-200 bg-paper px-2 text-xs focus:border-ink focus:outline-none focus:ring-0 touch:h-10" />
       </div>
       <div role="tree" aria-label="Иерархия скважин" className="thin-scrollbar min-h-0 flex-1 overflow-y-auto pb-4">
         {loading && <p className="px-4 py-2 text-xs text-ink-500">Загрузка…</p>}
@@ -141,12 +141,12 @@ export const Explorer = () => {
               tabIndex={(focusId ?? activeId ?? rows[0]?.node.id) === node.id ? 0 : -1}
               onKeyDown={(e) => onKeyDown(e, index)} onFocus={() => setFocusId(node.id)}
               onClick={() => open(node)} onContextMenu={(e) => onContextMenu(e, node)}
-              className={cn('group flex h-7 cursor-pointer select-none items-center gap-1 pr-2 text-[13px] outline-none',
+              className={cn('group flex h-7 cursor-pointer select-none items-center gap-1 pr-2 text-[13px] outline-none touch:h-11 touch:text-sm',
                 active ? 'bg-ink text-paper' : 'text-ink-700 hover:bg-ink-100 focus-visible:bg-ink-100')}
               style={{ paddingLeft: 8 + depth * 14 }}>
               <button type="button" tabIndex={-1} aria-hidden="true"
                 onClick={(e) => { e.stopPropagation(); if (hasChildren) toggle(node.id); }}
-                className={cn('flex h-4 w-4 shrink-0 items-center justify-center', !hasChildren && 'invisible')}>
+                className={cn('flex h-4 w-4 shrink-0 items-center justify-center touch:h-11 touch:w-8', !hasChildren && 'invisible')}>
                 <FiChevronRight className={cn('h-3.5 w-3.5 transition-transform', isOpen && 'rotate-90')} />
               </button>
               <KindIcon kind={node.kind} className={cn('h-3.5 w-3.5 shrink-0', active ? 'text-paper' : 'text-ink-500')} />
@@ -154,8 +154,8 @@ export const Explorer = () => {
               {kinds[node.kind].child && (
                 <button type="button" tabIndex={-1} aria-label={`Создать: ${kinds[kinds[node.kind].child as Kind].label}`}
                   onClick={(e) => { e.stopPropagation(); createChild(node); }}
-                  className={cn('ml-auto hidden h-5 w-5 shrink-0 items-center justify-center rounded group-hover:flex',
-                    active ? 'hover:bg-ink-700' : 'hover:bg-ink-200')}>
+                  className={cn('ml-auto hidden h-5 w-5 shrink-0 items-center justify-center rounded group-hover:flex touch:h-10 touch:w-10',
+                    active ? 'hover:bg-ink-700 touch:flex' : 'hover:bg-ink-200')}>
                   <FiPlus className="h-3.5 w-3.5" />
                 </button>
               )}
@@ -170,7 +170,7 @@ export const Explorer = () => {
 
 const IconButton = ({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) => (
   <button type="button" aria-label={label} title={label} onClick={onClick}
-    className="flex h-6 w-6 items-center justify-center rounded hover:bg-ink-100 hover:text-ink">
+    className="flex h-6 w-6 items-center justify-center rounded hover:bg-ink-100 hover:text-ink touch:h-10 touch:w-10">
     {children}
   </button>
 );
@@ -188,7 +188,7 @@ const ContextMenu = ({ menu, onClose, onOpen, onCreate }: {
     document.addEventListener('keydown', onKey);
     return () => { document.removeEventListener('mousedown', close); document.removeEventListener('keydown', onKey); };
   }, [onClose]);
-  const item = 'block w-full px-3 py-1.5 text-left text-[13px] hover:bg-ink hover:text-paper focus:bg-ink focus:text-paper focus:outline-none';
+  const item = 'block w-full px-3 py-1.5 touch:py-3 text-left text-[13px] hover:bg-ink hover:text-paper focus:bg-ink focus:text-paper focus:outline-none';
   return (
     <div ref={ref} role="menu" className="fixed z-50 min-w-[12rem] overflow-hidden rounded-md border border-ink-200 bg-paper py-1 shadow-pop"
       style={{ left: Math.min(menu.x, window.innerWidth - 220), top: Math.min(menu.y, window.innerHeight - 100) }}>

@@ -21,7 +21,7 @@ const useServiceStatus = () => {
 };
 
 const Dot = ({ health, label, detail }: { health: Health; label: string; detail: string }) => (
-  <span className="flex items-center gap-1.5" title={detail}>
+  <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap" title={detail}>
     <span aria-hidden="true" className={cn('h-1.5 w-1.5 rounded-full',
       health === 'ok' ? 'bg-paper' : health === 'down' ? 'border border-paper bg-transparent' : 'bg-ink-500')} />
     {label}
@@ -32,13 +32,15 @@ export const StatusBar = ({ user }: { user: CurrentUser | null }) => {
   const { api, model } = useServiceStatus();
   return (
     <footer className="flex h-6 shrink-0 items-center justify-between gap-4 bg-ink px-3 text-2xs text-paper/80" aria-label="Строка состояния">
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-3 md:gap-4">
         <Dot health={api} label={api === 'down' ? 'API недоступен' : 'API'} detail="Сервер приложения" />
         <Dot health={model} label={model === 'ok' ? 'Модель готова' : model === 'down' ? 'Модель недоступна' : 'Модель'}
           detail="Сервис прогнозов Torque & Drag" />
-        <span className="hidden sm:inline">Прогнозы не валидированы</span>
+        {/* Always visible, phones included: model output is not a validated calculation. */}
+        <span className="truncate" title="Прогнозы ML-моделей не подтверждены сравнением с эталонными расчётами">Прогнозы не валидированы</span>
       </div>
-      <div className="flex items-center gap-3 truncate">
+      {/* Phones show the account in the top bar menu instead. */}
+      <div className="hidden min-w-0 items-center gap-3 md:flex">
         {user && <span className="truncate">{user.email}{user.role === 'admin' ? ' · администратор' : ''}</span>}
         <span className="font-mono">MunaiPlan</span>
       </div>
