@@ -1,20 +1,13 @@
 import { instance } from "../api/axios.api";
-import { IUserData, RegistrationData, RegistrationResponseData, IUser } from "../types/types";
+import type { IUserData, IUser } from "../types/types";
+import { parseSignInResponse } from "../auth/session";
 
 export const authService = {
-    async login(userData: IUserData): Promise<IUser | undefined> {
-        const { data } = await instance.post<IUser>(
-          "api/v1/users/sign-in",
+    async login(userData: IUserData): Promise<IUser> {
+        const { data } = await instance.post<unknown>(
+          "/api/v1/users/sign-in",
           userData
         );
-        return data;
+        return parseSignInResponse(data);
     },
-
-    async registration(userData: RegistrationData, organizationId: string): Promise<RegistrationResponseData | undefined> {     
-        const { data } = await instance.post<RegistrationResponseData>(
-          `api/v1/users/sign-up?organizationId=${organizationId}`, 
-          userData
-        );
-        return data;
-      },
 };

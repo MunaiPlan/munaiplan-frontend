@@ -1,24 +1,21 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
-import dns from 'node:dns'
-
-dns.setDefaultResultOrder('verbatim')
-
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api/v1': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        secure: false,
-      },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', 'MUNAI_');
+  const proxy = {
+    '/api/v1': {
+      target: env.MUNAI_API_URL || 'http://127.0.0.1:8000',
+      changeOrigin: true,
     },
+  };
+  return {
+  server: {
+    proxy,
     port: 8080,
     strictPort: true,
-    host: true,
-    origin: "http://0.0.0.0:8080",
+    host: '127.0.0.1',
   },
   plugins: [
     react(),
@@ -29,7 +26,10 @@ export default defineConfig({
     },
   },
   preview: {
+    host: '127.0.0.1',
+    proxy,
     port: 8080,
     strictPort: true,
    },
+  };
 });

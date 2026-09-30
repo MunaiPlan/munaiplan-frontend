@@ -1,136 +1,41 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
 import ErrorPage from "../pages/ErrorPage";
-import Home, { companiesLoader } from "../pages/HomePage";
-import Catalog from "../pages/Catalog";
-import Settings from "../pages/Settings";
-import Account from "../pages/Accout";
+import Home from "../pages/HomePage";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "../components/ProtectedRoute";
-import CompanyDetail from "../pages/DetailedPages/CompanyDetailPage";
-import FieldDetail from "../pages/DetailedPages/FieldDetailPage";
-import SiteDetail from "../pages/DetailedPages/SiteDetailPage";
-import WellDetail from "../pages/DetailedPages/WellDetailPage";
-import WellBoreDetail from "../pages/DetailedPages/WellBoreDetailPage";
-import DesignDetail from "../pages/DetailedPages/DesignDetailPage";
-import TrajectoryDetail from "../pages/DetailedPages/TrajectoryDetailPage";
-import CaseDetail from "../pages/DetailedPages/CaseDetailPage";
+import CasePage from "../features/case/CasePage";
+import AdminPage from "../pages/AdminPage";
+import ImportPage from "../pages/ImportPage";
+import { EntityPage } from "../features/hierarchy/EntityPage";
+import { NewEntityPage } from "../features/hierarchy/NewEntityPage";
+import { TrajectoryPage } from "../features/trajectory/TrajectoryPage";
+import type { Kind } from "../features/hierarchy/hierarchy";
 
-export const router = createBrowserRouter([
+const protectedRoute = (element: JSX.Element) => <ProtectedRoute>{element}</ProtectedRoute>;
+
+// Simple hierarchy levels share one config-driven page; routes are unchanged from v1.
+const entityRoutes: [string, Kind][] = [
+    ['fields/:id', 'field'], ['sites/:id', 'site'], ['wells/:id', 'well'],
+    ['wellbores/:id', 'wellbore'], ['designs/:id', 'design'],
+];
+
+export const createAppRouter = () => createBrowserRouter([
     {
         path: '/',
         element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
-            {
-                index: true,
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute>
-                         <Home />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "catalog",
-                element: (
-                    <ProtectedRoute>
-                        <Catalog />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "settings",
-                element: (
-                    <ProtectedRoute>
-                        <Settings />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "account",
-                element: (
-                    <ProtectedRoute>
-                        <Account />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'auth',
-                element: <Auth />,
-            },
-            {
-                loader: companiesLoader,
-                path: '/:id',
-                element: (
-                    <ProtectedRoute>
-                        <CompanyDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'fields/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <FieldDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'sites/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <SiteDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'wells/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <WellDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'wellbores/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <WellBoreDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'designs/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <DesignDetail />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'trajectories/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <TrajectoryDetail/>
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'cases/:id',
-                loader: companiesLoader,
-                element: (
-                    <ProtectedRoute> 
-                        <CaseDetail/>
-                    </ProtectedRoute>
-                )
-            }
+            { index: true, element: protectedRoute(<Home />) },
+            { path: 'auth', element: <Auth /> },
+            { path: 'import', element: protectedRoute(<ImportPage />) },
+            { path: 'admin', element: protectedRoute(<AdminPage />) },
+            { path: 'new/:kind', element: protectedRoute(<NewEntityPage />) },
+            ...entityRoutes.map(([path, kind]) => ({ path, element: protectedRoute(<EntityPage key={kind} kind={kind} />) })),
+            { path: 'trajectories/:id', element: protectedRoute(<TrajectoryPage />) },
+            { path: 'cases/:id', element: protectedRoute(<CasePage />) },
+            // Companies keep their original top-level route.
+            { path: ':id', element: protectedRoute(<EntityPage key="company" kind="company" />) },
         ]
     }
 ])

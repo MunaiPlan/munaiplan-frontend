@@ -1,12 +1,9 @@
-version: '3.4'
-
+# Use ../scripts/local-stack.sh up for the complete stack including API and DB.
+# This definition expects an API container aliased "app" on its network.
 services:
-  sampleproject:
-    image: sampleproject
+  frontend:
     build:
       context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
+      dockerfile: dockerfile
     ports:
-      - 3000:3000 
+      - "127.0.0.1:3000:8080"

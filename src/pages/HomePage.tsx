@@ -1,83 +1,59 @@
-import {FC} from 'react'
-import { useCaseFormOpen, useCompanyFormOpen, useDesignFormOpen, useFieldFormOpen, useSiteFormOpen, useTrajectoryFormOpen, useWellBoreFormOpen, useWellFormOpen } from '../hooks/useForms'
-import CreateCompany from '../components/forms/CreateCompany'
-import CreateSite from '../components/forms/CreateSite'
-import CreateWell from '../components/forms/CreateWell'
-import CreateWellBore from '../components/forms/CreateWellBore'
-import CreateDesign from '../components/forms/CreateDesign'
-import CreateCase from '../components/forms/CreateCase'
-import { instance } from '../api/axios.api'
-import { ICompany, IResponseLoader } from '../types/types'
-import { useLoaderData } from 'react-router-dom'
-import SideBar from '../components/SideBar'
-import CreateField from '../components/forms/CreateField'
-import CreateTraj from '../components/forms/CreateTrajectory'
-import CreateTrajectory from '../components/forms/CreateTrajectory'
+import { FC, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiPlus, FiUploadCloud } from 'react-icons/fi';
+import type { TreeNode } from '../features/hierarchy/api';
+import { kinds, type Kind } from '../features/hierarchy/hierarchy';
+import { KindIcon } from '../features/hierarchy/icons';
+import { useTree } from '../features/hierarchy/treeState';
+import { Button, DataTable, EmptyState, Loading, PageHeader, Panel, type Column } from '../ui';
 
-export const companiesLoader = async() => {
-  try {
-    const companies = await instance.get<ICompany[]>('/api/v1/companies');
-    const data = { companies: companies.data };
-    return data;
-  } catch (error) {
-    console.error('Failed to load companies:', error);
-    return { companies: [] };  // Return an empty array if there's an error
-  }
+const count = (nodes: TreeNode[], kind: Kind): number =>
+  nodes.reduce((sum, n) => sum + (n.kind === kind ? 1 : 0) + count(n.children, kind), 0);
+
+/** Workspace overview: totals, companies and entry points. */
+const Home: FC = () => {
+  const { tree, loading } = useTree();
+  const navigate = useNavigate();
+  const totals = useMemo(() => (['company', 'field', 'well', 'case'] as Kind[]).map((k) => ({ kind: k, value: count(tree, k) })), [tree]);
+
+  const columns: Column<TreeNode>[] = [
+    { key: 'name', header: 'Компания', render: (c) => (
+      <Link to={kinds.company.route(c.id)} className="flex items-center gap-2 font-medium hover:underline">
+        <KindIcon kind="company" className="h-4 w-4 text-ink-500" />{c.name}
+      </Link>) },
+    { key: 'fields', header: 'Месторождения', numeric: true, render: (c) => count(c.children, 'field') },
+    { key: 'wells', header: 'Скважины', numeric: true, render: (c) => count(c.children, 'well') },
+    { key: 'cases', header: 'Кейсы', numeric: true, render: (c) => count(c.children, 'case') },
+  ];
+
+  if (loading) return <Loading />;
+  return (
+    <div className="mx-auto max-w-5xl space-y-6 p-6">
+      <PageHeader eyebrow="Рабочая область" title="Обзор"
+        actions={<>
+          <Button size="sm" icon={<FiUploadCloud />} onClick={() => navigate('/import')}>Импорт из WellPlan</Button>
+          <Button size="sm" variant="primary" icon={<FiPlus />} onClick={() => navigate('/new/company')}>Новая компания</Button>
+        </>} />
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {totals.map(({ kind, value }) => (
+          <div key={kind} className="rounded-lg border border-ink-200 px-4 py-3">
+            <p className="flex items-center gap-1.5 text-2xs uppercase tracking-wider text-ink-500"><KindIcon kind={kind} />{kinds[kind].plural}</p>
+            <p className="num mt-1 font-mono text-2xl">{value}</p>
+          </div>
+        ))}
+      </div>
+      {tree.length === 0 ? (
+        <EmptyState title="Рабочая область пуста" description="Создайте компанию вручную или импортируйте кейс из отчёта WellPlan — иерархия будет создана автоматически."
+          action={<div className="flex gap-2"><Button icon={<FiUploadCloud />} onClick={() => navigate('/import')}>Импорт</Button>
+            <Button variant="primary" icon={<FiPlus />} onClick={() => navigate('/new/company')}>Новая компания</Button></div>} />
+      ) : (
+        <Panel title="Компании" bodyClassName="p-0">
+          <DataTable columns={columns} rows={tree} rowKey={(c) => c.id} caption="Компании" />
+        </Panel>
+      )}
+      <p className="text-xs text-ink-500">Совет: правый клик по элементу в проводнике открывает меню; стрелки ↑↓←→ и Enter — навигация с клавиатуры.</p>
+    </div>
+  );
 };
 
-
-const Home: FC = () => {
-  const isCompanyFormOpened = useCompanyFormOpen()
-  const isFieldFormOpened = useFieldFormOpen()
-  const isSiteFormOpened = useSiteFormOpen()
-  const isWellFormOpened = useWellFormOpen()
-  const isWellBoreFormOpened = useWellBoreFormOpen()
-  const isDesignFormOpened = useDesignFormOpen()
-  const isCaseFormOpened = useCaseFormOpen()
-  const isTrajectoryFormOpened = useTrajectoryFormOpen()
-  const { companies: initialCompanies = [] } = useLoaderData() as IResponseLoader || {};
-
-  let content;
-  if (isCompanyFormOpened) {
-    content = <CreateCompany type={"post"} prevName={""} prevDivision={""} prevAddress={""} prevGroup={""} prevPhone={""} prevRepresentative={""}/>
-  } else if (isFieldFormOpened) {
-    content = <CreateField type={"post"} prevName={""} prevDescription={""} prevReductionLevel={""} prevActiveFieldUnit={""} companyId=''/>
-  } else if (isSiteFormOpened) { 
-    content = <CreateSite type={"post"} prevName={""} prevArea={0} prevAzimuth={0} prevBlock={""} fieldId='' prevCountry={""} prevRegion={""} prevState={""} />
-  } else if (isWellFormOpened){
-    content = <CreateWell type={"post"} prevName={""} prevDescription={""} prevLocation={""} prevType={""} prevActiveWellUnit={""} prevUniversalWellIdentifier={""} prevWellNumber={""} prevWorkingGroup={""} siteId='' />
-  } else if (isWellBoreFormOpened) {
-    content = <CreateWellBore type={"post"} prevName={""} prevAverageColumnRotationFrequency={0} prevAverageHookLead={0} prevAverageInLetFlow={0} prevAverageTorque={0} prevAverageWeightOnBit={0} wellId='' prevBottomLocation={""} prevDepth={0} prevDepthIntervalWellBore={0} prevDownStaticFriction={0} prevMaximumColumnRotationFrequency={0} prevMaximumTorque={0} prevMaximumWeightOnBit={0} prevRiserPressure={0}/>
-  } else if (isDesignFormOpened) {
-    content = <CreateDesign type={"post"} prevName={""} prevActualDate={new Date()} prevStage={""} prevVersion={""} wellBoreId=''/>
-  } else if (isTrajectoryFormOpened) {
-    content = <CreateTrajectory type={"post"} prevName={""} prevDescription={""} designId={""} prevHeader={[]} prevUnit={[]}/>
-  } else if (isCaseFormOpened) {
-    content = <CreateCase prevIsComplete={false} type={"post"} prevName={""} prevDescription={""} prevDrillDepth={0} prevPipeSize={0} trajectoryId={""}/>
-  }
-  
-  else {
-    content = <div className='w-screen flex flex-col justify-start items-center'>
-      {initialCompanies.length > 0 ? 
-      <div className='flex font-medium font-montserrat justify-center'>
-        Тут ваши компании
-        <ul>
-          {initialCompanies.map((company, i) => <li className='' key={i}>
-            {company.name}
-          </li>)}
-        </ul>
-      </div> : "Создайте компнанию"}
-    </div>
-  }
-
-  return (
-    <div className="'h-screen w-full">
-        <SideBar />
-        <div className="flex h-screen">
-            {content}    
-        </div>
-    </div>
-  )
-}
-
-export default Home
+export default Home;

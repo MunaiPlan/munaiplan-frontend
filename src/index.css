@@ -2,24 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    @apply bg-paper text-ink antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  body {
+    @apply font-sans text-sm;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink ring-offset-1 ring-offset-paper;
+  }
+  ::selection {
+    @apply bg-ink text-paper;
+  }
+  ::placeholder {
+    @apply text-ink-500;
+  }
+}
 
+@layer utilities {
+  /* Tabular figures for engineering values. */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #D4D4D8 transparent;
+  }
+}
+
+/* Legacy floating-label inputs, kept until every form uses ui/Field. */
 .input-wrapper {
   position: relative;
 }
-
-.input-wrapper>input {
-  border: 1px solid black;
+.input-wrapper > input {
+  border: 1px solid #0A0A0A;
   border-radius: 6px;
-  position: relative;
   margin-top: 15px;
   line-height: 3ex;
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
-  color: black;
 }
-
-.input-wrapper>label {
-  background-color: transparent;
+.input-wrapper > label {
   display: block;
   font-size: 12px;
   position: absolute;
@@ -30,19 +62,13 @@
   padding: 0 5px;
 }
 
-::placeholder {
-  color: black;
+/* Toasts in the monochrome palette. */
+.Toastify__toast {
+  @apply rounded-md border border-ink-200 bg-paper font-sans text-sm text-ink shadow-pop;
 }
-
-::-ms-input-placeholder {
-  color: black;
+.Toastify__toast--error {
+  @apply border-ink;
 }
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.Toastify__progress-bar {
+  @apply bg-ink;
 }

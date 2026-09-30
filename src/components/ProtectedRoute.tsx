@@ -1,25 +1,19 @@
-import {FC} from 'react'
-import { useAuth } from '../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { FC } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-interface Props {
-    children: JSX.Element
-}
+/** Renders children only for a signed-in user; otherwise a sign-in prompt. */
+const ProtectedRoute: FC<{ children: JSX.Element }> = ({ children }) => {
+  const isAuth = useAuth();
+  if (isAuth) return children;
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-paper p-6 text-center text-ink">
+      <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-sm bg-ink font-mono text-sm font-bold text-paper">M</span>
+      <h1 className="text-xl font-semibold tracking-tight">Требуется вход</h1>
+      <p className="max-w-xs text-sm text-ink-500">Чтобы открыть эту страницу, войдите в MunaiPlan.</p>
+      <Link to="/auth" className="rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink-700">Войти</Link>
+    </main>
+  );
+};
 
-const ProtectedRoute: FC<Props> = ({children}) => {
-  const isAuth = useAuth()
-  const navigate = useNavigate()
-  const authNavigator = () => {
-    navigate('/auth')
-  }
-  return <>
-    {isAuth ? (
-        children
-    ) : (<div className='flex flex-col justify-center items-center mt-20 gap-10'>
-            <h1 className='text-2xl m-5 text-center'>Чтобы увидеть данную страницу, вы должны войти в систему</h1>
-            <button className='pl-4 pr-4 pt-2 pb-2 border border-black rounded-md' onClick={() => authNavigator()}>Войти</button>
-        </div>)}
-  </>
-}
-
-export default ProtectedRoute
+export default ProtectedRoute;

@@ -19,7 +19,7 @@ export const UserSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<IUser | null>) => {
+    login: (state, action: PayloadAction<IUser>) => {
         state.user = action.payload
         state.isAuth = true
     },

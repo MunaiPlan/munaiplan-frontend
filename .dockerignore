@@ -1,1 +1,10 @@
 node_modules
+dist
+.git
+.env
+.env.*
+*.key
+*.crt
+*.tsbuildinfo
+.DS_Store
+*.log

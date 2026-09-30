@@ -1,70 +1,81 @@
-import axios from "axios";
-import { store } from "../store/store"; // Import your Redux store
-import { login, logout } from "../store/user/userSlice"; // Assuming you have a logout action
-import { isTokenExpired } from "../helpers/tokenExpirationChecker";
-import { createLocalStore } from "../helpers/createLocalStore";
-import type { IUser } from "../types/types"; 
+import axios from 'axios';
+import { store } from '../store/store';
+import { login, logout } from '../store/user/userSlice';
+import { createLocalStore } from '../helpers/createLocalStore';
+import { isUnauthorizedCurrentSession, isUsableSession } from '../auth/session';
+import type { IUser } from '../types/types';
 
-// Axios instance configuration
 const instance = axios.create({});
+const localUserStore = createLocalStore<IUser>('munaiplan.session.v1');
+let expiryTimer: number | undefined;
 
-const userLocalKey = "asldkasjd"; // random string
-const localUserStore = createLocalStore<IUser>(userLocalKey);
+const scheduleExpiry = (user: IUser) => {
+  if (expiryTimer !== undefined) {
+    window.clearTimeout(expiryTimer);
+  }
+  const remainingMs = Math.max(0, user.tokenExpiresAt * 1000 - Date.now());
+  expiryTimer = window.setTimeout(() => {
+    if (isUsableSession(user)) {
+      scheduleExpiry(user);
+    } else {
+      removeUserLocally();
+    }
+  }, Math.min(remainingMs, 2_147_483_647));
+};
 
 const init = () => {
-  const userFromLocalStore = localUserStore.get();
-  if (!userFromLocalStore) return;
-  if (isTokenExpired(userFromLocalStore.tokenExpiresAt)) {
+  const restored = localUserStore.get();
+  if (isUsableSession(restored)) {
+    store.dispatch(login(restored));
+    scheduleExpiry(restored);
+  } else {
     localUserStore.remove();
-    return;
-  };
-
-  store.dispatch(login(userFromLocalStore));
-}
+    store.dispatch(logout());
+  }
+};
 
 const saveUserLocally = (user: IUser) => {
+  if (!isUsableSession(user)) {
+    throw new Error('Cannot save an expired session');
+  }
   localUserStore.set(user);
-}
+  scheduleExpiry(user);
+};
 
 const removeUserLocally = () => {
+  if (expiryTimer !== undefined) {
+    window.clearTimeout(expiryTimer);
+    expiryTimer = undefined;
+  }
   localUserStore.remove();
-}
-
-// Function to retrieve the user from the Redux store
-const getUserFromStore = (): IUser | null => {
-    const state = store.getState(); // Access the current state
-    return state.user.user; // Assuming your userSlice is named 'user' and stores the user info in 'user'
-}
-
-// Check authentication status
-const checkAuth = (dispatch: any, user: IUser) => {
-    const { tokenExpiresAt } = user;
-
-    if (isTokenExpired(tokenExpiresAt)) {
-        dispatch(logout());
-    }
-}
-
-// Add a request interceptor to check authentication before making requests
-instance.interceptors.request.use(
-    async (config) => {
-        const user: IUser | null = getUserFromStore(); // Retrieve the user from the Redux store
-        // If the user is logged in, check the authentication status
-        if (user) {
-            checkAuth(store.dispatch, user); // Pass the store's dispatch function to checkAuth
-            config.headers.Authorization = 'Bearer ' + user.token; // Attach the current token to the request headers
-        }
-        
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
-export {
-  init,
-  instance,
-  saveUserLocally,
-  removeUserLocally,
+  store.dispatch(logout());
 };
+
+instance.interceptors.request.use((config) => {
+  if (config.url?.endsWith('/users/sign-in')) {
+    return config;
+  }
+  const user = store.getState().user.user;
+  if (user) {
+    if (!isUsableSession(user)) {
+      removeUserLocally();
+      return Promise.reject(new Error('Session expired'));
+    }
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+});
+
+instance.interceptors.response.use(undefined, (error: unknown) => {
+  if (axios.isAxiosError(error) && error.response?.status === 401 &&
+      !error.config?.url?.endsWith('/users/sign-in')) {
+    const requestAuthorization = error.config?.headers?.get('Authorization');
+    const currentToken = store.getState().user.user?.token;
+    if (isUnauthorizedCurrentSession(requestAuthorization, currentToken)) {
+      removeUserLocally();
+    }
+  }
+  return Promise.reject(error);
+});
+
+export { init, instance, saveUserLocally, removeUserLocally };
