@@ -6,14 +6,14 @@ const id = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')
 
 export const ids = {
   company: id(1), company2: id(2), field: id(10), site: id(20), well: id(30), wellbore: id(40),
-  design: id(50), trajectory: id(60), caseImported: id(70), caseManual: id(71),
+  design: id(50), trajectory: id(60), caseImported: id(70), caseManual: id(71), caseFull: id(72),
 };
 
-/** A J-shaped well: vertical to 800 m, build at 3°/30 m to 60°, then tangent to 2400 m MD. */
+/** A J-shaped well: vertical to 800 m, build at 3°/30 m to 60°, then tangent to 2600 m MD. */
 export const survey = (() => {
   const rows = [];
   let tvd = 0, vs = 0, inc = 0;
-  for (let md = 0; md <= 2400; md += 30) {
+  for (let md = 0; md <= 2610; md += 30) {
     const prevInc = inc;
     inc = md <= 800 ? 0 : Math.min(60, ((md - 800) / 30) * 3);
     const mid = ((prevInc + inc) / 2) * (Math.PI / 180);
@@ -35,9 +35,10 @@ export const tree = [
         { id: ids.well, kind: 'well', name: 'Скв. 12-1', children: [
           { id: ids.wellbore, kind: 'wellbore', name: 'Основной ствол', children: [
             { id: ids.design, kind: 'design', name: 'План #1', children: [
-              { id: ids.trajectory, kind: 'trajectory', name: 'Проект 2400 м', children: [
+              { id: ids.trajectory, kind: 'trajectory', name: 'Проект 2600 м', children: [
                 { id: ids.caseImported, kind: 'case', name: 'Секция 215,9 мм', children: [] },
                 { id: ids.caseManual, kind: 'case', name: 'Секция 152,4 мм (черновик)', children: [] },
+                { id: ids.caseFull, kind: 'case', name: 'Секция 215,9 мм — КНБК с ВЗД', children: [] },
               ] },
             ] },
           ] },
@@ -60,9 +61,10 @@ export const records: Record<string, Record<string, unknown>> = {
   [id(31)]: { id: id(31), name: 'Скв. 12-2', description: '', location: '', universal_well_identifier: '', type: '', well_number: '12-2', working_group: '', active_well_unit: '' },
   [ids.wellbore]: { id: ids.wellbore, name: 'Основной ствол', bottom_hole_location: 'Куст 12', wellbore_depth: 2400, depth_interval: 30, average_hook_load: 0, riser_pressure: 0, average_inlet_flow: 0, average_column_rotation_frequency: 0, maximum_column_rotation_frequency: 0, average_weight_on_bit: 0, maximum_weight_on_bit: 0, average_torque: 0, maximum_torque: 0, down_static_friction: 0 },
   [ids.design]: { id: ids.design, plan_name: 'План #1', stage: 'Проект', version: '1', actual_date: '2026-09-30T00:00:00Z' },
-  [ids.trajectory]: { id: ids.trajectory, name: 'Проект 2400 м', description: 'J-образный профиль, набор 3°/30 м', headers: [
+  [ids.trajectory]: { id: ids.trajectory, name: 'Проект 2600 м', description: 'J-образный профиль, набор 3°/30 м', headers: [
     { id: id(90), customer: 'Демо Бурение', project: 'Северное', profile_type: 'J', field: 'Северное', your_ref: '', structure: 'Куст 12', job_number: '', wellhead: 'Скв. 12-1', kelly_bushing_elev: -19, profile: 'Проект' }], units: survey },
   [ids.caseImported]: { id: ids.caseImported, case_name: 'Секция 215,9 мм', case_description: 'Импортировано из отчёта', drill_depth: 2400, pipe_size: 127, is_complete: true },
+  [ids.caseFull]: { id: ids.caseFull, case_name: 'Секция 215,9 мм — КНБК с ВЗД', case_description: 'Синтетический кейс: две обсадные колонны и полная КНБК', drill_depth: 2600, pipe_size: 127, is_complete: true },
   [ids.caseManual]: { id: ids.caseManual, case_name: 'Секция 152,4 мм (черновик)', case_description: 'Заполняется вручную', drill_depth: 0, pipe_size: 0, is_complete: false },
 };
 
@@ -174,8 +176,8 @@ export const organizations = [
   { id: id(501), name: 'Демо Бурение', email: 'ops@example.test', phone: '+7 700 000 00 00', address: 'г. Атырау', created_at: '2026-09-30T00:00:00Z', user_count: 3 },
 ];
 
-/** Case inputs of the imported demo case, in the shapes of /strings, /holes and /fluids. */
-export const caseChildren: Record<string, unknown[]> = {
+/** Case inputs per case, in the shapes of /strings, /holes and /fluids. */
+const importedChildren: Record<string, unknown[]> = {
   strings: [{ id: id(800), name: 'Рабочая колонна (импорт)', depth: 2400, sections: [
     { id: id(801), type: 'Drill Pipe', body_md: 2190, body_length: 2190, body_od: 127, body_id: 108.61, avg_joint_length: 9.14, stabilizer_length: 0.433, stabilizer_od: 152.4, stabilizer_id: 82.55, weight: 32.62, grade: 'X', min_yield_strength: 105000 },
     { id: id(802), type: 'Heavy Weight', body_md: 2370, body_length: 180, body_od: 127, body_id: 76.2, avg_joint_length: 9.14, stabilizer_length: 1.219, stabilizer_od: 165.1, stabilizer_id: 76.2, weight: 73.13, grade: '1340 MOD', min_yield_strength: 55000 },
@@ -185,3 +187,41 @@ export const caseChildren: Record<string, unknown[]> = {
     open_hole_md_top: 1000, open_hole_md_base: 2400, open_hole_length: 1400, open_hole_vd: 1928, effective_diameter: 215.9, friction_factor_open_hole: 0.3, linear_capacity_open_hole: 36.61, volume_excess: 0 }],
   fluids: [{ id: id(820), name: 'Полимер', description: 'Mud Bingham Plastic; PV 20 cP; YP 22 lbf/100ft²', density: 1230, fluid_base_type: { id: id(821), name: 'Water' }, base_fluid: { id: id(821), name: 'Water' } }],
 };
+
+/**
+ * A full synthetic 215,9 mm section: 339,7 mm casing to 500 m, 244,5 mm to 1800 m, open hole to 2600 m,
+ * and a motor BHA (PDC bit, motor, near-bit stabilizer, MWD, NM collar, stabilizer, collars, jar, HWDP, drill pipe).
+ */
+const bha = [
+  // type, length, OD, ID, avg joint, TJ/blade length, TJ/blade OD, TJ ID, weight, grade, yield
+  ['Heavy Weight', 137.16, 127, 76.2, 9.14, 1.22, 165.1, 76.2, 73.13, '1340 MOD', 55000],
+  ['Jar', 9.75, 165.1, 69.85, null, null, null, null, 136.6, '4145H MOD', 110000],
+  ['Heavy Weight', 45.72, 127, 76.2, 9.14, 1.22, 165.1, 76.2, 73.13, '1340 MOD', 55000],
+  ['Cross Over', 0.91, 165.1, 71.44, null, null, null, null, 120.5, '4145H MOD', 110000],
+  ['Drill Collar', 54.84, 165.1, 71.44, 9.14, null, null, null, 136.0, '4145H MOD', 110000],
+  ['Stabilizer', 1.8, 165.1, 71.44, null, 0.6, 212.7, null, 140.2, '4145H MOD', 110000],
+  ['Non-Mag Drill Collar', 9.4, 171.45, 71.44, null, null, null, null, 149.5, 'NMDC', 110000],
+  ['MWD', 10.4, 172, 71.44, null, null, null, null, 149.77, 'NMDC', 110000],
+  ['Near Bit Stabilizer', 1.6, 171.45, 71.44, null, 0.5, 212.7, null, 150.0, '4145H MOD', 110000],
+  ['Mud Motor', 9.71, 171.45, null, null, null, null, null, 103.53, '4145H MOD', 110000],
+  ['Polycrystalline Diamond Bit', 0.3, 215.9, null, null, null, null, null, 100, null, null],
+] as const;
+const bhaLength = bha.reduce((s, r) => s + r[1], 0);
+const fullSections = [['Drill Pipe', +(2600 - bhaLength).toFixed(2), 127, 108.61, 9.14, 0.43, 168.28, 82.55, 32.62, 'G-105', 105000] as const, ...bha]
+  .reduce<{ md: number; rows: Record<string, unknown>[] }>((acc, r, i) => {
+    const md = +(acc.md + r[1]).toFixed(2);
+    acc.rows.push({ id: id(900 + i), type: r[0], body_md: md, body_length: r[1], body_od: r[2], body_id: r[3], avg_joint_length: r[4],
+      stabilizer_length: r[5], stabilizer_od: r[6], stabilizer_id: r[7], weight: r[8], grade: r[9], min_yield_strength: r[10] });
+    return { md, rows: acc.rows };
+  }, { md: 0, rows: [] }).rows;
+
+const fullChildren: Record<string, unknown[]> = {
+  strings: [{ id: id(890), name: 'КНБК с ВЗД и бурильные трубы 127 мм', depth: 2600, sections: fullSections }],
+  holes: [{ id: id(950), caisings: [
+    { id: id(951), md_top: 0, md_base: 500, length: 500, shoe_md: 500, od: 339.7, inner_diameter: 315.32, vd: 500, drift_id: 311.35, effective_hole_diameter: 444.5, friction_factor_caising: 0.25, linear_capacity_caising: 78.09, description_caising: 'Casing' },
+    { id: id(952), md_top: 0, md_base: 1800, length: 1800, shoe_md: 1800, od: 244.5, inner_diameter: 220.5, vd: 1650, drift_id: 216.5, effective_hole_diameter: 311.1, friction_factor_caising: 0.25, linear_capacity_caising: 38.19, description_caising: 'Casing' },
+  ], open_hole_md_top: 1800, open_hole_md_base: 2600, open_hole_length: 800, open_hole_vd: 2050, effective_diameter: 215.9, friction_factor_open_hole: 0.3, linear_capacity_open_hole: 36.61, volume_excess: 10 }],
+  fluids: importedChildren.fluids,
+};
+
+export const caseChildren: Record<string, Record<string, unknown[]>> = { [ids.caseImported]: importedChildren, [ids.caseFull]: fullChildren };

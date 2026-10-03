@@ -42,7 +42,7 @@ const route = (req: IncomingMessage, res: ServerResponse): void => {
     return records[item[1]] ? json(res, 200, records[item[1]]) : json(res, 404, { message: 'not found' });
   }
   const list = path.match(/^\/(strings|holes|fluids)$/);
-  if (list && method === 'GET') return json(res, 200, url.searchParams.get('caseId') === ids.caseImported ? caseChildren[list[1]] : []);
+  if (list && method === 'GET') return json(res, 200, caseChildren[url.searchParams.get('caseId') ?? '']?.[list[1]] ?? []);
   if (method === 'GET') return json(res, 200, []);
   return json(res, method === 'POST' ? 201 : 200, {});
 };
