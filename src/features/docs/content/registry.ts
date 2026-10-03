@@ -3,6 +3,7 @@ import { admin } from './admin';
 import { caseArticle } from './case';
 import { comparison } from './comparison';
 import { depthCharts } from './depth-charts';
+import { formula } from './formula';
 import { faq } from './faq';
 import { fluidAndRig } from './fluid-and-rig';
 import { glossaryArticle } from './glossary-article';
@@ -32,7 +33,7 @@ export const groups: { key: DocGroup; title: string; articles: Article[] }[] = [
   { key: 'import', title: 'Импорт отчётов', articles: [importArticle] },
   { key: 'trajectory', title: 'Траектория', articles: [trajectory] },
   { key: 'case', title: 'Данные кейса', articles: [caseArticle, holeAndString, fluidAndRig] },
-  { key: 'td', title: 'Torque & Drag', articles: [torqueDrag, depthCharts, comparison] },
+  { key: 'td', title: 'Torque & Drag', articles: [torqueDrag, formula, depthCharts, comparison] },
   { key: 'hydraulics', title: 'Гидравлика', articles: [hydraulics] },
   { key: 'admin', title: 'Администрирование', articles: [admin] },
   { key: 'reference', title: 'Справочник', articles: [units, glossaryArticle, faq] },

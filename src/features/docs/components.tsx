@@ -119,3 +119,10 @@ export const QA = ({ q, children }: { q: string; children: ReactNode }) => (
     <div className="border-t border-ink-100 px-4 pb-1 text-[0.95em] [&>p]:my-3">{children}</div>
   </details>
 );
+
+/** A displayed equation in plain readable notation (monospace, centred, scrolls on phones). */
+export const Eq = ({ children, label }: { children: ReactNode; label?: string }) => (
+  <p className="thin-scrollbar my-4 overflow-x-auto rounded-lg bg-ink-50 px-4 py-3 text-center font-mono text-sm leading-7 text-ink" aria-label={label}>
+    {children}
+  </p>
+);

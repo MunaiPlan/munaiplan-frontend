@@ -9,7 +9,7 @@ export const docSlugs = [
   'import',
   'trajectory',
   'case', 'hole-and-string', 'fluid-and-rig',
-  'torque-drag', 'depth-charts', 'comparison',
+  'torque-drag', 'formula', 'depth-charts', 'comparison',
   'hydraulics',
   'admin',
   'units', 'glossary', 'faq',
