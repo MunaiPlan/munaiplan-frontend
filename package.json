@@ -10,6 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test:auth": "node --experimental-strip-types --test src/auth/session.test.mjs",
     "test:collections": "node --experimental-strip-types --test src/helpers/normalizeCollection.test.mjs",
+    "test:schematic": "node --experimental-strip-types --test src/features/case/schematic/schematic.test.mjs",
     "preview": "vite preview",
     "dev:mock": "vite --config vite.mock.config.ts"
   },

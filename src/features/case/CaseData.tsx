@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { useState, type ReactNode } from 'react';
+import { FiEdit2, FiLayers, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { instance } from '../../api/axios.api';
 import { apiErrorMessage } from '../../services/admin.service';
@@ -8,22 +8,10 @@ import { HoleForm, type CasingData, type HoleData } from './HoleForm';
 import { RecordForm } from './RecordForm';
 import { recordSpecs } from './recordSpecs';
 import { StringForm } from './StringForm';
+import { useCaseChildren } from './useCaseChildren';
 import type { IFluid, IRig, ISection, IString } from '../../types/types';
 
 const n = (v: number | null | undefined, d = 2) => (v === null || v === undefined ? null : v.toLocaleString('ru-RU', { maximumFractionDigits: d }));
-
-/** Loads the records of one case child resource (/api/v1/{resource}?caseId=). */
-function useCaseChildren<T>(resource: string, caseId: string) {
-  const [state, setState] = useState<{ loading: boolean; items: T[]; error: string }>({ loading: true, items: [], error: '' });
-  const load = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: '' }));
-    instance.get<T[] | null>(`/api/v1/${resource}/?caseId=${encodeURIComponent(caseId)}`)
-      .then(({ data }) => setState({ loading: false, items: Array.isArray(data) ? data : [], error: '' }))
-      .catch((e) => setState({ loading: false, items: [], error: apiErrorMessage(e, 'Не удалось загрузить данные') }));
-  }, [resource, caseId]);
-  useEffect(load, [load]);
-  return { ...state, reload: load };
-}
 
 type Mode = 'view' | 'edit' | 'create';
 
@@ -31,8 +19,8 @@ type Mode = 'view' | 'edit' | 'create';
  * Shared frame for a case input: loading/error/empty states, edit and create modes rendering
  * the existing forms, and a confirmed delete against the resource's own endpoint.
  */
-function CaseRecord<T extends { id?: string }>({ resource, caseId, title, emptyText, render, form }: {
-  resource: string; caseId: string; title: string; emptyText: string;
+function CaseRecord<T extends { id?: string }>({ resource, caseId, title, emptyText, render, form, onSchematic }: {
+  resource: string; caseId: string; title: string; emptyText: string; onSchematic?: () => void;
   render: (item: T) => ReactNode;
   form: (mode: 'edit' | 'create', item: T | undefined, done: () => void, cancel: () => void) => ReactNode;
 }) {
@@ -73,7 +61,8 @@ function CaseRecord<T extends { id?: string }>({ resource, caseId, title, emptyT
         <p className="text-2xs font-medium uppercase tracking-wider text-ink-500">
           {title}{items.length > 1 ? ` · записей: ${items.length}, показана первая` : ''}
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          {onSchematic && <Button size="sm" variant="ghost" icon={<FiLayers />} onClick={onSchematic}>Схема</Button>}
           <Button size="sm" icon={<FiEdit2 />} onClick={() => setMode('edit')}>Изменить</Button>
           <Button size="sm" variant="danger" icon={<FiTrash2 />} onClick={() => setDeleting(item)}>Удалить</Button>
         </div>
@@ -100,8 +89,8 @@ const sectionColumns: Column<ISection>[] = [
   { key: 'yield', header: 'Предел текучести', unit: 'psi', numeric: true, render: (s) => n(s.min_yield_strength, 0) ?? '—' },
 ];
 
-export const StringView = ({ caseId }: { caseId: string }) => (
-  <CaseRecord<IString> resource="strings" caseId={caseId} title="Колонна" emptyText="Рабочая колонна не задана"
+export const StringView = ({ caseId, onSchematic }: { caseId: string; onSchematic?: () => void }) => (
+  <CaseRecord<IString> resource="strings" caseId={caseId} title="Колонна" emptyText="Рабочая колонна не задана" onSchematic={onSchematic}
     render={(s) => (
       <Panel title={s.name || 'Рабочая колонна'} description={`Глубина: ${n(s.depth)} м · ${s.sections?.length ?? 0} элементов (сверху вниз)`} bodyClassName="p-0">
         <DataTable columns={sectionColumns} rows={[...(s.sections ?? [])].sort((a, b) => a.body_md - b.body_md)} rowKey={(x, i) => x.id ?? String(i)} caption="Секции колонны" />
@@ -124,8 +113,8 @@ const casingColumns: Column<Casing>[] = [
   { key: 'cap', header: 'Вместимость', unit: 'л/м', numeric: true, render: (c) => n(c.linear_capacity_caising) || '—' },
 ];
 
-export const HoleView = ({ caseId }: { caseId: string }) => (
-  <CaseRecord<Hole> resource="holes" caseId={caseId} title="Ствол" emptyText="Секции ствола не заданы"
+export const HoleView = ({ caseId, onSchematic }: { caseId: string; onSchematic?: () => void }) => (
+  <CaseRecord<Hole> resource="holes" caseId={caseId} title="Ствол" emptyText="Секции ствола не заданы" onSchematic={onSchematic}
     render={(h) => (
       <div className="space-y-4">
         <Panel title="Обсадные колонны" bodyClassName="p-0">

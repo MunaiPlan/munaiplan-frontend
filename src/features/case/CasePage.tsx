@@ -11,6 +11,7 @@ import { useTree } from '../hierarchy/treeState';
 import { CaseSource } from './CaseSource';
 import { HydraulicsPanel } from './HydraulicsPanel';
 import { useCaseReference } from './useCaseReference';
+import { SchematicView } from './schematic/SchematicView';
 import type { ICase } from '../../types/types';
 import TorqueDragPanel from '../torque-drag/TorqueDragPanel';
 import { FluidView, HoleView, PressureView, RigView, StringView } from './CaseData';
@@ -21,6 +22,7 @@ const tabs = [
   { key: 'overview', label: 'Обзор' },
   { key: 'hole', label: 'Ствол' },
   { key: 'string', label: 'Колонна' },
+  { key: 'schematic', label: 'Схема' },
   { key: 'fluid', label: 'Раствор' },
   { key: 'pressure', label: 'Давления и температура' },
   { key: 'rig', label: 'Буровая' },
@@ -34,6 +36,7 @@ const help: Record<TabKey, { to: DocSlug; anchor?: string; topic: string }> = {
   overview: { to: 'case', anchor: 'properties', topic: 'кейс и его свойства' },
   hole: { to: 'hole-and-string', anchor: 'hole', topic: 'вкладка «Ствол»' },
   string: { to: 'hole-and-string', anchor: 'string', topic: 'вкладка «Колонна»' },
+  schematic: { to: 'hole-and-string', anchor: 'schematic', topic: 'как читать схему колонны и ствола' },
   fluid: { to: 'fluid-and-rig', anchor: 'fluid', topic: 'вкладка «Раствор»' },
   pressure: { to: 'fluid-and-rig', anchor: 'pressure', topic: 'давления и температура' },
   rig: { to: 'fluid-and-rig', anchor: 'rig', topic: 'вкладка «Буровая»' },
@@ -113,8 +116,9 @@ const CasePage = () => {
             {report && <CaseSource report={report} />}
           </div>
         )}
-        {tab === 'hole' && <div className="mx-auto max-w-6xl"><HoleView caseId={id} /></div>}
-        {tab === 'string' && <div className="mx-auto max-w-6xl"><StringView caseId={id} /></div>}
+        {tab === 'hole' && <div className="mx-auto max-w-6xl"><HoleView caseId={id} onSchematic={() => setTab('schematic')} /></div>}
+        {tab === 'string' && <div className="mx-auto max-w-6xl"><StringView caseId={id} onSchematic={() => setTab('schematic')} /></div>}
+        {tab === 'schematic' && <div className="mx-auto max-w-6xl"><SchematicView caseId={id} onEdit={setTab} /></div>}
         {tab === 'fluid' && <div className="mx-auto max-w-5xl"><FluidView caseId={id} /></div>}
         {tab === 'pressure' && <div className="mx-auto max-w-6xl"><PressureView caseId={id} /></div>}
         {tab === 'rig' && <div className="mx-auto max-w-5xl"><RigView caseId={id} /></div>}

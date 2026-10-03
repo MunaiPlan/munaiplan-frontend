@@ -19,5 +19,6 @@ jobs:
       - run: npm run build
       - run: npm run test:auth
       - run: npm run test:collections
+      - run: npm run test:schematic
       - name: Production image builds
         run: docker build -t munaiplan-frontend:ci -f dockerfile .
