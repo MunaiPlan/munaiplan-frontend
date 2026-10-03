@@ -95,16 +95,78 @@ export const predictions: Record<string, Record<string, number[]>> = {
     'Мин. вес на долоте до синусоидального изгиба (бурение ротором)': curve(8.6, 0), 'Мин. вес на долоте до спирального изгиба (бурение ГЗД)': curve(7.2, -0.7) },
 };
 
+const rel = (ref: number, v: number | null) => (v === null ? undefined : +((v - ref) / ref).toFixed(4));
+const cmpRow = (operation: string, metric: string, wellplan: number, model: number | null, formula: number | null) =>
+  ({ operation, metric, unit: metric === 'hook_load' ? 't' : 'kN-m', wellplan, model, relative_difference: rel(wellplan, model), formula, formula_relative_difference: rel(wellplan, formula) });
+
 export const comparison = {
   case_id: ids.caseImported, bit_depth: 2400,
   rows: [
-    { operation: 'tripping_in', metric: 'hook_load', unit: 't', wellplan: 67.3, model: 63.1, difference: -4.2, relative_difference: -0.062 },
-    { operation: 'tripping_out', metric: 'hook_load', unit: 't', wellplan: 79.85, model: 84.2, difference: 4.35, relative_difference: 0.054 },
-    { operation: 'rotating_on_bottom', metric: 'hook_load', unit: 't', wellplan: 67.81, model: 66.9, difference: -0.91, relative_difference: -0.013 },
-    { operation: 'rotating_on_bottom', metric: 'surface_torque', unit: 'kN-m', wellplan: 10.1, model: 7.6, difference: -2.5, relative_difference: -0.247 },
-    { operation: 'slide_drilling', metric: 'hook_load', unit: 't', wellplan: 63.13, model: 65.0, difference: 1.87, relative_difference: 0.03 },
+    cmpRow('tripping_in', 'hook_load', 67.3, 63.1, 72.4),
+    cmpRow('tripping_out', 'hook_load', 79.85, 84.2, 82.1),
+    cmpRow('rotating_on_bottom', 'hook_load', 67.81, 66.9, 70.2),
+    cmpRow('rotating_on_bottom', 'surface_torque', 10.1, 7.6, 9.6),
+    cmpRow('slide_drilling', 'hook_load', 63.13, 65.0, 68.9),
+    cmpRow('rotating_off_bottom', 'hook_load', 73.81, null, 76.2),
+    cmpRow('rotating_off_bottom', 'surface_torque', 4.68, null, 4.35),
   ],
-  notes: ['Synthetic preview data.'], source_warnings: [],
+  notes: ['Синтетические данные предпросмотра.'], source_warnings: [],
+};
+
+/** Synthetic formula result in the shape of GET /torque-and-drag/formula; overrides shift it plausibly. */
+export const formulaResult = (q: URLSearchParams) => {
+  const num = (k: string, d: number) => (q.get(k) !== null && q.get(k) !== '' ? Number(q.get(k)) : d);
+  const block = num('block_weight', 17), wob = num('wob', 6), wobSlide = num('wob_slide', 3), tob = num('tob', 4.167);
+  const ffC = num('ff_cased', 0.25), ffO = num('ff_open', 0.3);
+  const f = ffO / 0.3;
+  const sweep = depth.filter((d) => d > 0);
+  const hl = (k: number) => sweep.map((d) => +(block + 0.028 * d * (1 + k * f * d / 2400)).toFixed(3));
+  const along = (top: number) => depth.map((d) => +(top * (1 - d / 2400)).toFixed(3));
+  const tq = (top: number) => depth.map((d) => +(top * (1 - d / 2400)).toFixed(3));
+  const surf = (b: number, k: number) => +(block + b + k * f).toFixed(2);
+  const sources = (key: string, d: string) => (q.get(key) !== null ? 'user' : d);
+  return {
+    case_id: ids.caseImported, engine: 'formula', bit_depth: 2400,
+    families: {
+      'weight-on-bit': { 'Глубина': sweep, 'Спуск': hl(-0.12), 'Подъём': hl(0.1), 'Бурение ротором': sweep.map((d) => +(block + 0.028 * d - wob * Math.min(1, d / 300)).toFixed(3)),
+        'Бурение ГЗД': hl(-0.15).map((v, i) => +(v - wobSlide * Math.min(1, sweep[i] / 300)).toFixed(3)), 'Вращение над забоем': hl(0),
+        'Мин. вес до спирального изгиба (спуск)': sweep.map((d) => (d < 600 ? null : +(block + 0.012 * d).toFixed(3))),
+        'Макс. вес до предела текучести (подъём)': sweep.map(() => 218) },
+      'surface-torque': { 'Глубина': depth, 'Бурение ротором': depth.map((d) => +(tob + 4.3 * f * (1 - d / 2400)).toFixed(3)), 'Вращение над забоем': tq(4.3 * f), 'Спуск': depth.map(() => 0), 'Подъём': depth.map(() => 0) },
+      'min-weight': { 'Глубина': sweep, 'Мин. вес на долоте до синусоидального изгиба (бурение ротором)': sweep.map((d) => +(6 + 6 * Math.min(1, d / 1800)).toFixed(3)),
+        'Мин. вес на долоте до спирального изгиба (бурение ротором)': sweep.map((d) => +(7 + 7.2 * Math.min(1, d / 1800)).toFixed(3)),
+        'Мин. вес на долоте до синусоидального изгиба (бурение ГЗД)': sweep.map((d) => +(5.5 + 5 * Math.min(1, d / 1800)).toFixed(3)),
+        'Мин. вес на долоте до спирального изгиба (бурение ГЗД)': sweep.map((d) => +(7.5 + 7 * Math.min(1, d / 1800)).toFixed(3)) },
+      'effective-tension': { 'Глубина': depth, 'Спуск': along(55), 'Подъём': along(65), 'Бурение ротором': depth.map((d) => +(61 * (1 - d / 2400) - wob * d / 2400).toFixed(3)),
+        'Бурение ГЗД': depth.map((d) => +(53 * (1 - d / 2400) - wobSlide * d / 2400).toFixed(3)), 'Вращение над забоем': along(61),
+        'Истинное натяжение (подъём)': depth.map((d) => +(65 * (1 - d / 2400) - 0.012 * d).toFixed(3)),
+        'Синусоидальный изгиб(все операции)': depth.map((d) => (d < 1000 ? -9 : -17)), 'Спиральный изгиб(с вращением)': depth.map((d) => (d < 1000 ? -19.6 : -24)),
+        'Спиральный изгиб(без вращения)': depth.map((d) => (d < 1000 ? -19.6 : -31)), 'Предел натяжения': depth.map((d) => (d < 2190 ? 201 : 108)) },
+      'side-force': { 'Глубина': depth, 'Спуск': depth.map((d) => +(d < 1000 ? 0.02 : 0.9).toFixed(3)), 'Подъём': depth.map((d) => +(d < 1000 ? 0.02 : 1.1).toFixed(3)),
+        'Бурение ротором': depth.map((d) => +(d < 1000 ? 0.02 : 1.0).toFixed(3)), 'Бурение ГЗД': depth.map((d) => +(d < 1000 ? 0.02 : 0.95).toFixed(3)), 'Вращение над забоем': depth.map((d) => +(d < 1000 ? 0.02 : 1.0).toFixed(3)) },
+    },
+    summary: [
+      { operation: 'tripping_in', hook_load: surf(55.4, -6), surface_torque: 0, max_side_force: 1.3, buckling: '' },
+      { operation: 'tripping_out', hook_load: surf(65.1, 4), surface_torque: 0, max_side_force: 1.28, buckling: '' },
+      { operation: 'rotating_on_bottom', hook_load: +(block + 61 - wob).toFixed(2), surface_torque: +(tob + 4.3 * f).toFixed(2), neutral_point_from_bit: +(wob * 62).toFixed(0), max_side_force: 1.48, buckling: '' },
+      { operation: 'slide_drilling', hook_load: surf(53 - wobSlide, -4), surface_torque: 0, neutral_point_from_bit: +(wobSlide * 120).toFixed(0), max_side_force: 1.39, buckling: wobSlide > 8 ? 'sinusoidal' : '' },
+      { operation: 'rotating_off_bottom', hook_load: +(block + 61).toFixed(2), surface_torque: +(4.3 * f).toFixed(2), max_side_force: 1.29, buckling: '' },
+    ],
+    limits: { overpull_margin: 136.2, min_wob_sinusoidal: 13.4, min_wob_sinusoidal_depth: 1800, min_wob_helical: 14.8, min_wob_helical_depth: 1800 },
+    parameters: { mud_density: 1230, buoyancy_factor: 0.8433, block_weight: block, wob_rotating: wob, wob_sliding: wobSlide, tob, overpull_back_reaming: 0,
+      trip_speed: 10, step: 10, yield_fraction: 0.8, steel_density: 7850, young_modulus: 206.84,
+      friction_cased: q.get('ff_cased') !== null ? ffC : undefined, friction_open: q.get('ff_open') !== null ? ffO : undefined,
+      hole_sections: [{ top: 0, bottom: 1000, diameter: 226.7, cased: true, friction: ffC }, { top: 1000, bottom: 2400, diameter: 215.9, cased: false, friction: ffO }],
+      sources: { block_weight: sources('block_weight', 'report'), wob_rotating: sources('wob', 'report'), wob_sliding: sources('wob_slide', 'report'), tob: sources('tob', 'report'), trip_speed: 'report', step: 'default' } },
+    assumptions: [
+      'Модель мягкой нити (soft-string): изгибная жёсткость колонны не учитывается; сила прижатия к стенке — от веса и от натяжения на искривлении (Johancsik и др., 1984).',
+      'Траектория между точками инклинометрии интерполируется методом минимальной кривизны.',
+      'Плавучесть: коэффициент 1 − ρ раствора / 7850 кг/м³; раствор одинаков в колонне и в затрубье, циркуляция не учитывается.',
+      'Синтетические данные предпросмотра.',
+    ],
+    warnings: ['Синтетический кейс: значения иллюстративные.'],
+    units: { force: 'т', torque: 'кН·м', depth: 'м', side_force: 'кН/м' },
+  };
 };
 
 export const organizations = [

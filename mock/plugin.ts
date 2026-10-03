@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { caseChildren, comparison, ids, organizations, predictions, records, reference, tree } from './fixtures';
+import { caseChildren, comparison, formulaResult, ids, organizations, predictions, records, reference, tree } from './fixtures';
 
 const json = (res: ServerResponse, status: number, body: unknown) => {
   res.statusCode = status;
@@ -22,6 +22,12 @@ const route = (req: IncomingMessage, res: ServerResponse): void => {
   if (path === '/admin/organizations') return method === 'GET' ? json(res, 200, organizations) : json(res, 201, {});
   if (/^\/admin\/organizations\/[^/]+\/users$/.test(path)) return json(res, 200, [{ id: 'u1', name: 'Демо', surname: 'Пользователь', email: 'demo@example.test', phone: '', role: 'admin' }]);
   if (path.startsWith('/torque-and-drag/comparison')) return url.searchParams.get('caseId') === ids.caseImported ? json(res, 200, comparison) : json(res, 404, { message: 'no reference' });
+  if (path === '/torque-and-drag/formula') {
+    if (url.searchParams.get('caseId') === ids.caseManual) return json(res, 422, { message: 'кейс не готов к расчёту Torque & Drag', problems: ['у кейса нет рабочей колонны'] });
+    const bad = ['ff_cased', 'ff_open'].find((k) => url.searchParams.get(k) !== null && !(Number(url.searchParams.get(k)) >= 0 && Number(url.searchParams.get(k)) <= 1));
+    if (bad) return json(res, 400, { message: 'Коэффициент трения: допустимо от 0 до 1' });
+    return json(res, 200, formulaResult(url.searchParams));
+  }
   const td = path.match(/^\/torque-and-drag\/([a-z-]+)$/);
   if (td) {
     if (url.searchParams.get('caseId') === ids.caseManual) return json(res, 422, { message: 'the case is not ready for Torque & Drag', problems: ['the case has no work string'] });

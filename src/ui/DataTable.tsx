@@ -18,7 +18,7 @@ export function DataTable<T>({ columns, rows, rowKey, empty = 'Нет данны
 }) {
   return (
     <div role="region" aria-label={caption} tabIndex={caption ? 0 : undefined}
-      className="thin-scrollbar max-w-full overflow-auto overscroll-x-contain rounded-md border border-ink-200"
+      className="thin-scrollbar relative max-w-full overflow-auto overscroll-x-contain rounded-md border border-ink-200"
       style={maxHeight ? { maxHeight } : undefined}>
       <table className="w-full border-collapse text-left text-sm">
         {caption && <caption className="sr-only">{caption}</caption>}
