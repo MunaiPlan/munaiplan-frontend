@@ -6,7 +6,7 @@ import { ComponentShape, Patterns, Swatch } from './shapes';
 type Entry = { group: 'string'; key: string; item: StringItem } | { group: 'hole'; key: string; item: HoleItem };
 
 const mm = (v: number | null) => (v === null ? '—' : `${fmt(v, 1)} мм`);
-const span = (a: number, b: number) => `${fmt(a)} – ${fmt(b)} м`;
+const span = (a: number, b: number) => `${fmt(a)}–${fmt(b)}\u00a0м`;
 
 /** Every fact about one layer, shared by the tooltip and the legend's accessible text. */
 function detailsOf(e: Entry): [string, string][] {
@@ -36,11 +36,11 @@ function detailsOf(e: Entry): [string, string][] {
 }
 
 /** Callouts use the common abbreviations (ТБТ, УБТ, ГЗД); the legend and tooltip spell names out. */
-const calloutText = (c: StringItem) => `${['hwdp', 'collar', 'motor'].includes(c.kind) && c.name === kindNames[c.kind].name ? kindNames[c.kind].short : c.name} ${fmt(c.od, 1)} мм`;
+const calloutText = (c: StringItem) => `${['hwdp', 'collar', 'motor'].includes(c.kind) && c.name === kindNames[c.kind].name ? kindNames[c.kind].short : c.name} ${fmt(c.od, 1)}\u00a0мм`;
 const outerOd = (c: StringItem) => Math.max(c.od, c.joint?.od ?? 0, c.blade?.od ?? 0);
 
 /** Deterministic irregular wall offset in px, continuous in y. */
-const wobble = (y: number) => 1.1 * Math.sin(y * 0.53) + 0.7 * Math.sin(y * 1.37 + 1.3) + 0.4 * Math.sin(y * 3.1 + 0.4);
+const wobble = (y: number) => 1.2 * Math.sin(y * 0.19) + 0.7 * Math.sin(y * 0.47 + 1.3) + 0.35 * Math.sin(y * 1.1 + 0.4);
 
 function computeLayout(model: SchematicModel, W: number) {
   const narrow = W < 520;
@@ -78,7 +78,7 @@ function computeLayout(model: SchematicModel, W: number) {
     }),
     ...model.hole.map((h) => {
       const y0 = Y(h.top), y1 = Y(h.bottom);
-      const ay = h.kind === 'casing' ? y1 - Math.min(14, (y1 - y0) / 2) : avoidBreaks(y0 + (y1 - y0) * 0.4, y0, y1);
+      const ay = h.kind === 'casing' ? y1 - Math.min(14, (y1 - y0) / 2) : avoidBreaks(y0 + Math.min(40, (y1 - y0) * 0.3), y0, y1);
       return { key: h.key, ax: cx + ((h.kind === 'casing' ? h.drawOd : h.id) / 2) * k, ay, lines: wrap(h.label, maxChars), bold: true };
     }),
   ];
@@ -99,7 +99,7 @@ function wallsFor(model: SchematicModel, L: Layout, top: number, bottom: number,
   const wavy = Boolean(open || casing?.holeDiameter);
   const r = (wallMm / 2) * L.k;
   const xs: number[] = [];
-  for (let y = y0; y < y1; y += 3) xs.push(y);
+  for (let y = y0; y < y1; y += 4) xs.push(y);
   xs.push(y1);
   const off = (y: number) => (wavy ? wobble(y) : 0);
   const side = (s: 1 | -1) => {

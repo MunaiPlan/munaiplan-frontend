@@ -50,12 +50,8 @@ export const ComponentShape = ({ item, g, p }: { item: StringItem; g: ShapeGeome
   const { cx, y0, y1, k } = g;
   const h = y1 - y0;
   const r = (item.od / 2) * k;
-  const ri = item.id ? (item.id / 2) * k : 0;
   const body = (fill: string, sw = 1, dash?: string) => (
     <rect x={cx - r} y={y0} width={2 * r} height={h} fill={fill} stroke={C.ink} strokeWidth={sw} strokeDasharray={dash} />
-  );
-  const bore = ri > 1 && ri < r - 1 && (
-    <g stroke={C.ink300} strokeWidth="0.75"><line x1={cx - ri} y1={y0} x2={cx - ri} y2={y1} /><line x1={cx + ri} y1={y0} x2={cx + ri} y2={y1} /></g>
   );
 
   switch (item.kind as ComponentKind) {
@@ -63,17 +59,19 @@ export const ComponentShape = ({ item, g, p }: { item: StringItem; g: ShapeGeome
     case 'hwdp': {
       const heavy = item.kind === 'hwdp';
       const rj = item.joint ? Math.max(r + 1.5, (item.joint.od / 2) * k) : 0;
-      const tj = heavy ? 5 : 4;
-      const pp = pitch(item, y0, y1, heavy ? 18 : 22);
+      const tj = heavy ? 8 : 7;
+      const pp = pitch(item, y0, y1, heavy ? 22 : 28);
+      // A connection: box (taper up from the body), upset, pin shoulder.
+      const joint = (y: number) => {
+        const a = Math.min(Math.max(y, y0), y1 - tj), c = 1.6;
+        return <path key={y} d={`M${cx - r},${a} L${cx - rj},${a + c} L${cx - rj},${a + tj} L${cx + rj},${a + tj} L${cx + rj},${a + c} L${cx + r},${a} Z`} fill={C.ink} />;
+      };
       return (
         <g>
-          {body(heavy ? C.ink200 : C.paper)}
-          {!heavy && bore}
-          {item.joint && steps(y0, y1, pp).map((y) => (
-            <rect key={y} x={cx - rj} y={Math.min(y, y1 - tj)} width={2 * rj} height={tj} rx="0.8" fill={C.ink} />
-          ))}
-          {heavy && item.joint && steps(y0, y1, pp).filter((y) => y + pp / 2 < y1 - 4).map((y) => (
-            <rect key={`pad${y}`} x={cx - (r + (rj - r) * 0.7)} y={y + pp / 2 - 2} width={2 * (r + (rj - r) * 0.7)} height="4" fill={C.paper} stroke={C.ink} strokeWidth="0.9" />
+          {body(heavy ? C.ink200 : C.paper, 1.2)}
+          {item.joint && steps(y0, y1, pp).map(joint)}
+          {heavy && item.joint && steps(y0, y1, pp).filter((y) => y + pp / 2 < y1 - 6).map((y) => (
+            <rect key={`pad${y}`} x={cx - (r + (rj - r) * 0.6)} y={y + pp / 2 - 2.5} width={2 * (r + (rj - r) * 0.6)} height="5" fill={C.paper} stroke={C.ink} strokeWidth="1" />
           ))}
         </g>
       );

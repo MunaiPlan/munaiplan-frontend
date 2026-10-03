@@ -186,11 +186,11 @@ export function buildModel(sections: RawSection[] | null | undefined, hole: RawH
     if (bottom === null || innerD === null) { casingSkipped += 1; return; }
     const top = Math.min(nonNeg(c.md_top) ?? 0, bottom);
     const name = casingName(c.description_caising);
-    const size = od !== null ? `${fmt(od, 1)} мм` : `ВД ${fmt(innerD, 1)} мм`;
+    const size = od !== null ? `${fmt(od, 1)}\u00a0мм` : `ВД\u00a0${fmt(innerD, 1)}\u00a0мм`;
     holeItems.push({
       key: `c${i}`, kind: 'casing', name, top, bottom, id: innerD, od, drawOd: od ?? nominalCasingOd(innerD),
       holeDiameter: pos(c.effective_hole_diameter), shoe: bottom, friction: nonNeg(c.friction_factor_caising),
-      label: `${name} ${size} до ${fmt(bottom, 1)} м`,
+      label: `${name} ${size} до\u00a0${fmt(bottom, 1)}\u00a0м`,
     });
   });
   if (casingSkipped) hints.push(`Не показано обсадных колонн: ${casingSkipped} — не задана глубина башмака или диаметр.`);
@@ -204,7 +204,7 @@ export function buildModel(sections: RawSection[] | null | undefined, hole: RawH
     if (bottom !== null && d !== null && bottom > top) {
       holeItems.push({
         key: 'open', kind: 'open', name: 'Открытый ствол', top, bottom, id: d, od: null, drawOd: d, holeDiameter: d, shoe: null,
-        friction: nonNeg(hole.friction_factor_open_hole), label: `Открытый ствол ${fmt(d, 1)} мм`,
+        friction: nonNeg(hole.friction_factor_open_hole), label: `Открытый ствол ${fmt(d, 1)}\u00a0мм`,
       });
     } else if (bottom !== null || d !== null) {
       hints.push('Открытый ствол не показан — не заданы низ (забой) или эффективный диаметр.');

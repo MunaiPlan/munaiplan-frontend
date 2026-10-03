@@ -73,8 +73,8 @@ test('model: casing without OD, open hole, joints, ordering and hints', () => {
   assert.equal(m.string[2].top, 2370);
   assert.equal(m.hole[0].od, null);
   assert.equal(m.hole[0].drawOd, 244.5);
-  assert.match(m.hole[0].label, /^Обсадная колонна ВД 226,7 мм до 1\s000 м$/);
-  assert.equal(m.hole[1].label, 'Открытый ствол 215,9 мм');
+  assert.match(m.hole[0].label, /^Обсадная колонна ВД\s226,7\sмм до\s1\s000\sм$/);
+  assert.equal(m.hole[1].label, 'Открытый ствол 215,9\u00a0мм');
   assert.equal(m.totalDepth, 2600);
   assert.ok(m.hints.some((h) => h.includes('не показан')));
   assert.ok(m.hints.some((h) => h.includes('замки')));
