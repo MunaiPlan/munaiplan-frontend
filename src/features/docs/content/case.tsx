@@ -25,6 +25,7 @@ export const caseArticle: Article = {
             [<Ui>Обзор</Ui>, <>Свойства кейса и источник, если кейс импортирован. <DocLink to="case" hash="properties">Подробнее</DocLink></>, 'нет'],
             [<Ui>Ствол</Ui>, <>Обсадные колонны и открытый ствол с коэффициентами трения. <DocLink to="hole-and-string" hash="hole">Подробнее</DocLink></>, 'да (трение)'],
             [<Ui>Колонна</Ui>, <>Элементы рабочей колонны сверху вниз. <DocLink to="hole-and-string" hash="string">Подробнее</DocLink></>, 'да'],
+            [<Ui>Схема</Ui>, <>Рисунок колонны внутри ствола по глубине. <DocLink to="hole-and-string" hash="schematic">Подробнее</DocLink></>, 'нет (только просмотр)'],
             [<Ui>Раствор</Ui>, <>Буровой раствор. <DocLink to="fluid-and-rig" hash="fluid">Подробнее</DocLink></>, 'да (плотность — в расчёте по формулам)'],
             [<Ui>Давления и температура</Ui>, <>Поровое давление и геотермический профиль. <DocLink to="fluid-and-rig" hash="pressure">Подробнее</DocLink></>, 'пока нет'],
             [<Ui>Буровая</Ui>, <>Параметры буровой установки. <DocLink to="fluid-and-rig" hash="rig">Подробнее</DocLink></>, 'пока нет'],
