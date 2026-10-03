@@ -1,5 +1,6 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { instance } from '../../api/axios.api';
+import { useCachedResult } from '../../hooks/useCachedResult';
 import { PredictionStatus } from '../../components/PredictionStatus';
 import type { PredictionError } from '../../hooks/usePrediction';
 import { operationLabels } from '../../services/import.service';
@@ -56,29 +57,26 @@ const EngineAlert = ({ title, error }: { title: string; error: EngineError }) =>
   </Alert>
 );
 
+const toComparisonError = (error: unknown): PredictionError & { missing?: boolean } => {
+  const response = (error as { response?: { status?: number; data?: { message?: string; problems?: string[] } } }).response;
+  if (response?.status === 404) return { status: 404, message: '', problems: [], missing: true };
+  return {
+    status: response?.status, problems: response?.data?.problems ?? [],
+    message: response?.status === 422 ? 'Кейс не готов к расчёту Torque & Drag:' : (response?.data?.message ?? 'Не удалось выполнить сравнение.'),
+  };
+};
+
 /** The report's own results for an imported case beside the formula engine and the model. */
 const WellPlanComparison: FC<{ caseId: string }> = ({ caseId }) => {
-  const [state, setState] = useState<{ loading: boolean; data: Comparison | null; error: PredictionError | null; missing: boolean }>(
-    { loading: true, data: null, error: null, missing: false });
+  const state = useCachedResult<Comparison, PredictionError & { missing?: boolean }>(
+    `comparison:${caseId}`,
+    async () => (await instance.get<Comparison>(`/api/v1/torque-and-drag/comparison?caseId=${encodeURIComponent(caseId)}`)).data,
+    toComparisonError,
+  );
+  const load = state.reload;
 
-  const load = useCallback(async () => {
-    setState({ loading: true, data: null, error: null, missing: false });
-    try {
-      const { data } = await instance.get<Comparison>(`/api/v1/torque-and-drag/comparison?caseId=${encodeURIComponent(caseId)}`);
-      setState({ loading: false, data, error: null, missing: false });
-    } catch (error) {
-      const response = (error as { response?: { status?: number; data?: { message?: string; problems?: string[] } } }).response;
-      if (response?.status === 404) { setState({ loading: false, data: null, error: null, missing: true }); return; }
-      setState({ loading: false, data: null, missing: false, error: {
-        status: response?.status, problems: response?.data?.problems ?? [],
-        message: response?.status === 422 ? 'Кейс не готов к расчёту Torque & Drag:' : (response?.data?.message ?? 'Не удалось выполнить сравнение.'),
-      } });
-    }
-  }, [caseId]);
-  useEffect(() => { load(); }, [load]);
-
-  if (state.loading) return <Loading label="Расчёт и сравнение… (до минуты)" />;
-  if (state.missing) return <EmptyState title="Нет эталонных данных" description="Сравнение доступно для импортированных кейсов: эталоном служат результаты из исходного отчёта." />;
+  if (state.loading) return <Loading label="Расчёт и сравнение…" />;
+  if (state.error?.missing) return <EmptyState title="Нет эталонных данных" description="Сравнение доступно для импортированных кейсов: эталоном служат результаты из исходного отчёта." />;
   if (!state.data) return <PredictionStatus error={state.error} onRetry={load} />;
 
   const d = state.data;

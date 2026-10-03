@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import { instance } from '../../api/axios.api';
+import { useCachedResult } from '../../hooks/useCachedResult';
 import type { PredictionError } from '../../hooks/usePrediction';
 
 export type Curves = Record<string, (number | null)[]>;
@@ -69,30 +69,13 @@ const toError = (error: unknown): PredictionError => {
   };
 };
 
-/** Runs the formula engine for a case once for all charts; re-runs when the overrides change. */
+/** Runs the formula engine for a case once for all charts (cached until data changes); re-runs when the overrides change. */
 export function useFormula(caseId: string, overrides: FormulaOverrides, enabled: boolean) {
-  const [state, setState] = useState<{ loading: boolean; data: FormulaResult | null; error: PredictionError | null }>(
-    { loading: enabled, data: null, error: null });
   const query = Object.entries(overrides).filter(([, v]) => v !== undefined && Number.isFinite(v))
     .map(([k, v]) => `&${k}=${encodeURIComponent(String(v))}`).join('');
-
-  const load = useCallback(async (signal?: AbortSignal) => {
-    setState((s) => ({ ...s, loading: true, error: null }));
-    try {
-      const { data } = await instance.get<FormulaResult>(`/api/v1/torque-and-drag/formula?caseId=${encodeURIComponent(caseId)}${query}`, { signal });
-      setState({ loading: false, data, error: null });
-    } catch (error) {
-      if (signal?.aborted) return;
-      setState({ loading: false, data: null, error: toError(error) });
-    }
-  }, [caseId, query]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    const controller = new AbortController();
-    load(controller.signal);
-    return () => controller.abort();
-  }, [load, enabled]);
-
-  return { ...state, reload: () => load() };
+  return useCachedResult<FormulaResult, PredictionError>(
+    enabled ? `formula:${caseId}${query}` : null,
+    async () => (await instance.get<FormulaResult>(`/api/v1/torque-and-drag/formula?caseId=${encodeURIComponent(caseId)}${query}`)).data,
+    toError,
+  );
 }

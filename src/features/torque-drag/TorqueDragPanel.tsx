@@ -58,6 +58,9 @@ const FamilyView = ({ family, caseId, mode, formula }: {
       {wantsFormula && formula.error && <PredictionStatus error={formula.error} onRetry={formula.reload} />}
       {wantsModel && model.error && <PredictionStatus error={model.error} onRetry={model.reload} />}
       {sources.length > 0 && <DepthChart family={family} sources={sources} />}
+      {wantsFormula && wantsModel && formula.data && model.loading && (
+        <p className="text-xs text-ink-500" role="status">Прогноз модели рассчитывается — серые линии появятся через несколько секунд.</p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-1">
           {wantsFormula && formula.data && <FormulaNotice />}

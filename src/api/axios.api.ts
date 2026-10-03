@@ -4,6 +4,7 @@ import { login, logout } from '../store/user/userSlice';
 import { createLocalStore } from '../helpers/createLocalStore';
 import { isUnauthorizedCurrentSession, isUsableSession } from '../auth/session';
 import type { IUser } from '../types/types';
+import { clearResults } from './resultCache';
 
 const instance = axios.create({});
 const localUserStore = createLocalStore<IUser>('munaiplan.session.v1');
@@ -43,6 +44,7 @@ const saveUserLocally = (user: IUser) => {
 };
 
 const removeUserLocally = () => {
+  clearResults();
   if (expiryTimer !== undefined) {
     window.clearTimeout(expiryTimer);
     expiryTimer = undefined;
@@ -66,7 +68,13 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-instance.interceptors.response.use(undefined, (error: unknown) => {
+// Calculation results depend on the stored data, so any successful write invalidates them.
+// The Torque & Drag model routes are POSTs but only calculate, so they do not count.
+instance.interceptors.response.use((response) => {
+  const method = (response.config.method ?? 'get').toLowerCase();
+  if (method !== 'get' && !response.config.url?.includes('/torque-and-drag/')) clearResults();
+  return response;
+}, (error: unknown) => {
   if (axios.isAxiosError(error) && error.response?.status === 401 &&
       !error.config?.url?.endsWith('/users/sign-in')) {
     const requestAuthorization = error.config?.headers?.get('Authorization');
